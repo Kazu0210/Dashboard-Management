@@ -38,7 +38,7 @@ const mainNavItems: NavItem[] = [
     { title: 'Full Time Employee', href: '/full-time-employee', icon: Users },
     { title: 'Number of Projects', href: '/number-of-projects', icon: Briefcase },
     { title: 'Account Receivables', href: '/account-receivables', icon: FileText },
-    { title: 'Number of DOLE Case', href: '/dole-cases', icon: FileWarning },
+    { title: 'Number of DOLE Case', href: '/admin/dole-cases/create', icon: FileWarning },
     { title: 'Total Contract Price (Annually)', href: '/total-contract-price', icon: DollarSign },
     { title: 'Monthly Supplies Expense', href: '/supplies-expense/monthly', icon: ShoppingCart },
     { title: 'Quarterly Supplies Expense', href: '/supplies-expense/quarterly', icon: ShoppingCart },
@@ -48,6 +48,7 @@ const mainNavItems: NavItem[] = [
     { title: 'Gross Income', href: '/gross-income', icon: TrendingUp },
     { title: 'Gross Expense', href: '/gross-expense', icon: TrendingDown },
     { title: 'Net Income (Monthly)', href: '/net-income/monthly', icon: PieChart },
+    { title: 'Knowledge Base', href: '/knowledge-base', icon: BookOpen },
 ];
 
 const footerNavItems: NavItem[] = [];
