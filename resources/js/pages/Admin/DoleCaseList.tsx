@@ -34,7 +34,19 @@ const DoleCaseList = () => {
                       <td className="border px-4 py-2">{c.status}</td>
                       <td className="border px-4 py-2">
                         <Link href={`/admin/dole-cases/${c.id}/edit`} className="text-blue-600 hover:underline mr-2">Edit</Link>
-                        <Link href={`/admin/dole-cases/${c.id}`} className="text-green-600 hover:underline">View</Link>
+                        <Link href={`/admin/dole-cases/${c.id}`} className="text-green-600 hover:underline mr-2">View</Link>
+                        <form
+                          onSubmit={e => {
+                            e.preventDefault();
+                            if (confirm('Are you sure you want to delete this case?')) {
+                              // Use Inertia POST with _method delete
+                              window.Inertia.post(`/admin/dole-cases/${c.id}`, { _method: 'delete' });
+                            }
+                          }}
+                          style={{ display: 'inline' }}
+                        >
+                          <button type="submit" className="text-red-600 hover:underline">Delete</button>
+                        </form>
                       </td>
                     </tr>
                   ))}
