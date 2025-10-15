@@ -1,6 +1,7 @@
 
-import React, { useState } from 'react';
-import { router } from '@inertiajs/react';
+
+import React, { useState, useEffect } from 'react';
+import { router, usePage } from '@inertiajs/react';
 
 const statusOptions = [
   { value: 'open', label: 'Open' },
@@ -10,6 +11,7 @@ const statusOptions = [
 ];
 
 const DoleCaseForm = () => {
+  const { doleCase, editMode } = usePage().props as any;
   const [form, setForm] = useState({
     case_title: '',
     filed_by: '',
@@ -22,20 +24,41 @@ const DoleCaseForm = () => {
   });
   const [errors, setErrors] = useState<any>({});
 
+  useEffect(() => {
+    if (doleCase) {
+      setForm({
+        case_title: doleCase.case_title || '',
+        filed_by: doleCase.filed_by || '',
+        case_date: doleCase.case_date || '',
+        status: doleCase.status || 'open',
+        details: doleCase.details || '',
+        resolution_date: doleCase.resolution_date || '',
+        assigned_personnel: doleCase.assigned_personnel || '',
+        remarks: doleCase.remarks || '',
+      });
+    }
+  }, [doleCase]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    router.post('/admin/dole-cases', form, {
-      onError: (err) => setErrors(err),
-    });
+    if (editMode && doleCase) {
+      router.put(`/admin/dole-cases/${doleCase.id}`, form, {
+        onError: (err) => setErrors(err),
+      });
+    } else {
+      router.post('/admin/dole-cases', form, {
+        onError: (err) => setErrors(err),
+      });
+    }
   };
 
   return (
     <div className="max-w-lg mx-auto mt-10 p-6 bg-white rounded shadow">
-      <h1 className="text-2xl font-bold mb-4">Add DOLE Case</h1>
+      <h1 className="text-2xl font-bold mb-4">{editMode ? 'Edit DOLE Case' : 'Add DOLE Case'}</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block mb-1">Case Title</label>
@@ -126,7 +149,7 @@ const DoleCaseForm = () => {
           />
           {errors.remarks && <div className="text-red-500 text-sm">{errors.remarks}</div>}
         </div>
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">Submit</button>
+        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">{editMode ? 'Update' : 'Submit'}</button>
       </form>
     </div>
   );
