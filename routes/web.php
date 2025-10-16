@@ -44,4 +44,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('contracts/create', [ContractController::class, 'create'])->name('contracts.create');
     Route::post('contracts', [ContractController::class, 'store'])->name('contracts.store');
     Route::get('contracts/{id}', [ContractController::class, 'show'])->name('contracts.show');
+    Route::get('contracts/{id}/edit', [ContractController::class, 'edit'])->name('contracts.edit');
+    Route::put('contracts/{id}', [ContractController::class, 'update'])->name('contracts.update');
+    Route::delete('contracts/{id}', [ContractController::class, 'destroy'])->name('contracts.destroy');
 });

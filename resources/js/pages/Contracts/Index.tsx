@@ -1,6 +1,6 @@
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/app-sidebar';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, usePage, router } from '@inertiajs/react';
 import { type BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -12,6 +12,16 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function ContractsIndex() {
     const { contracts = { data: [] } } = usePage().props as any;
+    const handleDelete = (id: number) => {
+        if (!confirm('Are you sure you want to delete this contract? This action cannot be undone.')) return;
+
+        router.delete(`/admin/contracts/${id}`, {
+            onSuccess: () => {
+                // Refresh the contracts list after successful deletion
+                router.visit('/admin/contracts');
+            },
+        });
+    };
     const formatDateOnly = (v: any) => {
         if (!v) return '—';
         if (typeof v === 'string') {
@@ -70,6 +80,8 @@ export default function ContractsIndex() {
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{c.created_by ?? '—'}</td>
                                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <Link href={`/admin/contracts/${c.id}`} className="text-indigo-600 hover:underline">View</Link>
+                                                <Link href={`/admin/contracts/${c.id}/edit`} className="text-indigo-600 hover:underline ml-4">Edit</Link>
+                                                <button type="button" onClick={() => handleDelete(c.id)} className="text-red-600 hover:underline ml-4">Delete</button>
                                             </td>
                                         </tr>
                                     ))}

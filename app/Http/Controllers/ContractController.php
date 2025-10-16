@@ -51,4 +51,41 @@ class ContractController extends Controller
             'contract' => $contract,
         ]);
     }
+
+    public function edit($id)
+    {
+        $contract = Contract::findOrFail($id);
+
+        return Inertia::render('Contracts/Edit', [
+            'contract' => $contract,
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $data = $request->validate([
+            'contract_number' => 'required|string|max:255',
+            'project_name' => 'required|string|max:255',
+            'client' => 'required|string|max:255',
+            'contract_price' => 'required|numeric',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'status' => 'nullable|string|max:50',
+            'notes' => 'nullable|string',
+        ]);
+
+        $contract = Contract::findOrFail($id);
+        $contract->update($data);
+
+        return redirect()->route('admin.contracts.index');
+    }
+
+    public function destroy($id)
+    {
+        $contract = Contract::findOrFail($id);
+        $contract->delete();
+
+        // Return a 204/no-content for Inertia router.delete to treat as success
+        return redirect()->route('admin.contracts.index');
+    }
 }
