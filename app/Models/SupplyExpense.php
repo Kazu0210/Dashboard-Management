@@ -18,4 +18,9 @@ class SupplyExpense extends Model
         'expense_date' => 'date',
         'amount' => 'decimal:2',
     ];
+
+    public function creator()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'created_by');
+    }
 }
