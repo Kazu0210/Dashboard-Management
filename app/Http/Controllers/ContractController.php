@@ -11,7 +11,11 @@ class ContractController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Contracts/Index');
+        $contracts = Contract::orderBy('created_at', 'desc')->paginate(20);
+
+        return Inertia::render('Contracts/Index', [
+            'contracts' => $contracts,
+        ]);
     }
 
     public function create()
