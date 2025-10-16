@@ -69,4 +69,80 @@ class EmployeeController extends Controller
 
         return redirect()->route('admin.employees.index');
     }
+
+    public function show($id)
+    {
+        $r = DB::table('employees')
+            ->leftJoin('employment_types', 'employees.employment_type_id', '=', 'employment_types.id')
+            ->select('employees.*', 'employment_types.id as employment_type_id', 'employment_types.name as employment_type_name')
+            ->where('employees.id', $id)
+            ->first();
+
+        if (!$r) {
+            abort(404);
+        }
+
+        $employee = [
+            'id' => $r->id,
+            'first_name' => $r->first_name,
+            'last_name' => $r->last_name,
+            'email' => $r->email,
+            'phone' => $r->phone,
+            'position' => $r->position,
+            'hired_at' => $r->hired_at,
+            'salary' => $r->salary,
+            'employment_type' => $r->employment_type_id ? ['id' => $r->employment_type_id, 'name' => $r->employment_type_name] : null,
+            'status' => ['name' => $r->status],
+            'created_at' => $r->created_at,
+            'updated_at' => $r->updated_at,
+        ];
+
+        return \Inertia\Inertia::render('Employees/Show', [
+            'employee' => $employee,
+        ]);
+    }
+
+    public function edit($id)
+    {
+        $r = DB::table('employees')
+            ->where('id', $id)
+            ->first();
+
+        if (!$r) {
+            abort(404);
+        }
+
+        $employee = (array) $r;
+
+        return \Inertia\Inertia::render('Employees/Edit', [
+            'employee' => $employee,
+            'types' => DB::table('employment_types')->get()->toArray(),
+            'statuses' => ['active', 'inactive'],
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $data = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+            'email' => 'required|email|unique:employees,email,'.$id,
+            'phone' => 'nullable|string|max:50',
+            'position' => 'nullable|string|max:255',
+            'hired_at' => 'nullable|date',
+            'salary' => 'nullable|numeric',
+            'employment_type_id' => 'required|exists:employment_types,id',
+            'status' => 'required|in:active,inactive',
+        ]);
+
+        DB::table('employees')->where('id', $id)->update($data + ['updated_at' => now()]);
+
+        return redirect()->route('admin.employees.index');
+    }
+
+    public function destroy($id)
+    {
+        DB::table('employees')->where('id', $id)->delete();
+        return redirect()->route('admin.employees.index');
+    }
 }

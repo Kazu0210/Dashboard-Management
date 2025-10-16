@@ -1,5 +1,5 @@
 import React from 'react'
-import { Head, Link, usePage } from '@inertiajs/react'
+import { Head, Link, usePage, router } from '@inertiajs/react'
 import AppLayout from '@/layouts/app-layout'
 
 type Props = {
@@ -37,9 +37,20 @@ export default function Index() {
               <div className="text-right">
                 <div className="text-sm text-gray-600">{emp.employment_type?.name ?? '—'}</div>
                 <div className="text-sm text-gray-600">{emp.status?.name ?? '—'}</div>
-                <div className="mt-2 flex gap-2 justify-end">
+                <div className="mt-2 flex gap-2 justify-end items-center">
                   <Link href={`/admin/employees/${emp.id}`} className="text-blue-600 hover:underline">View</Link>
                   <Link href={`/admin/employees/${emp.id}/edit`} className="text-indigo-600 hover:underline">Edit</Link>
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      if (confirm('Are you sure you want to delete this employee?')) {
+                        router.post(`/admin/employees/${emp.id}`, { _method: 'delete' });
+                      }
+                    }}
+                    style={{ display: 'inline' }}
+                  >
+                    <button type="submit" className="text-red-600 hover:underline">Delete</button>
+                  </form>
                 </div>
               </div>
             </li>
