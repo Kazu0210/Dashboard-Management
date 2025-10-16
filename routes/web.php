@@ -5,6 +5,7 @@ require __DIR__.'/auth.php';
 use App\Http\Controllers\Admin\DoleCaseController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\SupplyExpenseController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -47,4 +48,13 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('contracts/{id}/edit', [ContractController::class, 'edit'])->name('contracts.edit');
     Route::put('contracts/{id}', [ContractController::class, 'update'])->name('contracts.update');
     Route::delete('contracts/{id}', [ContractController::class, 'destroy'])->name('contracts.destroy');
+
+    // Supply Expenses
+    Route::get('supply-expenses', [SupplyExpenseController::class, 'index'])->name('supply-expenses.index');
+    Route::get('supply-expenses/create', [SupplyExpenseController::class, 'create'])->name('supply-expenses.create');
+    Route::post('supply-expenses', [SupplyExpenseController::class, 'store'])->name('supply-expenses.store');
+    Route::get('supply-expenses/{id}', [SupplyExpenseController::class, 'show'])->name('supply-expenses.show');
+    Route::get('supply-expenses/{id}/edit', [SupplyExpenseController::class, 'edit'])->name('supply-expenses.edit');
+    Route::put('supply-expenses/{id}', [SupplyExpenseController::class, 'update'])->name('supply-expenses.update');
+    Route::delete('supply-expenses/{id}', [SupplyExpenseController::class, 'destroy'])->name('supply-expenses.destroy');
 });
