@@ -39,7 +39,7 @@ const mainNavItems: NavItem[] = [
     { title: 'Number of Projects', href: '/number-of-projects', icon: Briefcase },
     // { title: 'Account Receivables', href: '/account-receivables', icon: FileText },
     { title: 'Number of DOLE Case', href: '/admin/dole-cases', icon: FileWarning },
-    // { title: 'Total Contract Price (Annually)', href: '/total-contract-price', icon: DollarSign },
+    { title: 'Total Contract Price (Annually)', href: '/admin/contracts', icon: DollarSign },
     // { title: 'Monthly Supplies Expense', href: '/supplies-expense/monthly', icon: ShoppingCart },
     // { title: 'Quarterly Supplies Expense', href: '/supplies-expense/quarterly', icon: ShoppingCart },
     // { title: 'Semi Annual Supplies Exp', href: '/supplies-expense/semi-annual', icon: ShoppingCart },
