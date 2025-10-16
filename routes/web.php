@@ -3,6 +3,7 @@ require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
 
 use App\Http\Controllers\Admin\DoleCaseController;
+use App\Http\Controllers\ContractController;
 use App\Http\Controllers\EmployeeController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -37,4 +38,13 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::put('employees/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
     Route::delete('employees/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
     Route::get('employees/{employee}', [EmployeeController::class, 'show'])->name('employees.show');
+
+    // Contracts
+    Route::get('contracts', [ContractController::class, 'index'])->name('contracts.index');
+    Route::get('contracts/create', [ContractController::class, 'create'])->name('contracts.create');
+    Route::post('contracts', [ContractController::class, 'store'])->name('contracts.store');
+    Route::get('contracts/{id}', [ContractController::class, 'show'])->name('contracts.show');
+    Route::get('contracts/{id}/edit', [ContractController::class, 'edit'])->name('contracts.edit');
+    Route::put('contracts/{id}', [ContractController::class, 'update'])->name('contracts.update');
+    Route::delete('contracts/{id}', [ContractController::class, 'destroy'])->name('contracts.destroy');
 });
