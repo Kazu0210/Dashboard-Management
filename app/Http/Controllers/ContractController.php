@@ -42,4 +42,13 @@ class ContractController extends Controller
 
         return redirect()->route('admin.contracts.index');
     }
+
+    public function show($id)
+    {
+        $contract = Contract::with('creator')->findOrFail($id);
+
+        return Inertia::render('Contracts/Show', [
+            'contract' => $contract,
+        ]);
+    }
 }

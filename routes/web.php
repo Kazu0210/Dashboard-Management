@@ -43,4 +43,5 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('contracts', [ContractController::class, 'index'])->name('contracts.index');
     Route::get('contracts/create', [ContractController::class, 'create'])->name('contracts.create');
     Route::post('contracts', [ContractController::class, 'store'])->name('contracts.store');
+    Route::get('contracts/{id}', [ContractController::class, 'show'])->name('contracts.show');
 });

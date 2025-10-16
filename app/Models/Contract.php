@@ -23,4 +23,9 @@ class Contract extends Model
         'end_date' => 'date',
         'contract_price' => 'decimal:2',
     ];
+
+    public function creator()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'created_by');
+    }
 }
