@@ -34,7 +34,7 @@ import {
 
 const mainNavItems: NavItem[] = [
     { title: 'Dashboard', href: dashboard(), icon: LayoutGrid },
-    // { title: 'Actual Collection', href: '/actual-collection', icon: BarChart2 },
+    { title: 'Actual Collection', href: '/admin/collection', icon: BarChart2 },
     { title: 'Full Time Employee', href: '/admin/employees', icon: Users },
     // { title: 'Number of Projects', href: '/number-of-projects', icon: Briefcase },
     { title: 'Account Receivables', href: '/admin/accounts-receivable', icon: FileText },

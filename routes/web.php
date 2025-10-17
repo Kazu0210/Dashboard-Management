@@ -5,6 +5,7 @@ require __DIR__.'/auth.php';
 use App\Http\Controllers\AccountsReceivableController;
 use App\Http\Controllers\Admin\DoleCaseController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\SupplyExpenseController;
@@ -19,6 +20,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
+
+    // // Actual Collection Tracker page
+    // Route::get('collections', function () {
+    //     return Inertia::render('Projects/ActualCollection');
+    // })->name('collections.index');
 
 });
 
@@ -83,4 +89,6 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('clients/{id}/edit', [ClientController::class, 'edit'])->name('clients.edit');
     Route::put('clients/{id}', [ClientController::class, 'update'])->name('clients.update');
     Route::delete('clients/{id}', [ClientController::class, 'destroy'])->name('clients.destroy');
+
+    Route::get('collection', [CollectionController::class, 'index'])->name('collection.index');
 });

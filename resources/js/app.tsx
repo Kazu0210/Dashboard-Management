@@ -1,4 +1,5 @@
 import '../css/app.css';
+import ActualCollection from "@/pages/Projects/actual-collection";
 
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
