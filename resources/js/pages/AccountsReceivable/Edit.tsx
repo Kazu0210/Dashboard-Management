@@ -16,7 +16,7 @@ const EditAccountsReceivable = ({ record }: { record: any }) => {
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        put(`/accounts-receivable/${record.id}`);
+        put(`/admin/accounts-receivable/${record.id}`);
     }
 
     return (
@@ -67,7 +67,7 @@ const EditAccountsReceivable = ({ record }: { record: any }) => {
                                 {errors.status && <div className="text-red-500 text-sm">{errors.status}</div>}
                             </div>
                             <div className="flex justify-end gap-2">
-                                <Link href="/accounts-receivable" className="btn btn-secondary">Cancel</Link>
+                                <Link href="/admin/accounts-receivable" className="btn btn-secondary">Cancel</Link>
                                 <button type="submit" className="btn btn-primary" disabled={processing}>Update</button>
                             </div>
                         </form>

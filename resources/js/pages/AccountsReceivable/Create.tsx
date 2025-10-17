@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { useForm, Link, router } from '@inertiajs/react';
+import { useForm, Link, router, usePage } from '@inertiajs/react';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/app-sidebar';
 
 const CreateAccountsReceivable = () => {
+    const { clients = [] } = usePage().props as { clients?: { id: number, name: string }[] };
     const { data, setData, post, processing, errors } = useForm({
         client_id: '',
         invoice_no: '',
@@ -28,8 +29,17 @@ const CreateAccountsReceivable = () => {
                         <h1 className="text-2xl font-bold mb-6">Create Account Receivable</h1>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div>
-                                <label className="block font-medium">Client ID</label>
-                                <input type="text" className="input" value={data.client_id} onChange={e => setData('client_id', e.target.value)} />
+                                <label className="block font-medium">Client</label>
+                                <select
+                                    className="input"
+                                    value={data.client_id}
+                                    onChange={e => setData('client_id', e.target.value)}
+                                >
+                                    <option value="">Select a client</option>
+                                    {clients.map(client => (
+                                        <option key={client.id} value={client.id}>{client.name}</option>
+                                    ))}
+                                </select>
                                 {errors.client_id && <div className="text-red-500 text-sm">{errors.client_id}</div>}
                             </div>
                             <div>

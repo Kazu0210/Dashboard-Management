@@ -46,7 +46,7 @@ const AccountsReceivablePage = () => {
                                                 <button
                                                     onClick={() => {
                                                         if (confirm('Are you sure you want to delete this record?')) {
-                                                            router.delete(`/accounts-receivable/${rec.id}`);
+                                                            router.delete(`/admin/accounts-receivable/${rec.id}`);
                                                         }
                                                     }}
                                                     className="text-red-600 hover:underline ml-2"

@@ -21,7 +21,7 @@ const ShowAccountsReceivable = ({ record }: { record: any }) => {
                             <div><strong>Status:</strong> {record.status}</div>
                         </div>
                         <div className="mt-6 flex justify-end">
-                            <Link href="/accounts-receivable" className="btn btn-secondary">Back</Link>
+                            <Link href="/admin/accounts-receivable" className="btn btn-secondary">Back</Link>
                         </div>
                     </div>
                 </main>

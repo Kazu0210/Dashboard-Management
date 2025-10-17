@@ -17,7 +17,10 @@ class AccountsReceivableController extends Controller
 
     public function create()
     {
-        return inertia('AccountsReceivable/Create');
+        $clients = \App\Models\Client::orderBy('name')->get(['id', 'name']);
+        return inertia('AccountsReceivable/Create', [
+            'clients' => $clients
+        ]);
     }
 
     public function store(Request $request)
@@ -32,13 +35,13 @@ class AccountsReceivableController extends Controller
             'status' => 'required|in:unpaid,partial,paid',
         ]);
         
-        $record = \App\Models\AccountsReceivable::create($validated);
-        return redirect()->route('accounts-receivable.index')->with('success', 'Account receivable created successfully.');
+        $record = AccountsReceivable::create($validated);
+        return redirect()->route('admin.accounts-receivable.index')->with('success', 'Account receivable created successfully.');
     }
 
     public function show($id)
     {
-        $record = \App\Models\AccountsReceivable::findOrFail($id);
+        $record = AccountsReceivable::findOrFail($id);
         return inertia('AccountsReceivable/Show', [
             'record' => $record
         ]);
@@ -46,7 +49,7 @@ class AccountsReceivableController extends Controller
 
     public function edit($id)
     {
-        $record = \App\Models\AccountsReceivable::findOrFail($id);
+        $record = AccountsReceivable::findOrFail($id);
         return inertia('AccountsReceivable/Edit', [
             'record' => $record
         ]);
@@ -63,15 +66,15 @@ class AccountsReceivableController extends Controller
             'due_date' => 'required|date',
             'status' => 'required|in:unpaid,partial,paid',
         ]);
-        $record = \App\Models\AccountsReceivable::findOrFail($id);
+        $record = AccountsReceivable::findOrFail($id);
         $record->update($validated);
-        return redirect()->route('accounts-receivable.index')->with('success', 'Account receivable updated successfully.');
+        return redirect()->route('admin.accounts-receivable.index')->with('success', 'Account receivable updated successfully.');
     }
 
     public function destroy($id)
     {
-    $record = \App\Models\AccountsReceivable::findOrFail($id);
+    $record = AccountsReceivable::findOrFail($id);
     $record->delete();
-    return redirect()->route('accounts-receivable.index')->with('success', 'Account receivable deleted successfully.');
+    return redirect()->route('admin.accounts-receivable.index')->with('success', 'Account receivable deleted successfully.');
     }
 }
