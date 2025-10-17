@@ -36,7 +36,7 @@ const mainNavItems: NavItem[] = [
     { title: 'Dashboard', href: dashboard(), icon: LayoutGrid },
     { title: 'Actual Collection', href: '/admin/collection', icon: BarChart2 },
     { title: 'Full Time Employee', href: '/admin/employees', icon: Users },
-    // { title: 'Number of Projects', href: '/number-of-projects', icon: Briefcase },
+    { title: 'Number of Projects', href: '/admin/monitoring', icon: Briefcase },
     { title: 'Account Receivables', href: '/admin/accounts-receivable', icon: FileText },
     { title: 'Number of DOLE Case', href: '/admin/dole-cases', icon: FileWarning },
     { title: 'Total Contract Price (Annually)', href: '/admin/contracts', icon: DollarSign },
