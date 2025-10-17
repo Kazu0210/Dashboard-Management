@@ -4,6 +4,7 @@ require __DIR__.'/auth.php';
 
 use App\Http\Controllers\AccountsReceivableController;
 use App\Http\Controllers\Admin\DoleCaseController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\SupplyExpenseController;
@@ -19,8 +20,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
-    
+});
 
+Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    // ...existing code...
+
+    // Client management (admin only)
 
 });
 
@@ -69,4 +74,13 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('accounts-receivable/{id}/edit', [AccountsReceivableController::class, 'edit'])->name('accounts-receivable.edit');
     Route::put('accounts-receivable/{id}', [AccountsReceivableController::class, 'update'])->name('accounts-receivable.update');
     Route::delete('accounts-receivable/{id}', [AccountsReceivableController::class, 'destroy'])->name('accounts-receivable.destroy');
+
+    // Client Management
+    Route::get('clients', [ClientController::class, 'index'])->name('clients.index');
+    Route::get('clients/create', [ClientController::class, 'create'])->name('clients.create');
+    Route::post('clients', [ClientController::class, 'store'])->name('clients.store');
+    Route::get('clients/{id}', [ClientController::class, 'show'])->name('clients.show');
+    Route::get('clients/{id}/edit', [ClientController::class, 'edit'])->name('clients.edit');
+    Route::put('clients/{id}', [ClientController::class, 'update'])->name('clients.update');
+    Route::delete('clients/{id}', [ClientController::class, 'destroy'])->name('clients.destroy');
 });
