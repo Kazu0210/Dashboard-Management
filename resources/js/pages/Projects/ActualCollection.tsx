@@ -29,7 +29,6 @@ export default function ActualCollection() {
     notes: "",
   });
   const [editingId, setEditingId] = useState<string | null>(null);
-
   const amountRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -95,17 +94,20 @@ export default function ActualCollection() {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen bg-gray-100">
-        <Head title="Actual Collection Tracker" />
+      <div className="flex min-h-screen bg-gray-100">
+        {/* Sidebar */}
         <AppSidebar />
-        <div className="pl-64">
-          {/* Main Content */}
-          <main className="py-12">
-            <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+
+        {/* Main Content */}
+        <div className="flex-1">
+          <Head title="Actual Collection Tracker" />
+          <main className="py-12 px-6">
+            <div className="max-w-7xl mx-auto">
               <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div className="p-6 text-gray-900">
                   <h2 className="text-2xl font-semibold mb-6">Actual Collection Tracker</h2>
-                  
+
+                  {/* Form Section */}
                   <form onSubmit={handleSubmit} className="mb-8 space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                       <div>
@@ -118,7 +120,7 @@ export default function ActualCollection() {
                           required
                         />
                       </div>
-                      
+
                       <div>
                         <label className="block text-sm font-medium text-gray-700">Project</label>
                         <input
@@ -175,6 +177,7 @@ export default function ActualCollection() {
                     </div>
                   </form>
 
+                  {/* Table Section */}
                   <div className="mt-8">
                     <h3 className="text-lg font-medium mb-4">Collection Entries</h3>
                     <div className="overflow-x-auto">

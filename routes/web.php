@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DoleCaseController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\ContractController;
+use App\Http\Controllers\ProjectMonitoringController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\SupplyExpenseController;
 use Illuminate\Support\Facades\Route;
@@ -25,14 +26,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route::get('collections', function () {
     //     return Inertia::render('Projects/ActualCollection');
     // })->name('collections.index');
-
 });
 
-Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    // ...existing code...
-
-    // Client management (admin only)
-
+// Project monitoring API endpoints (authenticated)
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('projects', [ProjectMonitoringController::class, 'index'])->name('projects.index');
+    Route::post('projects', [ProjectMonitoringController::class, 'store'])->name('projects.store');
 });
 
 
@@ -91,4 +90,6 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::delete('clients/{id}', [ClientController::class, 'destroy'])->name('clients.destroy');
 
     Route::get('collection', [CollectionController::class, 'index'])->name('collection.index');
+
+    route::get('monitoring', [ProjectMonitoringController::class, 'index'])->name('monitoring.index');
 });
