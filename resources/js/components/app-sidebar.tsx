@@ -49,22 +49,6 @@ export function AppSidebar() {
             collapsible="icon"
             className={`transition-all duration-300 ${collapsed ? "w-16" : "w-64"}`}
         >
-            {/* Header with toggle button */}
-            <SidebarHeader className="flex items-center justify-between p-2">
-                <div className="flex items-center gap-2">
-                    <AppLogo />
-                    {!collapsed && <span className="font-semibold text-lg">Tagline HRIS</span>}
-                </div>
-                <button
-                    onClick={() => setCollapsed(!collapsed)}
-                    className="p-2 rounded hover:bg-gray-200"
-                    title="Toggle sidebar"
-                >
-                    <LayoutGrid size={18} />
-                </button>
-            </SidebarHeader>
-
-
             <SidebarContent>
                 <NavMain items={mainNavItems} />
             </SidebarContent>
