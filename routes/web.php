@@ -10,6 +10,7 @@ use App\Http\Controllers\ContractController;
 use App\Http\Controllers\ProjectMonitoringController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\SupplyExpenseController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -92,4 +93,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('collection', [CollectionController::class, 'index'])->name('collection.index');
 
     route::get('monitoring', [ProjectMonitoringController::class, 'index'])->name('monitoring.index');
+
+    // User Management
+    Route::get('users', [UserController::class, 'index'])->name('users.index');
 });

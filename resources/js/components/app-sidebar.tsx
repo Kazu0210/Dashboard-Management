@@ -49,7 +49,7 @@ const mainNavItems: NavItem[] = [
 const footerNavItems: NavItem[] = [];
 
 const adminNavItems: NavItem[] = [
-    { title: "Users", href: "/admin/users", icon: Users },
+    { title: "User Management", href: "/admin/users", icon: Users },
     // { title: "Roles", href: "/admin/roles", icon: Shield },
     // { title: "Settings", href: "/admin/settings", icon: Settings },
 ];
