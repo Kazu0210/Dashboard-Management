@@ -33,6 +33,14 @@ const mainNavItems: NavItem[] = [
             { title: "Account Receivables", href: "/admin/accounts-receivable", icon: FileText },
         ],
     },
+    {
+        title: "Project / Client Monitoring",
+        icon: Briefcase,
+        children: [
+            { title: "Project Monitoring", href: "/admin/projects", icon: Briefcase },
+            { title: "Client Monitoring", href: "/admin/clients", icon: Users },
+        ],
+    },
     { title: "Full Time Employee", href: "/admin/employees", icon: Users },
     { title: "Number of Projects", href: "/admin/monitoring", icon: Briefcase },
     { title: "Number of DOLE Case", href: "/admin/dole-cases", icon: FileWarning },
