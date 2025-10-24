@@ -19,8 +19,8 @@ import {
     SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { type NavItem } from "@/types";
-import { Link } from "@inertiajs/react";
-import { LayoutGrid, DollarSign, BarChart2, FileText, Users, Briefcase, FileWarning } from "lucide-react";
+import { Link, usePage } from "@inertiajs/react";
+import { LayoutGrid, DollarSign, BarChart2, FileText, Users, Briefcase, FileWarning, Settings, Shield } from "lucide-react";
 import AppLogo from "./app-logo";
 
 const mainNavItems: NavItem[] = [
@@ -48,8 +48,15 @@ const mainNavItems: NavItem[] = [
 
 const footerNavItems: NavItem[] = [];
 
+const adminNavItems: NavItem[] = [
+    { title: "Users", href: "/admin/users", icon: Users },
+    // { title: "Roles", href: "/admin/roles", icon: Shield },
+    // { title: "Settings", href: "/admin/settings", icon: Settings },
+];
+
 export function AppSidebar() {
     const [collapsed, setCollapsed] = useState(false);
+    const page = usePage();
 
     return (
         <Sidebar
@@ -59,6 +66,26 @@ export function AppSidebar() {
         >
             <SidebarContent>
                 <NavMain items={mainNavItems} />
+
+                <SidebarGroup className="px-2 py-0">
+                    <SidebarGroupLabel>Admin Tools</SidebarGroupLabel>
+                    <SidebarMenu>
+                        {adminNavItems.map((item) => (
+                            <SidebarMenuItem key={item.title}>
+                                <SidebarMenuButton
+                                    asChild
+                                    isActive={item.href ? page.url.startsWith(typeof item.href === 'string' ? item.href : item.href.url) : false}
+                                    tooltip={{ children: item.title }}
+                                >
+                                    <Link href={item.href} prefetch>
+                                        {item.icon && <item.icon />}
+                                        <span>{item.title}</span>
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        ))}
+                    </SidebarMenu>
+                </SidebarGroup>
             </SidebarContent>
 
             <SidebarFooter>
