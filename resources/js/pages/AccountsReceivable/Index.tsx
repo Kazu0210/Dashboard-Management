@@ -41,15 +41,15 @@ const AccountsReceivablePage = () => {
                                             <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${rec.status === 'Paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>{rec.status}</span>
                                         </td>
                                         <td className="px-6 py-3 space-x-2">
-                                            <Link href={`/admin/accounts-receivable/${rec.id}`} className="text-primary hover:underline">View</Link>
-                                            <Link href={`/admin/accounts-receivable/${rec.id}/edit`} className="text-secondary hover:underline">Edit</Link>
+                                            <Link href={`/admin/accounts-receivable/${rec.id}`} className="inline-flex items-center px-3 py-1 rounded bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors">View</Link>
+                                            <Link href={`/admin/accounts-receivable/${rec.id}/edit`} className="inline-flex items-center px-3 py-1 rounded bg-yellow-500 text-white text-sm font-medium hover:bg-yellow-600 transition-colors">Edit</Link>
                                             <button
                                                 onClick={() => {
                                                     if (confirm('Are you sure you want to delete this record?')) {
                                                         router.delete(`/admin/accounts-receivable/${rec.id}`);
                                                     }
                                                 }}
-                                                className="text-red-600 hover:underline ml-2"
+                                                className="inline-flex items-center px-3 py-1 rounded bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition-colors ml-2"
                                             >
                                                 Delete
                                             </button>
