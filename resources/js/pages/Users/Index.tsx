@@ -1,4 +1,7 @@
 import AppLayout from '@/layouts/app-layout';
+import { Button } from '@/components/ui/button';
+import { Link } from '@inertiajs/react';
+import { UserPlus } from 'lucide-react';
 
 const UsersPage = () => {
 	return (
@@ -8,6 +11,14 @@ const UsersPage = () => {
 						<div>
 							<h2 className="text-3xl font-bold text-black">Users</h2>
 							<p className="text-lg mt-1 text-black">Manage users and access here</p>
+						</div>
+						<div>
+							<Button asChild>
+								<Link href="/admin/users/create" prefetch>
+									<UserPlus />
+									<span>Create User</span>
+								</Link>
+							</Button>
 						</div>
 					</div>
 
