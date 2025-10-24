@@ -12,14 +12,14 @@ type CollectionEntry = {
   notes?: string;
 };
 
-const STORAGE_KEY = "actualCollections_simple_v1";
+const STORAGE_KEY = "collections_simple_v1";
 
 const formatCurrency = (value: number) =>
   value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 const uid = () => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`;
 
-export default function ActualCollection() {
+export default function Collection() {
   const [entries, setEntries] = useState<CollectionEntry[]>([]);
   const [form, setForm] = useState<Partial<CollectionEntry>>({
     date: new Date().toISOString().slice(0, 10),
@@ -100,12 +100,12 @@ export default function ActualCollection() {
 
         {/* Main Content */}
         <div className="flex-1">
-          <Head title="Actual Collection Tracker" />
+          <Head title="Collection Tracker" />
           <main className="py-12 px-6">
             <div className="max-w-7xl mx-auto">
               <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div className="p-6 text-gray-900">
-                  <h2 className="text-2xl font-semibold mb-6">Actual Collection Tracker</h2>
+                  <h2 className="text-2xl font-semibold mb-6">Collection Tracker</h2>
 
                   {/* Form Section */}
                   <form onSubmit={handleSubmit} className="mb-8 space-y-4">
