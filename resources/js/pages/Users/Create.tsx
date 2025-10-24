@@ -26,8 +26,8 @@ const CreateUserPage = () => {
             <div className="space-y-6 p-4 bg-white min-h-screen text-green-900 transition-colors">
                 <div className="flex items-center justify-between max-w-2xl mx-auto">
                     <div>
-                        <h2 className="text-3xl font-bold text-green-900">Create User</h2>
-                        <p className="text-lg mt-1 text-green-700">Fill out the form to add a new user.</p>
+                        <h2 className="text-3xl font-bold text-neutral-900">Create User</h2>
+                        <p className="text-lg mt-1 text-neutral-700">Fill out the form to add a new user.</p>
                     </div>
                 </div>
 

@@ -9,8 +9,8 @@ const UsersPage = () => {
 		<div className="space-y-6 p-4 bg-white min-h-screen text-green-900 transition-colors">
 		  <div className="flex items-center justify-between">
 		    <div>
-		      <h2 className="text-3xl font-bold text-green-900">Users</h2>
-		      <p className="text-lg mt-1 text-green-700">Manage users and access here</p>
+		      <h2 className="text-3xl font-bold text-neutral-900">Users</h2>
+		      <p className="text-lg mt-1 text-neutral-700">Manage users and access here</p>
 		    </div>
 		    <div>
 		      <Button asChild variant="default" className="bg-green-500 hover:bg-green-600 text-white">
