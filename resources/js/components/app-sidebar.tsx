@@ -1,62 +1,62 @@
-import { NavFooter } from '@/components/nav-footer';
-import { NavMain } from '@/components/nav-main';
-import { NavUser } from '@/components/nav-user';
+import { dashboard } from "@/routes/index";
+import { useState } from "react";
+import { NavFooter } from "@/components/nav-footer";
+import { NavMain } from "@/components/nav-main";
+import { NavUser } from "@/components/nav-user";
 import {
     Sidebar,
-    SidebarContent,
     SidebarFooter,
     SidebarHeader,
+    SidebarContent,
+    SidebarGroup,
+    SidebarGroupLabel,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-} from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
-import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
-import { Folder, LayoutGrid } from 'lucide-react';
-import AppLogo from './app-logo';
-
-import {
-    BarChart2,
-    Users,
-    Briefcase,
-    FileText,
-    FileWarning,
-    DollarSign,
-    Calendar,
-    ShoppingCart,
-    CreditCard,
-    TrendingUp,
-    TrendingDown,
-    PieChart,
-    BookOpen,
-} from 'lucide-react';
+    SidebarMenuSub,
+    SidebarMenuSubButton,
+    SidebarMenuSubItem,
+    SidebarSeparator,
+} from "@/components/ui/sidebar";
+import { type NavItem } from "@/types";
+import { Link } from "@inertiajs/react";
+import { LayoutGrid, DollarSign, BarChart2, FileText, Users, Briefcase, FileWarning } from "lucide-react";
+import AppLogo from "./app-logo";
 
 const mainNavItems: NavItem[] = [
-    { title: 'Dashboard', href: dashboard(), icon: LayoutGrid },
-    { title: 'Actual Collection', href: '/admin/collection', icon: BarChart2 },
-    { title: 'Full Time Employee', href: '/admin/employees', icon: Users },
-    { title: 'Number of Projects', href: '/admin/monitoring', icon: Briefcase },
-    { title: 'Account Receivables', href: '/admin/accounts-receivable', icon: FileText },
-    { title: 'Number of DOLE Case', href: '/admin/dole-cases', icon: FileWarning },
-    { title: 'Total Contract Price (Annually)', href: '/admin/contracts', icon: DollarSign },
-    { title: 'Client Management', href: '/admin/clients', icon: Users },
-    // { title: 'Monthly Supplies Expense', href: '/supplies-expense/monthly', icon: ShoppingCart },
-    // { title: 'Quarterly Supplies Expense', href: '/supplies-expense/quarterly', icon: ShoppingCart },
-    // { title: 'Semi Annual Supplies Exp', href: '/supplies-expense/semi-annual', icon: ShoppingCart },
-    // { title: 'Annual Supplies Exp', href: '/supplies-expense/annual', icon: ShoppingCart },
-    // { title: 'Payroll Monthly', href: '/payroll/monthly', icon: CreditCard },
-    // { title: 'Gross Income', href: '/gross-income', icon: TrendingUp },
-    // { title: 'Gross Expense', href: '/gross-expense', icon: TrendingDown },
-    // { title: 'Net Income (Monthly)', href: '/net-income/monthly', icon: PieChart },
-    // { title: 'Knowledge Base', href: '/knowledge-base', icon: BookOpen },
+    { title: "Dashboard", href: dashboard(), icon: LayoutGrid },
+    {
+        title: "Billing & Collection",
+        icon: DollarSign,
+        children: [
+            { title: "Actual Collection", href: "/admin/collection", icon: BarChart2 },
+            { title: "Account Receivables", href: "/admin/accounts-receivable", icon: FileText },
+        ],
+    },
+    {
+        title: "Project / Client Monitoring",
+        icon: Briefcase,
+        children: [
+            { title: "Project Monitoring", href: "/admin/projects", icon: Briefcase },
+            { title: "Client Monitoring", href: "/admin/clients", icon: Users },
+        ],
+    },
+    { title: "Full Time Employee", href: "/admin/employees", icon: Users },
+    { title: "Number of Projects", href: "/admin/monitoring", icon: Briefcase },
+    { title: "Number of DOLE Case", href: "/admin/dole-cases", icon: FileWarning },
 ];
 
 const footerNavItems: NavItem[] = [];
 
 export function AppSidebar() {
+    const [collapsed, setCollapsed] = useState(false);
+
     return (
-        <Sidebar collapsible="icon" variant="inset">
+        <Sidebar
+            variant="inset"
+            collapsible="icon"
+            className={`transition-all duration-300 ${collapsed ? "w-16" : "w-64"}`}
+        >
             <SidebarContent>
                 <NavMain items={mainNavItems} />
             </SidebarContent>
