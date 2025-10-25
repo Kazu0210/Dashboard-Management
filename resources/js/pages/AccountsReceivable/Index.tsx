@@ -32,7 +32,7 @@ const AccountsReceivablePage = () => {
                             <thead>
                                 <tr>
                                     <th className="text-left py-2 px-3 font-semibold text-green-900">Invoice No</th>
-                                    <th className="text-left py-2 px-3 font-semibold text-green-900">Client ID</th>
+                                    <th className="text-left py-2 px-3 font-semibold text-green-900">Client</th>
                                     <th className="text-left py-2 px-3 font-semibold text-green-900">Amount</th>
                                     <th className="text-left py-2 px-3 font-semibold text-green-900">Balance</th>
                                     <th className="text-left py-2 px-3 font-semibold text-green-900">Status</th>
@@ -43,7 +43,7 @@ const AccountsReceivablePage = () => {
                                 {records.map((rec) => (
                                     <tr key={rec.id} className="border-t border-green-100">
                                         <td className="py-2 px-3">{rec.invoice_no}</td>
-                                        <td className="py-2 px-3">{rec.client_id}</td>
+                                        <td className="py-2 px-3">{rec.client_name}</td>
                                         <td className="py-2 px-3">{rec.amount}</td>
                                         <td className="py-2 px-3">{rec.balance}</td>
                                         <td className="py-2 px-3">
