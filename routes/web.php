@@ -90,7 +90,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::put('clients/{id}', [ClientController::class, 'update'])->name('clients.update');
     Route::delete('clients/{id}', [ClientController::class, 'destroy'])->name('clients.destroy');
 
-    Route::get('collection', [CollectionController::class, 'index'])->name('collection.index');
+    // Route::get('collection', [CollectionController::class, 'index'])->name('collection.index');
 
     route::get('monitoring', [ProjectMonitoringController::class, 'index'])->name('monitoring.index');
 
@@ -101,5 +101,10 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('users/{id}/update', [UserController::class, 'update'])->name('users.update');
     Route::delete('users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
+    // Collection Route
+    Route::get('collections', [CollectionController::class, 'index'])->name('collections.index');
+    Route::get('collections/create', [CollectionController::class, 'create'])->name('collections.create');
+    Route::post('collections', [CollectionController::class, 'store'])->name('collections.store');
 });
 
