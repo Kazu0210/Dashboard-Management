@@ -42,7 +42,6 @@ const mainNavItems: NavItem[] = [
         ],
     },
     { title: "Employee Management", href: "/admin/employees", icon: Users },
-    { title: "Number of Projects", href: "/admin/monitoring", icon: Briefcase },
     { title: "Number of DOLE Case", href: "/admin/dole-cases", icon: FileWarning },
 ];
 
