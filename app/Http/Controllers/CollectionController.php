@@ -11,7 +11,11 @@ class CollectionController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Collections/Index');
+        $collections = Collection::with('project')->orderBy('date', 'desc')->get();
+
+        return Inertia::render('Collections/Index', [
+            'collections' => $collections,
+        ]);
     }
 
     public function create()
