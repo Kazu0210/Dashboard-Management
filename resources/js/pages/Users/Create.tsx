@@ -4,22 +4,35 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useState } from 'react';
+import { router } from '@inertiajs/react';
+
 
 const CreateUserPage = () => {
-	const [form, setForm] = useState({
-		name: '',
-		email: '',
-		password: '',
-		password_confirmation: '',
-	});
+    const [form, setForm] = useState({
+        name: '',
+        email: '',
+        password: '',
+        password_confirmation: '',
+    });
+    const [processing, setProcessing] = useState(false);
+        const [errors, setErrors] = useState<Record<string, any>>({});
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setForm({ ...form, [e.target.name]: e.target.value });
-	};
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
 
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
-	};
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setProcessing(true);
+        setErrors({});
+        router.post('/admin/users/create', form, {
+            onError: (err) => {
+                setErrors(err);
+                setProcessing(false);
+            },
+            onFinish: () => setProcessing(false),
+        });
+    };
 
 	return (
 		<AppLayout>
@@ -43,7 +56,11 @@ const CreateUserPage = () => {
                                 onChange={handleChange}
                                 className="mt-1"
                                 required
+                                disabled={processing}
                             />
+                            {errors.name && (
+                                <div className="text-red-600 text-sm mt-1">{errors.name.join(' ')}</div>
+                            )}
                         </div>
                         <div>
                             <Label htmlFor="email">Email</Label>
@@ -55,7 +72,11 @@ const CreateUserPage = () => {
                                 onChange={handleChange}
                                 className="mt-1"
                                 required
+                                disabled={processing}
                             />
+                            {errors.email && (
+                                <div className="text-red-600 text-sm mt-1">{errors.email.join(' ')}</div>
+                            )}
                         </div>
                         <div>
                             <Label htmlFor="password">Password</Label>
@@ -67,7 +88,11 @@ const CreateUserPage = () => {
                                 onChange={handleChange}
                                 className="mt-1"
                                 required
+                                disabled={processing}
                             />
+                            {errors.password && (
+                                <div className="text-red-600 text-sm mt-1">{errors.password.join(' ')}</div>
+                            )}
                         </div>
                         <div>
                             <Label htmlFor="password_confirmation">Confirm Password</Label>
@@ -79,11 +104,15 @@ const CreateUserPage = () => {
                                 onChange={handleChange}
                                 className="mt-1"
                                 required
+                                disabled={processing}
                             />
+                            {errors.password_confirmation && (
+                                <div className="text-red-600 text-sm mt-1">{errors.password_confirmation.join(' ')}</div>
+                            )}
                         </div>
                         <div className="pt-2">
-                            <Button type="submit" variant="default" className="bg-green-500 hover:bg-green-600 text-white w-full">
-                                Create User
+                            <Button type="submit" variant="default" className="bg-green-500 hover:bg-green-600 text-white w-full" disabled={processing}>
+                                {processing ? 'Creating...' : 'Create User'}
                             </Button>
                         </div>
                     </form>
