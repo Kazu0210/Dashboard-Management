@@ -10,7 +10,14 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = User::with('roles')->get()->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->roles->pluck('name')->first() ?? 'N/A',
+            ];
+        });
         return Inertia::render('Users/Index', compact('users'));
     }
 

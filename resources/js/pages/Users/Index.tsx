@@ -8,6 +8,7 @@ type User = {
 	id: number;
 	name: string;
 	email: string;
+	role: string;
 };
 
 const UsersPage = () => {
@@ -35,17 +36,19 @@ const UsersPage = () => {
 						<table className="min-w-full text-sm">
 							<thead>
 								<tr>
-									<th className="text-left py-2 px-3 font-semibold text-green-900">Name</th>
-									<th className="text-left py-2 px-3 font-semibold text-green-900">Email</th>
-									<th className="text-left py-2 px-3 font-semibold text-green-900">Actions</th>
+												<th className="text-left py-2 px-3 font-semibold text-green-900">Name</th>
+												<th className="text-left py-2 px-3 font-semibold text-green-900">Email</th>
+												<th className="text-left py-2 px-3 font-semibold text-green-900">Role</th>
+												<th className="text-left py-2 px-3 font-semibold text-green-900">Actions</th>
 								</tr>
 							</thead>
 							<tbody>
 								{users.map((user) => (
 									<tr key={user.id} className="border-t border-green-100">
-										<td className="py-2 px-3">{user.name}</td>
-										<td className="py-2 px-3">{user.email}</td>
-										<td className="py-2 px-3">
+													<td className="py-2 px-3">{user.name}</td>
+													<td className="py-2 px-3">{user.email}</td>
+													<td className="py-2 px-3">{user.role}</td>
+													<td className="py-2 px-3">
 											<div className="flex gap-2">
 												<Link
 													href={`/admin/users/${user.id}/edit`}
