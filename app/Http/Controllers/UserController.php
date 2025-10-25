@@ -33,6 +33,9 @@ class UserController extends Controller
             'password' => bcrypt($request['password']),
         ]);
 
+        // Assign role to user
+        $user->assignRole('admin');
+
         return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
     }
 
