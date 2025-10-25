@@ -15,7 +15,7 @@ const CreateUserPage = () => {
         password_confirmation: '',
     });
     const [processing, setProcessing] = useState(false);
-        const [errors, setErrors] = useState<Record<string, any>>({});
+    const [errors, setErrors] = useState<Record<string, any>>({});
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });

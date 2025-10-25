@@ -9,6 +9,7 @@ use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\ProjectMonitoringController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SupplyExpenseController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -92,7 +93,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
 
     // Route::get('collection', [CollectionController::class, 'index'])->name('collection.index');
 
-    route::get('monitoring', [ProjectMonitoringController::class, 'index'])->name('monitoring.index');
+    // route::get('monitoring', [ProjectMonitoringController::class, 'index'])->name('monitoring.index');
 
     // User Management
     Route::get('users', [UserController::class, 'index'])->name('users.index');
@@ -106,5 +107,10 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('collections', [CollectionController::class, 'index'])->name('collections.index');
     Route::get('collections/create', [CollectionController::class, 'create'])->name('collections.create');
     Route::post('collections', [CollectionController::class, 'store'])->name('collections.store');
+
+    // Project Management
+    Route::get('projects', [ProjectController::class, 'index'])->name('projects.index');
+    Route::get('projects/create', [ProjectController::class, 'create'])->name('projects.create');
+    Route::post('projects/create', [ProjectController::class, 'store'])->name('projects.store');
 });
 
