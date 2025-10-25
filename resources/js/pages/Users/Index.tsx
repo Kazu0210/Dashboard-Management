@@ -47,7 +47,13 @@ const UsersPage = () => {
 													<td className="py-2 px-3">{user.email}</td>
 													<td className="py-2 px-3">
 														<div className="flex gap-2">
-															<button className="text-green-700 hover:underline" title="Edit" disabled>Edit</button>
+															<Link
+																href={`/admin/users/${user.id}/edit`}
+																className="text-green-700 hover:underline"
+																title="Edit"
+															>
+																Edit
+															</Link>
 															<button className="text-red-600 hover:underline" title="Delete" disabled>Delete</button>
 														</div>
 													</td>
