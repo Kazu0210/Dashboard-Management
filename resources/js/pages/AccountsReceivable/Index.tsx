@@ -1,91 +1,98 @@
-
-
 import AppLayout from '@/layouts/app-layout';
-import { Button } from '@/components/ui/button';
-import { Link, usePage, router } from '@inertiajs/react';
-import { FilePlus2 } from 'lucide-react';
+import { Link, usePage } from '@inertiajs/react';
 
+const breadcrumbs = [
+    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Accounts Receivable', href: '/admin/accounts-receivable' },
+];
 
 const AccountsReceivablePage = () => {
     const { records = [] } = usePage().props as { records?: any[] };
+
+    function deleteRecord(id: number) {
+        if (!confirm('Delete this record? This action cannot be undone.')) return;
+
+        const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+        fetch(`/admin/accounts-receivable/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRF-TOKEN': token,
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: new URLSearchParams({ _method: 'DELETE' }).toString(),
+        })
+            .then((res) => {
+                if (res.ok) {
+                    window.location.reload();
+                } else {
+                    alert('Failed to delete the record.');
+                }
+            })
+            .catch(() => alert('Failed to delete the record.'));
+    }
+
     return (
-        <AppLayout>
-            <div className="space-y-6 p-4 bg-white min-h-screen text-green-900 transition-colors">
-                <div className="flex items-center justify-between">
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <div className="space-y-6 p-4 bg-gray-50 min-h-screen">
+                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                     <div>
-                        <h2 className="text-3xl font-bold text-neutral-900">Accounts Receivable</h2>
-                        <p className="text-lg mt-1 text-neutral-700">Manage accounts receivable records here</p>
+                        <h2 className="text-3xl font-bold text-gray-900">Accounts Receivable</h2>
+                        <p className="text-sm text-gray-600 mt-1">Manage accounts receivable records here</p>
                     </div>
-                    <div>
-                        <Button asChild variant="default" className="bg-green-500 hover:bg-green-600 text-white">
-                            <Link href="/admin/accounts-receivable/create" prefetch>
-                                <FilePlus2 />
-                                <span>New Record</span>
-                            </Link>
-                        </Button>
+
+                    <div className="flex items-center gap-3 w-full md:w-auto">
+                        <Link
+                            href="/admin/accounts-receivable/create"
+                            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            Create New
+                        </Link>
                     </div>
                 </div>
 
-                <div className="bg-green-50 rounded-lg p-6 shadow">
-                    {records && records.length > 0 ? (
-                        <table className="min-w-full text-sm">
+                <div className="bg-white rounded-lg shadow p-4">
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full text-left">
                             <thead>
-                                <tr>
-                                    <th className="text-left py-2 px-3 font-semibold text-green-900">Invoice No</th>
-                                    <th className="text-left py-2 px-3 font-semibold text-green-900">Client</th>
-                                    <th className="text-left py-2 px-3 font-semibold text-green-900">Amount</th>
-                                    <th className="text-left py-2 px-3 font-semibold text-green-900">Balance</th>
-                                    <th className="text-left py-2 px-3 font-semibold text-green-900">Status</th>
-                                    <th className="text-left py-2 px-3 font-semibold text-green-900">Actions</th>
+                                <tr className="text-sm text-gray-700">
+                                    <th className="py-2 px-3">Invoice No</th>
+                                    <th className="py-2 px-3">Client</th>
+                                    <th className="py-2 px-3">Amount</th>
+                                    <th className="py-2 px-3">Balance</th>
+                                    <th className="py-2 px-3">Status</th>
+                                    <th className="py-2 px-3">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {records.map((rec) => (
-                                    <tr key={rec.id} className="border-t border-green-100">
-                                        <td className="py-2 px-3">{rec.invoice_no}</td>
-                                        <td className="py-2 px-3">{rec.client_name}</td>
-                                        <td className="py-2 px-3">{rec.amount}</td>
-                                        <td className="py-2 px-3">{rec.balance}</td>
-                                        <td className="py-2 px-3">
-                                            <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${rec.status === 'Paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>{rec.status}</span>
-                                        </td>
-                                        <td className="py-2 px-3">
-                                            <div className="flex gap-2">
-                                                <Link
-                                                    href={`/admin/accounts-receivable/${rec.id}`}
-                                                    className="text-green-700 hover:underline"
-                                                    title="View"
-                                                >
-                                                    View
-                                                </Link>
-                                                <Link
-                                                    href={`/admin/accounts-receivable/${rec.id}/edit`}
-                                                    className="text-yellow-600 hover:underline"
-                                                    title="Edit"
-                                                >
-                                                    Edit
-                                                </Link>
-                                                <button
-                                                    type="button"
-                                                    className="text-red-600 hover:underline"
-                                                    title="Delete"
-                                                    onClick={() => {
-                                                        if (confirm('Are you sure you want to delete this record?')) {
-                                                            router.delete(`/admin/accounts-receivable/${rec.id}`);
-                                                        }
-                                                    }}
-                                                >
-                                                    Delete
-                                                </button>
-                                            </div>
+                                {records.length === 0 ? (
+                                    <tr>
+                                        <td className="py-4 px-3 text-sm text-gray-600" colSpan={6}>
+                                            No records found.
                                         </td>
                                     </tr>
-                                ))}
+                                ) : (
+                                    records.map((rec: any) => (
+                                        <tr key={rec.id} className="border-t">
+                                            <td className="py-3 px-3 text-sm text-gray-700">{rec.invoice_no}</td>
+                                            <td className="py-3 px-3 text-sm text-gray-700">{rec.client_name}</td>
+                                            <td className="py-3 px-3 text-sm text-gray-700">{rec.amount}</td>
+                                            <td className="py-3 px-3 text-sm text-gray-700">{rec.balance}</td>
+                                            <td className="py-3 px-3 text-sm text-gray-700">{rec.status}</td>
+                                            <td className="py-3 px-3 text-sm text-gray-700">
+                                                <div className="flex items-center gap-2">
+                                                    <Link href={`/admin/accounts-receivable/${rec.id}`} className="text-sm text-blue-600 hover:underline">View</Link>
+                                                    <Link href={`/admin/accounts-receivable/${rec.id}/edit`} className="text-sm text-blue-600 hover:underline">Edit</Link>
+                                                    <button type="button" onClick={() => deleteRecord(rec.id)} className="text-sm text-red-600 hover:underline">Delete</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
                             </tbody>
                         </table>
-                    ) : (
-                        <p className="text-sm text-green-900">No records found.</p>
-                    )}
+                    </div>
                 </div>
             </div>
         </AppLayout>

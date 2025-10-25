@@ -7,25 +7,88 @@ const ShowAccountsReceivable = ({ record }: { record: any }) => {
     return (
         <AppLayout>
             <Head title="Account Receivable Details" />
-            <div className="space-y-6 p-4 bg-white min-h-screen text-green-900 transition-colors">
-                <div className="flex items-center justify-between max-w-2xl mx-auto">
-                    <div>
-                        <h2 className="text-3xl font-bold text-neutral-900">Account Receivable Details</h2>
-                        <p className="text-lg mt-1 text-neutral-700">View details for this record</p>
+            <div className="space-y-6 p-4 bg-gray-50 min-h-screen">
+                <div className="max-w-4xl mx-auto">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h2 className="text-3xl font-bold text-gray-900">Account Receivable Details</h2>
+                            <p className="text-lg mt-1 text-gray-600">View details for this record</p>
+                        </div>
+                        <Link href="/admin/accounts-receivable" className="text-sm text-gray-600 hover:underline">Back to list</Link>
                     </div>
-                </div>
-                <div className="bg-green-50 rounded-lg p-6 shadow max-w-2xl mx-auto w-full">
-                    <div className="space-y-4 text-base">
-                        <div><span className="font-semibold">Invoice No:</span> {record.invoice_no}</div>
-                        <div><span className="font-semibold">Client:</span> {record.client_name || record.client_id}</div>
-                        <div><span className="font-semibold">Amount:</span> {record.amount}</div>
-                        <div><span className="font-semibold">Balance:</span> {record.balance}</div>
-                        <div><span className="font-semibold">Invoice Date:</span> {record.invoice_date}</div>
-                        <div><span className="font-semibold">Due Date:</span> {record.due_date}</div>
-                        <div><span className="font-semibold">Status:</span> <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${record.status === 'Paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>{record.status}</span></div>
-                    </div>
-                    <div className="mt-6 flex justify-end">
-                        <Link href="/admin/accounts-receivable" className="inline-flex items-center px-4 py-2 rounded bg-muted text-foreground font-semibold hover:bg-muted/80 transition-colors">Back</Link>
+
+                    <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="md:col-span-2 bg-white rounded-lg p-6 shadow w-full">
+                            <div className="space-y-4 text-sm text-gray-700">
+                                <div>
+                                    <p className="text-xs text-gray-500">Invoice No</p>
+                                    <p className="font-medium">{record.invoice_no}</p>
+                                </div>
+
+                                <div>
+                                    <p className="text-xs text-gray-500">Client</p>
+                                    <p className="font-medium">{record.client_name ?? record.client_id}</p>
+                                </div>
+
+                                <div>
+                                    <p className="text-xs text-gray-500">Amount</p>
+                                    <p className="font-medium">{record.amount}</p>
+                                </div>
+
+                                <div>
+                                    <p className="text-xs text-gray-500">Balance</p>
+                                    <p className="font-medium">{record.balance}</p>
+                                </div>
+
+                                <div>
+                                    <p className="text-xs text-gray-500">Invoice Date</p>
+                                    <p className="font-medium">{record.invoice_date}</p>
+                                </div>
+
+                                <div>
+                                    <p className="text-xs text-gray-500">Due Date</p>
+                                    <p className="font-medium">{record.due_date}</p>
+                                </div>
+
+                                <div>
+                                    <p className="text-xs text-gray-500">Status</p>
+                                    <p className="font-medium">{record.status}</p>
+                                </div>
+                            </div>
+
+                            <div className="mt-6 flex justify-end gap-2">
+                                <Link
+                                    href={`/admin/accounts-receivable/${record.id}/edit`}
+                                    className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700"
+                                >
+                                    Edit
+                                </Link>
+                                <Link
+                                    href="/admin/accounts-receivable"
+                                    className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50"
+                                >
+                                    Back
+                                </Link>
+                            </div>
+                        </div>
+
+                        <aside className="md:col-span-1">
+                            <div className="bg-white rounded-lg p-4 shadow">
+                                <h3 className="text-lg font-medium text-gray-900">Record Info</h3>
+                                <p className="text-sm text-gray-600 mt-2">Metadata for this record.</p>
+
+                                <div className="mt-4 text-sm text-gray-700">
+                                    <div className="py-3">
+                                        <p className="text-xs text-gray-500">Created At</p>
+                                        <p className="font-medium">{record.created_at ? (new Date(record.created_at)).toLocaleString() : '-'}</p>
+                                    </div>
+                                    <div className="py-3">
+                                        <p className="text-xs text-gray-500">Updated At</p>
+                                        <p className="font-medium">{record.updated_at ? (new Date(record.updated_at)).toLocaleString() : '-'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </aside>
                     </div>
                 </div>
             </div>
