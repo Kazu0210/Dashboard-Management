@@ -76,4 +76,12 @@ class DoleCaseController extends Controller
             'viewMode' => true,
         ]);
     }
+
+    public function destroy($id)
+    {
+        $doleCase = DoleCase::findOrFail($id);
+        $doleCase->delete();
+
+        return redirect()->route('admin.dole-cases.index')->with('success', 'Dole case deleted successfully.');
+    }
 }

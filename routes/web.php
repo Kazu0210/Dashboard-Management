@@ -45,6 +45,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('dole-cases/{id}/edit', [DoleCaseController::class, 'edit'])->name('dole-cases.edit');
     Route::put('dole-cases/{id}', [DoleCaseController::class, 'update'])->name('dole-cases.update');
     Route::get('dole-cases/{id}', [DoleCaseController::class, 'show'])->name('dole-cases.show');
+    Route::delete('dole-cases/{id}/destroy', [DoleCaseController::class, 'destroy'])->name('dole-cases.destroy');
 
     // Employee management
     Route::get('employees', [EmployeeController::class, 'index'])->name('employees.index');
