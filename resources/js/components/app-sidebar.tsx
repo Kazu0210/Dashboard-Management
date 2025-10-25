@@ -29,7 +29,7 @@ const mainNavItems: NavItem[] = [
         title: "Billing & Collection",
         icon: DollarSign,
         children: [
-            { title: "Actual Collection", href: "/admin/collection", icon: BarChart2 },
+            { title: "Actual Collection", href: "/admin/collections", icon: BarChart2 },
             { title: "Account Receivables", href: "/admin/accounts-receivable", icon: FileText },
         ],
     },

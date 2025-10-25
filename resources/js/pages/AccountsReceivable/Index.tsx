@@ -1,68 +1,91 @@
 
+
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link, usePage, router } from '@inertiajs/react';
+import { Button } from '@/components/ui/button';
+import { Link, usePage, router } from '@inertiajs/react';
+import { FilePlus2 } from 'lucide-react';
+
 
 const AccountsReceivablePage = () => {
     const { records = [] } = usePage().props as { records?: any[] };
     return (
         <AppLayout>
-            <Head title="Accounts Receivable" />
-            <div className="space-y-6 p-4 bg-background min-h-screen">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-                    <h2 className="text-3xl font-bold text-primary">Accounts Receivable</h2>
-                    <Link
-                        href="/admin/accounts-receivable/create"
-                        className="inline-flex items-center px-5 py-2 rounded-lg bg-primary text-primary-foreground font-semibold shadow hover:bg-primary/90 transition-colors"
-                    >
-                        + New Record
-                    </Link>
+            <div className="space-y-6 p-4 bg-white min-h-screen text-green-900 transition-colors">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h2 className="text-3xl font-bold text-neutral-900">Accounts Receivable</h2>
+                        <p className="text-lg mt-1 text-neutral-700">Manage accounts receivable records here</p>
+                    </div>
+                    <div>
+                        <Button asChild variant="default" className="bg-green-500 hover:bg-green-600 text-white">
+                            <Link href="/admin/accounts-receivable/create" prefetch>
+                                <FilePlus2 />
+                                <span>New Record</span>
+                            </Link>
+                        </Button>
+                    </div>
                 </div>
-                <div className="rounded-xl shadow bg-card p-0 overflow-x-auto border border-border w-full max-w-none">
-                    <table className="w-full table-auto text-left">
-                        <thead className="bg-primary text-primary-foreground">
-                            <tr>
-                                <th className="px-6 py-3 font-semibold">Invoice No</th>
-                                <th className="px-6 py-3 font-semibold">Client ID</th>
-                                <th className="px-6 py-3 font-semibold">Amount</th>
-                                <th className="px-6 py-3 font-semibold">Balance</th>
-                                <th className="px-6 py-3 font-semibold">Status</th>
-                                <th className="px-6 py-3 font-semibold">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {records && records.length > 0 ? (
-                                records.map((rec) => (
-                                    <tr key={rec.id} className="border-t border-border hover:bg-muted transition-colors">
-                                        <td className="px-6 py-3">{rec.invoice_no}</td>
-                                        <td className="px-6 py-3">{rec.client_id}</td>
-                                        <td className="px-6 py-3">{rec.amount}</td>
-                                        <td className="px-6 py-3">{rec.balance}</td>
-                                        <td className="px-6 py-3">
+
+                <div className="bg-green-50 rounded-lg p-6 shadow">
+                    {records && records.length > 0 ? (
+                        <table className="min-w-full text-sm">
+                            <thead>
+                                <tr>
+                                    <th className="text-left py-2 px-3 font-semibold text-green-900">Invoice No</th>
+                                    <th className="text-left py-2 px-3 font-semibold text-green-900">Client</th>
+                                    <th className="text-left py-2 px-3 font-semibold text-green-900">Amount</th>
+                                    <th className="text-left py-2 px-3 font-semibold text-green-900">Balance</th>
+                                    <th className="text-left py-2 px-3 font-semibold text-green-900">Status</th>
+                                    <th className="text-left py-2 px-3 font-semibold text-green-900">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {records.map((rec) => (
+                                    <tr key={rec.id} className="border-t border-green-100">
+                                        <td className="py-2 px-3">{rec.invoice_no}</td>
+                                        <td className="py-2 px-3">{rec.client_name}</td>
+                                        <td className="py-2 px-3">{rec.amount}</td>
+                                        <td className="py-2 px-3">{rec.balance}</td>
+                                        <td className="py-2 px-3">
                                             <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${rec.status === 'Paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>{rec.status}</span>
                                         </td>
-                                        <td className="px-6 py-3 space-x-2">
-                                            <Link href={`/admin/accounts-receivable/${rec.id}`} className="inline-flex items-center px-3 py-1 rounded bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors">View</Link>
-                                            <Link href={`/admin/accounts-receivable/${rec.id}/edit`} className="inline-flex items-center px-3 py-1 rounded bg-yellow-500 text-white text-sm font-medium hover:bg-yellow-600 transition-colors">Edit</Link>
-                                            <button
-                                                onClick={() => {
-                                                    if (confirm('Are you sure you want to delete this record?')) {
-                                                        router.delete(`/admin/accounts-receivable/${rec.id}`);
-                                                    }
-                                                }}
-                                                className="inline-flex items-center px-3 py-1 rounded bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition-colors ml-2"
-                                            >
-                                                Delete
-                                            </button>
+                                        <td className="py-2 px-3">
+                                            <div className="flex gap-2">
+                                                <Link
+                                                    href={`/admin/accounts-receivable/${rec.id}`}
+                                                    className="text-green-700 hover:underline"
+                                                    title="View"
+                                                >
+                                                    View
+                                                </Link>
+                                                <Link
+                                                    href={`/admin/accounts-receivable/${rec.id}/edit`}
+                                                    className="text-yellow-600 hover:underline"
+                                                    title="Edit"
+                                                >
+                                                    Edit
+                                                </Link>
+                                                <button
+                                                    type="button"
+                                                    className="text-red-600 hover:underline"
+                                                    title="Delete"
+                                                    onClick={() => {
+                                                        if (confirm('Are you sure you want to delete this record?')) {
+                                                            router.delete(`/admin/accounts-receivable/${rec.id}`);
+                                                        }
+                                                    }}
+                                                >
+                                                    Delete
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan={6} className="text-center py-6 text-muted-foreground">No records found.</td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                                ))}
+                            </tbody>
+                        </table>
+                    ) : (
+                        <p className="text-sm text-green-900">No records found.</p>
+                    )}
                 </div>
             </div>
         </AppLayout>

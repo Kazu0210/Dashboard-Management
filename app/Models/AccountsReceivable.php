@@ -16,4 +16,9 @@ class AccountsReceivable extends Model
     {
         return $this->hasMany(Payments::class);
     }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
 }

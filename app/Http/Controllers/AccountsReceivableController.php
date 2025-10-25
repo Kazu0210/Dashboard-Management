@@ -9,7 +9,18 @@ class AccountsReceivableController extends Controller
 {
     public function index()
     {
-        $records = AccountsReceivable::with('payments')->orderByDesc('created_at')->get();
+        $records = AccountsReceivable::with(['payments', 'client'])->orderByDesc('created_at')->get();
+        $records = $records->map(function ($record) {
+            return [
+                'id' => $record->id,
+                'invoice_no' => $record->invoice_no,
+                'client_id' => $record->client_id,
+                'client_name' => $record->client ? $record->client->name : null,
+                'amount' => $record->amount,
+                'balance' => $record->balance,
+                'status' => $record->status,
+            ];
+        });
         return inertia('AccountsReceivable/Index', [
             'records' => $records
         ]);
@@ -41,17 +52,30 @@ class AccountsReceivableController extends Controller
 
     public function show($id)
     {
-        $record = AccountsReceivable::findOrFail($id);
+        $record = AccountsReceivable::with('client')->findOrFail($id);
+        $data = [
+            'id' => $record->id,
+            'invoice_no' => $record->invoice_no,
+            'client_id' => $record->client_id,
+            'client_name' => $record->client ? $record->client->name : null,
+            'amount' => $record->amount,
+            'balance' => $record->balance,
+            'invoice_date' => $record->invoice_date,
+            'due_date' => $record->due_date,
+            'status' => $record->status,
+        ];
         return inertia('AccountsReceivable/Show', [
-            'record' => $record
+            'record' => $data
         ]);
     }
 
     public function edit($id)
     {
         $record = AccountsReceivable::findOrFail($id);
+        $clients = \App\Models\Client::orderBy('name')->get(['id', 'name']);
         return inertia('AccountsReceivable/Edit', [
-            'record' => $record
+            'record' => $record,
+            'clients' => $clients
         ]);
     }
 
