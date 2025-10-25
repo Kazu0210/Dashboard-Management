@@ -41,7 +41,7 @@ const mainNavItems: NavItem[] = [
             { title: "Client Monitoring", href: "/admin/clients", icon: Users },
         ],
     },
-    { title: "Full Time Employee", href: "/admin/employees", icon: Users },
+    { title: "Employee Management", href: "/admin/employees", icon: Users },
     { title: "Number of Projects", href: "/admin/monitoring", icon: Briefcase },
     { title: "Number of DOLE Case", href: "/admin/dole-cases", icon: FileWarning },
 ];
