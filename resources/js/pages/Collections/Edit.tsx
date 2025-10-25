@@ -136,18 +136,10 @@ const EditCollection = ({ collection }: any) => {
 								<h3 className="text-lg font-medium text-gray-900">Collection Info</h3>
 								<p className="text-sm text-gray-600 mt-2">Metadata for this collection.</p>
 
-								<div className="mt-4 divide-y divide-gray-100 text-sm text-gray-700">
+								<div className="mt-4 text-sm text-gray-700">
 									<div className="py-3">
-										<p className="text-xs text-gray-500">ID</p>
-										<p className="font-medium">{collection.id}</p>
-									</div>
-									<div className="py-3">
-										<p className="text-xs text-gray-500">Created</p>
-										<p className="font-medium">{collection.created_at || '-'}</p>
-									</div>
-									<div className="py-3">
-										<p className="text-xs text-gray-500">Updated</p>
-										<p className="font-medium">{collection.updated_at || '-'}</p>
+										<p className="text-xs text-gray-500">Date</p>
+										<p className="font-medium">{collection.date ? (new Date(collection.date)).toLocaleDateString() : '-'}</p>
 									</div>
 								</div>
 							</div>
@@ -160,3 +152,4 @@ const EditCollection = ({ collection }: any) => {
 };
 
 export default EditCollection;
+
