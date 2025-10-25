@@ -114,5 +114,6 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::post('projects/create', [ProjectController::class, 'store'])->name('projects.store');
     Route::get('projects/{id}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
     Route::put('projects/{id}', [ProjectController::class, 'update'])->name('projects.update');
+    Route::delete('projects/{id}', [ProjectController::class, 'destroy'])->name('projects.destroy');
 });
 

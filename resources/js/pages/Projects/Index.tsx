@@ -74,6 +74,14 @@ const Projects = () => {
                           }}
                           style={{ display: 'inline' }}
                         >
+                          <input type="hidden" name="_token" value={
+                            (typeof window !== 'undefined' &&
+                              (window as any).Laravel &&
+                              (window as any).Laravel.csrfToken) ||
+                            (typeof document !== 'undefined' &&
+                              document.querySelector('meta[name=csrf-token]')?.getAttribute('content')) ||
+                            ''
+                          } />
                           <input type="hidden" name="_method" value="DELETE" />
                           <button
                             type="submit"
