@@ -36,10 +36,10 @@ const UsersPage = () => {
 						<table className="min-w-full text-sm">
 							<thead>
 								<tr>
-												<th className="text-left py-2 px-3 font-semibold text-green-900">Name</th>
-												<th className="text-left py-2 px-3 font-semibold text-green-900">Email</th>
-												<th className="text-left py-2 px-3 font-semibold text-green-900">Role</th>
-												<th className="text-left py-2 px-3 font-semibold text-green-900">Actions</th>
+									<th className="text-left py-2 px-3 font-semibold text-green-900">Name</th>
+									<th className="text-left py-2 px-3 font-semibold text-green-900">Email</th>
+									<th className="text-left py-2 px-3 font-semibold text-green-900">Role</th>
+									<th className="text-left py-2 px-3 font-semibold text-green-900">Actions</th>
 								</tr>
 							</thead>
 							<tbody>
