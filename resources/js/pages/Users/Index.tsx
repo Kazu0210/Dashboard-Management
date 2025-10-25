@@ -1,7 +1,7 @@
 
 import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, usePage, router } from '@inertiajs/react';
 import { UserPlus } from 'lucide-react';
 
 type User = {
@@ -31,36 +31,47 @@ const UsersPage = () => {
 				</div>
 
 				<div className="bg-green-50 rounded-lg p-6 shadow">
-								{users && users.length > 0 ? (
-									<table className="min-w-full text-sm">
-										<thead>
-											<tr>
-												<th className="text-left py-2 px-3 font-semibold text-green-900">Name</th>
-												<th className="text-left py-2 px-3 font-semibold text-green-900">Email</th>
-												<th className="text-left py-2 px-3 font-semibold text-green-900">Actions</th>
-											</tr>
-										</thead>
-										<tbody>
-											{users.map((user) => (
-												<tr key={user.id} className="border-t border-green-100">
-													<td className="py-2 px-3">{user.name}</td>
-													<td className="py-2 px-3">{user.email}</td>
-													<td className="py-2 px-3">
-														<div className="flex gap-2">
-															<Link
-																href={`/admin/users/${user.id}/edit`}
-																className="text-green-700 hover:underline"
-																title="Edit"
-															>
-																Edit
-															</Link>
-															<button className="text-red-600 hover:underline" title="Delete" disabled>Delete</button>
-														</div>
-													</td>
-												</tr>
-											))}
-										</tbody>
-									</table>
+					{users && users.length > 0 ? (
+						<table className="min-w-full text-sm">
+							<thead>
+								<tr>
+									<th className="text-left py-2 px-3 font-semibold text-green-900">Name</th>
+									<th className="text-left py-2 px-3 font-semibold text-green-900">Email</th>
+									<th className="text-left py-2 px-3 font-semibold text-green-900">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{users.map((user) => (
+									<tr key={user.id} className="border-t border-green-100">
+										<td className="py-2 px-3">{user.name}</td>
+										<td className="py-2 px-3">{user.email}</td>
+										<td className="py-2 px-3">
+											<div className="flex gap-2">
+												<Link
+													href={`/admin/users/${user.id}/edit`}
+													className="text-green-700 hover:underline"
+													title="Edit"
+												>
+													Edit
+												</Link>
+												<button
+													type="button"
+													className="text-red-600 hover:underline"
+													title="Delete"
+													onClick={() => {
+														if (confirm(`Are you sure you want to delete ${user.name}?`)) {
+															router.delete(`/admin/users/${user.id}`);
+														}
+													}}
+												>
+													Delete
+												</button>
+											</div>
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
 					) : (
 						<p className="text-sm text-green-900">No users found.</p>
 					)}
