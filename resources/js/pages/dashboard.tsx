@@ -11,6 +11,10 @@ import { useState } from 'react';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
+// const breadcrumbs = [
+//   { title: "Home", href: "/" },
+//   { title: "Dashboard", href: "/dashboard" },
+// ];
 
 const initialStats = {
   users: 2847,
@@ -54,6 +58,7 @@ const Dashboard = () => {
 
   return (
     <AppLayout>
+    {/* <AppLayout breadcrumbs={breadcrumbs}> */}
       <div className="space-y-6 p-4 bg-background min-h-screen">
         <div className="flex items-center justify-between">
           <div>
