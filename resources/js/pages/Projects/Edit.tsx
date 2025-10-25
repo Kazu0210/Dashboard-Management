@@ -20,6 +20,20 @@ type Project = {
     updated_at: string;
 };
 
+function formatDateTime(iso: string) {
+    if (!iso) return '';
+    const date = new Date(iso);
+    if (isNaN(date.getTime())) return iso;
+    return date.toLocaleString(undefined, {
+        year: 'numeric',
+        month: 'short',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+    });
+}
 
 const EditProject = () => {
     const props = usePage().props as { project?: Project };
@@ -180,12 +194,13 @@ const EditProject = () => {
                             </div>
                             <div className="py-3">
                                 <p className="text-xs text-gray-500">Created At</p>
-                                <p className="text-sm font-medium text-gray-800">{project.created_at}</p>
+                                <p className="text-sm font-medium text-gray-800">{formatDateTime(project.created_at)}</p>
                             </div>
                             <div className="py-3">
                                 <p className="text-xs text-gray-500">Last Updated</p>
-                                <p className="text-sm font-medium text-gray-800">{project.updated_at}</p>
+                                <p className="text-sm font-medium text-gray-800">{formatDateTime(project.updated_at)}</p>
                             </div>
+
                             <div className="py-3">
                                 <p className="text-xs text-gray-500">Current Status</p>
                                 <span
@@ -200,15 +215,6 @@ const EditProject = () => {
                                     {form.status || 'N/A'}
                                 </span>
                             </div>
-                        </div>
-
-                        <div className="pt-3">
-                            <Link
-                                href={`/admin/projects/${project.id}`}
-                                className="block w-full text-center px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700 text-sm transition-all"
-                            >
-                                View Project Details
-                            </Link>
                         </div>
                     </div>
                 </div>
