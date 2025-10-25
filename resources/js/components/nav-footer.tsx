@@ -38,12 +38,6 @@ export function NavFooter({
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    {item.icon && (
-                                        <Icon
-                                            iconNode={item.icon}
-                                            className="h-5 w-5"
-                                        />
-                                    )}
                                     <span>{item.title}</span>
                                 </a>
                             </SidebarMenuButton>
