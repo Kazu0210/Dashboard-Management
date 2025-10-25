@@ -32,7 +32,6 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                             >
                                 <div className="flex items-center w-full justify-between">
                                     <span className="flex items-center gap-2">
-                                        {item.icon && <item.icon />}
                                         <span>{item.title}</span>
                                     </span>
                                     <svg className={`transition-transform ml-2 ${openDropdown === item.title ? 'rotate-90' : ''}`} width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
@@ -48,9 +47,8 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                                                     isActive={page.url.startsWith(typeof child.href === 'string' ? child.href : child.href.url)}
                                                 >
                                                     <Link href={child.href} prefetch>
-                                                        {child.icon && <child.icon />}
-                                                        <span>{child.title}</span>
-                                                    </Link>
+                                                            <span>{child.title}</span>
+                                                        </Link>
                                                 </SidebarMenuSubButton>
                                             </SidebarMenuSubItem>
                                         )
@@ -70,7 +68,6 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                                 tooltip={{ children: item.title }}
                             >
                                 <Link href={item.href} prefetch>
-                                    {item.icon && <item.icon />}
                                     <span>{item.title}</span>
                                 </Link>
                             </SidebarMenuButton>
