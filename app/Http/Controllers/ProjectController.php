@@ -44,4 +44,29 @@ class ProjectController extends Controller
 
         return redirect()->route('admin.projects.index')->with('success', 'Project created successfully.');
     }
+
+    public function edit($id)
+    {
+        $project = Project::findOrFail($id);
+        return Inertia::render('Projects/Edit', [
+            'project' => $project
+        ]);
+    }
+
+    public function update($id)
+    {
+        $data = request()->validate([
+            'name' => 'required|string|max:255',
+            'status' => 'required|in:ongoing,completed,on-hold',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'manager' => 'required|string|max:255',
+            'budget' => 'required|numeric|min:0',
+        ]);
+
+        $project = Project::findOrFail($id);
+        $project->update($data);
+
+        return redirect()->route('admin.projects.index')->with('success', 'Project updated successfully.');
+    }
 }
