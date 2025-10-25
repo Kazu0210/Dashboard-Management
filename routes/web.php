@@ -31,10 +31,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 // Project monitoring API endpoints (authenticated)
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('projects', [ProjectMonitoringController::class, 'index'])->name('projects.index');
-    Route::post('projects', [ProjectMonitoringController::class, 'store'])->name('projects.store');
-});
+// Route::middleware(['auth', 'verified'])->group(function () {
+//     Route::get('projects', [ProjectMonitoringController::class, 'index'])->name('projects.index');
+//     Route::post('projects', [ProjectMonitoringController::class, 'store'])->name('projects.store');
+// });
 
 
 
@@ -106,7 +106,10 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     // Collection Route
     Route::get('collections', [CollectionController::class, 'index'])->name('collections.index');
     Route::get('collections/create', [CollectionController::class, 'create'])->name('collections.create');
+    Route::get('collections/{id}/edit', [CollectionController::class, 'edit'])->name('collections.edit');
     Route::post('collections', [CollectionController::class, 'store'])->name('collections.store');
+    Route::put('collections/{id}', [CollectionController::class, 'update'])->name('collections.update');
+    Route::delete('collections/{id}', [CollectionController::class, 'delete'])->name('collections.delete');
 
     // Project Management
     Route::get('projects', [ProjectController::class, 'index'])->name('projects.index');
