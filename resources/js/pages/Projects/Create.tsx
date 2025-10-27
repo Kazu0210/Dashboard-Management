@@ -10,12 +10,18 @@ const breadcrumbs = [
 
 const CreateProject = () => {
   const [form, setForm] = useState({
-    name: '',
-    status: 'ongoing',
-    startDate: '',
-    endDate: '',
-    manager: '',
-    budget: '',
+    project_name: '',
+    client: '',
+    location: '',
+    contract_amount: '',
+    duration: '',
+    status: '',
+    personnel: '',
+    payroll: '',
+    supplies: '',
+    billing_status: '',
+    collected: '',
+    net_income: '',
   });
 
   const [processing, setProcessing] = useState(false);
@@ -36,166 +42,79 @@ const CreateProject = () => {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <div className="min-h-screen bg-background p-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Left Panel */}
-          <div className="bg-card shadow rounded-xl p-6 md:col-span-1 space-y-6">
-            <div>
-              <h2 className="text-2xl font-bold text-primary mb-1">Create Project</h2>
-              <p className="text-gray-600 text-sm">
-                Fill in the details to register a new project in the system.
-              </p>
-            </div>
-
-            <div className="border-t pt-4 space-y-2">
-              <p className="font-medium text-gray-700 text-sm">Quick Tips:</p>
-              <ul className="text-gray-600 text-sm list-disc list-inside space-y-1">
-                <li>Use a clear and short project name.</li>
-                <li>Make sure to set accurate start and end dates.</li>
-                <li>Assign a valid project manager.</li>
-              </ul>
-            </div>
-
-            <div className="pt-4">
-              <a
-                href="/admin/projects"
-                className="w-full inline-block text-center px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 transition"
-              >
-                Back to Projects
-              </a>
-            </div>
+      <div className="min-h-screen bg-gray-50 py-10 px-2">
+        <div className="max-w-3xl mx-auto">
+          <div className="mb-8 text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Create New Project</h2>
+            <p className="text-gray-400 text-base">Register a new project and monitor its progress easily.</p>
           </div>
-
-          {/* Right Panel */}
-          <div className="md:col-span-2 bg-card shadow rounded-xl p-8">
-            <form onSubmit={handleSubmit} className="space-y-8">
-              {/* Step 1 */}
-              <div>
-                <h3 className="text-lg font-semibold text-primary mb-4 border-b pb-2">
-                  Project Information
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">
-                      Project Name
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.name}
-                      onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">
-                      Status
-                    </label>
-                    <select
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.status}
-                      onChange={e => setForm(f => ({ ...f, status: e.target.value }))}
-                      required
-                    >
-                      <option value="ongoing">Ongoing</option>
-                      <option value="completed">Completed</option>
-                      <option value="on-hold">On Hold</option>
-                    </select>
-                  </div>
+          <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-0 border border-gray-100 overflow-hidden">
+            {/* Project Info Section */}
+            <div className="px-8 pt-8 pb-6 bg-gray-50 border-b border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-800 mb-6">Project Information</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium mb-1 text-gray-700">Project Name</label>
+                  <input type="text" className="w-full px-4 py-2 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-200 bg-white" value={form.project_name} onChange={e => setForm(f => ({ ...f, project_name: e.target.value }))} required />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1 text-gray-700">Client</label>
+                  <input type="text" className="w-full px-4 py-2 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-200 bg-white" value={form.client} onChange={e => setForm(f => ({ ...f, client: e.target.value }))} required />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1 text-gray-700">Location</label>
+                  <input type="text" className="w-full px-4 py-2 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-200 bg-white" value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value }))} required />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1 text-gray-700">Contract Amount (₱)</label>
+                  <input type="number" step="0.01" min="0" className="w-full px-4 py-2 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-200 bg-white" value={form.contract_amount} onChange={e => setForm(f => ({ ...f, contract_amount: e.target.value }))} required />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1 text-gray-700">Duration</label>
+                  <input type="text" className="w-full px-4 py-2 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-200 bg-white" value={form.duration} onChange={e => setForm(f => ({ ...f, duration: e.target.value }))} required />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1 text-gray-700">Status</label>
+                  <input type="text" className="w-full px-4 py-2 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-200 bg-white" value={form.status} onChange={e => setForm(f => ({ ...f, status: e.target.value }))} required />
                 </div>
               </div>
-
-              {/* Step 2 */}
-              <div>
-                <h3 className="text-lg font-semibold text-primary mb-4 border-b pb-2">
-                  Timeline Details
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">
-                      Start Date
-                    </label>
-                    <input
-                      type="date"
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.startDate}
-                      onChange={e => setForm(f => ({ ...f, startDate: e.target.value }))}
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">
-                      End Date
-                    </label>
-                    <input
-                      type="date"
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.endDate}
-                      onChange={e => setForm(f => ({ ...f, endDate: e.target.value }))}
-                      required
-                    />
-                  </div>
+            </div>
+            {/* Financial & Personnel Section */}
+            <div className="px-8 pt-8 pb-6 bg-white">
+              <h3 className="text-lg font-semibold text-gray-800 mb-6">Financial & Personnel Details</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium mb-1 text-gray-700">Personnel</label>
+                  <input type="number" min="0" className="w-full px-4 py-2 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-200 bg-gray-50" value={form.personnel} onChange={e => setForm(f => ({ ...f, personnel: e.target.value }))} required />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1 text-gray-700">Payroll (₱)</label>
+                  <input type="number" step="0.01" min="0" className="w-full px-4 py-2 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-200 bg-gray-50" value={form.payroll} onChange={e => setForm(f => ({ ...f, payroll: e.target.value }))} required />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1 text-gray-700">Supplies (₱)</label>
+                  <input type="number" step="0.01" min="0" className="w-full px-4 py-2 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-200 bg-gray-50" value={form.supplies} onChange={e => setForm(f => ({ ...f, supplies: e.target.value }))} required />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1 text-gray-700">Billing Status</label>
+                  <input type="text" className="w-full px-4 py-2 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-200 bg-gray-50" value={form.billing_status} onChange={e => setForm(f => ({ ...f, billing_status: e.target.value }))} required />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1 text-gray-700">Collected (₱)</label>
+                  <input type="number" step="0.01" min="0" className="w-full px-4 py-2 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-200 bg-gray-50" value={form.collected} onChange={e => setForm(f => ({ ...f, collected: e.target.value }))} required />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1 text-gray-700">Net Income (₱)</label>
+                  <input type="number" step="0.01" min="0" className="w-full px-4 py-2 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-200 bg-gray-50" value={form.net_income} onChange={e => setForm(f => ({ ...f, net_income: e.target.value }))} required />
                 </div>
               </div>
-
-              {/* Step 3 */}
-              <div>
-                <h3 className="text-lg font-semibold text-primary mb-4 border-b pb-2">
-                  Management & Budget
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">
-                      Manager
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.manager}
-                      onChange={e => setForm(f => ({ ...f, manager: e.target.value }))}
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">
-                      Budget (₱)
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.budget}
-                      onChange={e => setForm(f => ({ ...f, budget: e.target.value }))}
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Buttons */}
-              <div className="flex justify-end gap-3 pt-4 border-t">
-                <a
-                  href="/admin/projects"
-                  className="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
-                >
-                  Cancel
-                </a>
-                <button
-                  type="submit"
-                  disabled={processing}
-                  className={`px-5 py-2 rounded bg-primary text-primary-foreground shadow hover:bg-primary/90 transition ${
-                    processing ? 'opacity-70 cursor-not-allowed' : ''
-                  }`}
-                >
-                  {processing ? 'Creating...' : 'Create Project'}
-                </button>
-              </div>
-            </form>
-          </div>
+            </div>
+            {/* Action Bar */}
+            <div className="flex justify-end gap-3 px-8 py-6 border-t border-gray-100 bg-gray-50 rounded-b-2xl">
+              <a href="/admin/projects" className="px-4 py-2 rounded bg-gray-100 text-gray-700 hover:bg-gray-200 transition font-medium">Cancel</a>
+              <button type="submit" disabled={processing} className={`px-6 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 transition ${processing ? 'opacity-70 cursor-not-allowed' : ''}`}>{processing ? 'Creating...' : 'Create Project'}</button>
+            </div>
+          </form>
         </div>
       </div>
     </AppLayout>

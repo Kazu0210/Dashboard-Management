@@ -8,12 +8,18 @@ const breadcrumbs = [
 
 type Project = {
     id: number;
-    name: string;
+    project_name: string;
+    client: string;
+    location: string;
+    contract_amount: string;
+    duration: string;
     status: string;
-    start_date: string;
-    end_date: string;
-    manager: string;
-    budget: string;
+    personnel: number;
+    payroll: string;
+    supplies: string;
+    billing_status: string;
+    collected: string;
+    net_income: string;
     created_at: string;
     updated_at: string;
 };
@@ -48,11 +54,17 @@ const Projects = () => {
                             <thead className="bg-gray-100 text-gray-700 uppercase text-xs font-semibold">
                                 <tr>
                                     <th className="px-5 py-3 text-left">Project Name</th>
+                                    <th className="px-5 py-3 text-left">Client</th>
+                                    <th className="px-5 py-3 text-left">Location</th>
+                                    <th className="px-5 py-3 text-left">Contract Amount</th>
+                                    <th className="px-5 py-3 text-left">Duration</th>
                                     <th className="px-5 py-3 text-left">Status</th>
-                                    <th className="px-5 py-3 text-left">Start Date</th>
-                                    <th className="px-5 py-3 text-left">End Date</th>
-                                    <th className="px-5 py-3 text-left">Manager</th>
-                                    <th className="px-5 py-3 text-left">Budget</th>
+                                    <th className="px-5 py-3 text-left">Personnel</th>
+                                    <th className="px-5 py-3 text-left">Payroll</th>
+                                    <th className="px-5 py-3 text-left">Supplies</th>
+                                    <th className="px-5 py-3 text-left">Billing Status</th>
+                                    <th className="px-5 py-3 text-left">Collected</th>
+                                    <th className="px-5 py-3 text-left">Net Income</th>
                                     <th className="px-5 py-3 text-left">Actions</th>
                                 </tr>
                             </thead>
@@ -63,7 +75,11 @@ const Projects = () => {
                                             key={project.id}
                                             className="border-t border-gray-100 hover:bg-gray-50 transition-colors"
                                         >
-                                            <td className="px-5 py-3 font-medium text-gray-800">{project.name}</td>
+                                            <td className="px-5 py-3 font-medium text-gray-800">{project.project_name}</td>
+                                            <td className="px-5 py-3 text-gray-600">{project.client}</td>
+                                            <td className="px-5 py-3 text-gray-600">{project.location}</td>
+                                            <td className="px-5 py-3 text-gray-600">₱{project.contract_amount}</td>
+                                            <td className="px-5 py-3 text-gray-600">{project.duration}</td>
                                             <td className="px-5 py-3">
                                                 <span
                                                     className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
@@ -77,10 +93,12 @@ const Projects = () => {
                                                     {project.status}
                                                 </span>
                                             </td>
-                                            <td className="px-5 py-3 text-gray-600">{project.start_date}</td>
-                                            <td className="px-5 py-3 text-gray-600">{project.end_date}</td>
-                                            <td className="px-5 py-3 text-gray-600">{project.manager}</td>
-                                            <td className="px-5 py-3 text-gray-600">₱{project.budget}</td>
+                                            <td className="px-5 py-3 text-gray-600">{project.personnel}</td>
+                                            <td className="px-5 py-3 text-gray-600">₱{project.payroll}</td>
+                                            <td className="px-5 py-3 text-gray-600">₱{project.supplies}</td>
+                                            <td className="px-5 py-3 text-gray-600">{project.billing_status}</td>
+                                            <td className="px-5 py-3 text-gray-600">₱{project.collected}</td>
+                                            <td className="px-5 py-3 text-gray-600">₱{project.net_income}</td>
                                             <td className="px-5 py-3">
                                                 <div className="flex gap-2">
                                                     <Link
@@ -130,7 +148,7 @@ const Projects = () => {
                                 ) : (
                                     <tr>
                                         <td
-                                            colSpan={7}
+                                            colSpan={13}
                                             className="px-6 py-8 text-center text-gray-400 text-sm"
                                         >
                                             No projects found.
