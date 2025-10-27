@@ -1,4 +1,5 @@
 import AppLayout from '@/layouts/app-layout';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Head, Link, usePage } from '@inertiajs/react';
 
 const breadcrumbs = [
@@ -25,6 +26,63 @@ export default function Index() {
       <Head title="Employees" />
 
       <div className="min-h-screen bg-gray-50 p-6">
+        {/* Employee Stats Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Total Employees</CardTitle>
+              <CardDescription>Company-wide deployment</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <span className="text-3xl font-bold">380</span>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Active Deployment Rate</CardTitle>
+              <CardDescription>360 active, 20 on-leave</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <span className="text-3xl font-bold">95%</span>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">New Hires This Month</CardTitle>
+              <CardDescription>Added for new projects</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <span className="text-3xl font-bold">15</span>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Resigned / Replaced</CardTitle>
+              <CardDescription>Regular staff turnover</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <span className="text-3xl font-bold">10</span>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Attendance Compliance</CardTitle>
+              <CardDescription>Based on monthly DTRs</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <span className="text-3xl font-bold">97%</span>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Average Monthly Salary</CardTitle>
+              <CardDescription>Varies per site</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <span className="text-3xl font-bold">₱12,000</span>
+            </CardContent>
+          </Card>
+        </div>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div>
             <h2 className="text-2xl font-semibold text-gray-800">Employees</h2>
