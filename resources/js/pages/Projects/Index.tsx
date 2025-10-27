@@ -3,24 +3,24 @@ import { Link, usePage } from '@inertiajs/react';
 
 const breadcrumbs = [
     { title: "Home", href: "/" },
-    { title: "Projects", href: "/admin/projects" },
+    { title: "Collections", href: "/admin/collections" },
 ];
 
-type Project = {
+type Collection = {
     id: number;
-    name: string;
+    project: string;
+    billing_period: string;
+    billed_amount: string;
+    collected: string;
+    balance: string;
     status: string;
-    start_date: string;
-    end_date: string;
-    manager: string;
-    budget: string;
     created_at: string;
     updated_at: string;
 };
 
-const Projects = () => {
-    const { projects: projectsRaw } = usePage().props;
-    const projects: Project[] = Array.isArray(projectsRaw) ? projectsRaw : [];
+const Collections = () => {
+    const { collections: collectionsRaw } = usePage().props;
+    const collections: Collection[] = Array.isArray(collectionsRaw) ? collectionsRaw : [];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -28,16 +28,16 @@ const Projects = () => {
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                     <div>
-                        <h2 className="text-2xl font-semibold text-gray-800">Projects</h2>
+                        <h2 className="text-2xl font-semibold text-gray-800">Collections</h2>
                         <p className="text-sm text-gray-500">
-                            Manage and track ongoing company projects.
+                            View and manage project billing and collection records.
                         </p>
                     </div>
                     <Link
-                        href={`/admin/projects/create`}
+                        href={`/admin/collections/create`}
                         className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-all shadow-sm"
                     >
-                        <span>＋</span> Create New Project
+                        <span>＋</span> Add Collection
                     </Link>
                 </div>
 
@@ -47,55 +47,57 @@ const Projects = () => {
                         <table className="min-w-full text-sm">
                             <thead className="bg-gray-100 text-gray-700 uppercase text-xs font-semibold">
                                 <tr>
-                                    <th className="px-5 py-3 text-left">Project Name</th>
+                                    <th className="px-5 py-3 text-left">Project</th>
+                                    <th className="px-5 py-3 text-left">Billing Period</th>
+                                    <th className="px-5 py-3 text-left">Billed Amount</th>
+                                    <th className="px-5 py-3 text-left">Collected</th>
+                                    <th className="px-5 py-3 text-left">Balance</th>
                                     <th className="px-5 py-3 text-left">Status</th>
-                                    <th className="px-5 py-3 text-left">Start Date</th>
-                                    <th className="px-5 py-3 text-left">End Date</th>
-                                    <th className="px-5 py-3 text-left">Manager</th>
-                                    <th className="px-5 py-3 text-left">Budget</th>
                                     <th className="px-5 py-3 text-left">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {projects.length > 0 ? (
-                                    projects.map((project) => (
+                                {collections.length > 0 ? (
+                                    collections.map((item) => (
                                         <tr
-                                            key={project.id}
+                                            key={item.id}
                                             className="border-t border-gray-100 hover:bg-gray-50 transition-colors"
                                         >
-                                            <td className="px-5 py-3 font-medium text-gray-800">{project.name}</td>
+                                            <td className="px-5 py-3 font-medium text-gray-800">
+                                                {item.project}
+                                            </td>
+                                            <td className="px-5 py-3 text-gray-600">{item.billing_period}</td>
+                                            <td className="px-5 py-3 text-gray-600">₱{item.billed_amount}</td>
+                                            <td className="px-5 py-3 text-gray-600">₱{item.collected}</td>
+                                            <td className="px-5 py-3 text-gray-600">₱{item.balance}</td>
                                             <td className="px-5 py-3">
                                                 <span
                                                     className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                                                        project.status === "Active"
+                                                        item.status === "Paid"
                                                             ? "bg-green-100 text-green-700"
-                                                            : project.status === "Pending"
+                                                            : item.status === "Partial"
                                                             ? "bg-yellow-100 text-yellow-700"
-                                                            : "bg-gray-100 text-gray-600"
+                                                            : "bg-red-100 text-red-600"
                                                     }`}
                                                 >
-                                                    {project.status}
+                                                    {item.status}
                                                 </span>
                                             </td>
-                                            <td className="px-5 py-3 text-gray-600">{project.start_date}</td>
-                                            <td className="px-5 py-3 text-gray-600">{project.end_date}</td>
-                                            <td className="px-5 py-3 text-gray-600">{project.manager}</td>
-                                            <td className="px-5 py-3 text-gray-600">₱{project.budget}</td>
                                             <td className="px-5 py-3">
                                                 <div className="flex gap-2">
                                                     <Link
-                                                        href={`/admin/projects/${project.id}/edit`}
+                                                        href={`/admin/collections/${item.id}/edit`}
                                                         className="px-3 py-1.5 rounded-md bg-blue-500 text-white hover:bg-blue-600 text-xs transition-all"
                                                     >
                                                         Edit
                                                     </Link>
                                                     <form
                                                         method="POST"
-                                                        action={`/admin/projects/${project.id}`}
+                                                        action={`/admin/collections/${item.id}`}
                                                         onSubmit={(e) => {
                                                             if (
                                                                 !confirm(
-                                                                    'Are you sure you want to delete this project?'
+                                                                    'Are you sure you want to delete this record?'
                                                                 )
                                                             )
                                                                 e.preventDefault();
@@ -133,7 +135,7 @@ const Projects = () => {
                                             colSpan={7}
                                             className="px-6 py-8 text-center text-gray-400 text-sm"
                                         >
-                                            No projects found.
+                                            No collection records found.
                                         </td>
                                     </tr>
                                 )}
@@ -146,4 +148,4 @@ const Projects = () => {
     );
 };
 
-export default Projects;
+export default Collections;
