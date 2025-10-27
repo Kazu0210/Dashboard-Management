@@ -10,6 +10,17 @@ class Project extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'status', 'start_date', 'end_date', 'manager', 'budget',
+        'project_name',
+        'client',
+        'location',
+        'contract_amount',
+        'duration',
+        'status',
+        'personnel',
+        'payroll',
+        'supplies',
+        'billing_status',
+        'collected',
+        'net_income',
     ];
 }

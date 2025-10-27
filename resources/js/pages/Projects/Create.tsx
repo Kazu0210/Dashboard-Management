@@ -1,232 +1,175 @@
+
+
 import AppLayout from '@/layouts/app-layout';
-import { router, usePage } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 import { useState } from 'react';
 
 const breadcrumbs = [
-  { title: "Home", href: "/" },
-  { title: "Collections", href: "/admin/collections" },
-  { title: "Create Collection", href: "#" },
+    { title: 'Home', href: '/' },
+    { title: 'Projects', href: '/admin/projects' },
+    { title: 'Create Project', href: '#' },
 ];
 
-type Project = {
-  id: number;
-  name: string;
+const steps = [
+    { label: 'Details', fields: ['project_name', 'client', 'location', 'duration'] },
+    { label: 'Financials', fields: ['contract_amount', 'personnel', 'payroll', 'supplies', 'collected', 'net_income'] },
+    { label: 'Status', fields: ['status', 'billing_status'] },
+];
+
+const fieldLabels: Record<string, string> = {
+    project_name: 'Project Name',
+    client: 'Client',
+    location: 'Location',
+    contract_amount: 'Contract Amount (₱)',
+    duration: 'Duration',
+    status: 'Status',
+    personnel: 'Personnel',
+    payroll: 'Payroll (₱)',
+    supplies: 'Supplies (₱)',
+    billing_status: 'Billing Status',
+    collected: 'Collected (₱)',
+    net_income: 'Net Income (₱)',
 };
 
-const CreateCollection = () => {
-  const { projects } = usePage<{ projects: Project[] }>().props;
-
-  const [form, setForm] = useState({
-    project_id: '',
-    billing_period: '',
-    billed_amount: '',
+const initialForm = {
+    project_name: '',
+    client: '',
+    location: '',
+    contract_amount: '',
+    duration: '',
+    status: '',
+    personnel: 0,
+    payroll: '',
+    supplies: '',
+    billing_status: '',
     collected: '',
-    balance: '',
-    status: 'Pending',
-  });
-
-  const [processing, setProcessing] = useState(false);
-  const [errors, setErrors] = useState<Record<string, any>>({});
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setProcessing(true);
-    setErrors({});
-
-    router.post('/admin/collections/create', form, {
-      onError: (err) => {
-        setErrors(err);
-        setProcessing(false);
-      },
-      onFinish: () => setProcessing(false),
-    });
-  };
-
-  return (
-    <AppLayout breadcrumbs={breadcrumbs}>
-      <div className="min-h-screen bg-background p-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Left Panel */}
-          <div className="bg-card shadow rounded-xl p-6 md:col-span-1 space-y-6">
-            <div>
-              <h2 className="text-2xl font-bold text-primary mb-1">Create Collection</h2>
-              <p className="text-gray-600 text-sm">
-                Fill in the details to record a new collection entry.
-              </p>
-            </div>
-
-            <div className="border-t pt-4 space-y-2">
-              <p className="font-medium text-gray-700 text-sm">Quick Tips:</p>
-              <ul className="text-gray-600 text-sm list-disc list-inside space-y-1">
-                <li>Select the correct project from the list.</li>
-                <li>Ensure billing period and amounts are accurate.</li>
-                <li>Status helps track the payment progress.</li>
-              </ul>
-            </div>
-
-            <div className="pt-4">
-              <a
-                href="/admin/collections"
-                className="w-full inline-block text-center px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 transition"
-              >
-                Back to Collections
-              </a>
-            </div>
-          </div>
-
-          {/* Right Panel */}
-          <div className="md:col-span-2 bg-card shadow rounded-xl p-8">
-            <form onSubmit={handleSubmit} className="space-y-8">
-              {/* Collection Details */}
-              <div>
-                <h3 className="text-lg font-semibold text-primary mb-4 border-b pb-2">
-                  Collection Details
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Project Dropdown */}
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">
-                      Project
-                    </label>
-                    <select
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.project_id}
-                      onChange={e => setForm(f => ({ ...f, project_id: e.target.value }))}
-                      required
-                    >
-                      <option value="">Select Project</option>
-                      {projects?.map(project => (
-                        <option key={project.id} value={project.id}>
-                          {project.name}
-                        </option>
-                      ))}
-                    </select>
-                    {errors.project_id && (
-                      <p className="text-red-500 text-xs mt-1">{errors.project_id}</p>
-                    )}
-                  </div>
-
-                  {/* Billing Period */}
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">
-                      Billing Period
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="e.g. October 2025"
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.billing_period}
-                      onChange={e => setForm(f => ({ ...f, billing_period: e.target.value }))}
-                      required
-                    />
-                    {errors.billing_period && (
-                      <p className="text-red-500 text-xs mt-1">{errors.billing_period}</p>
-                    )}
-                  </div>
-
-                  {/* Billed Amount */}
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">
-                      Billed Amount (₱)
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.billed_amount}
-                      onChange={e => setForm(f => ({ ...f, billed_amount: e.target.value }))}
-                      required
-                    />
-                    {errors.billed_amount && (
-                      <p className="text-red-500 text-xs mt-1">{errors.billed_amount}</p>
-                    )}
-                  </div>
-
-                  {/* Collected */}
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">
-                      Collected (₱)
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.collected}
-                      onChange={e => setForm(f => ({ ...f, collected: e.target.value }))}
-                      required
-                    />
-                    {errors.collected && (
-                      <p className="text-red-500 text-xs mt-1">{errors.collected}</p>
-                    )}
-                  </div>
-
-                  {/* Balance */}
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">
-                      Balance (₱)
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.balance}
-                      onChange={e => setForm(f => ({ ...f, balance: e.target.value }))}
-                      required
-                    />
-                    {errors.balance && (
-                      <p className="text-red-500 text-xs mt-1">{errors.balance}</p>
-                    )}
-                  </div>
-
-                  {/* Status */}
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">
-                      Status
-                    </label>
-                    <select
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.status}
-                      onChange={e => setForm(f => ({ ...f, status: e.target.value }))}
-                      required
-                    >
-                      <option value="Pending">Pending</option>
-                      <option value="Partial">Partial</option>
-                      <option value="Paid">Paid</option>
-                    </select>
-                    {errors.status && (
-                      <p className="text-red-500 text-xs mt-1">{errors.status}</p>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Buttons */}
-              <div className="flex justify-end gap-3 pt-4 border-t">
-                <a
-                  href="/admin/collections"
-                  className="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
-                >
-                  Cancel
-                </a>
-                <button
-                  type="submit"
-                  disabled={processing}
-                  className={`px-5 py-2 rounded bg-primary text-primary-foreground shadow hover:bg-primary/90 transition ${
-                    processing ? 'opacity-70 cursor-not-allowed' : ''
-                  }`}
-                >
-                  {processing ? 'Saving...' : 'Save Collection'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </AppLayout>
-  );
+    net_income: '',
 };
 
-export default CreateCollection;
+const CreateProject = () => {
+    const [form, setForm] = useState(initialForm);
+    const [processing, setProcessing] = useState(false);
+    const [errors, setErrors] = useState<Record<string, any>>({});
+    const [step, setStep] = useState(0);
+
+    const handleChange = (field: string, value: any) => {
+        setForm(f => ({ ...f, [field]: value }));
+    };
+
+    const handleNext = () => {
+        setStep(s => Math.min(s + 1, steps.length - 1));
+    };
+    const handleBack = () => {
+        setStep(s => Math.max(s - 1, 0));
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setProcessing(true);
+        setErrors({});
+        router.post('/admin/projects', form, {
+            onError: (err) => {
+                setErrors(err);
+                setProcessing(false);
+            },
+            onFinish: () => setProcessing(false),
+        });
+    };
+
+    return (
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <div className="min-h-screen bg-gray-50 p-6">
+                {/* Header */}
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+                    <div>
+                        <h2 className="text-2xl font-semibold text-blue-900">Create Project</h2>
+                        <p className="text-sm text-gray-500">
+                            Enter project information and financial details.
+                        </p>
+                    </div>
+                </div>
+
+                {/* Stepper */}
+                <div className="max-w-3xl mx-auto mb-6">
+                    <ol className="flex items-center w-full text-sm font-medium text-gray-500">
+                        {steps.map((s, idx) => (
+                            <li key={s.label} className={`flex-1 flex items-center ${idx < step ? 'text-blue-600' : idx === step ? 'text-blue-900' : ''}`}>
+                                <span className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${idx <= step ? 'border-blue-600 bg-blue-100' : 'border-gray-300 bg-white'} mr-2`}>{idx + 1}</span>
+                                {s.label}
+                                {idx < steps.length - 1 && <span className="flex-1 h-0.5 bg-gray-300 mx-2" />}
+                            </li>
+                        ))}
+                    </ol>
+                </div>
+
+                {/* Tabbed Card */}
+                <form onSubmit={handleSubmit} className="max-w-3xl mx-auto bg-white border border-gray-100 rounded-xl shadow-sm p-8">
+                    <div className="mb-6 border-b border-gray-200">
+                        <nav className="-mb-px flex space-x-8">
+                            {steps.map((s, idx) => (
+                                <button
+                                    type="button"
+                                    key={s.label}
+                                    className={`whitespace-nowrap pb-2 px-1 border-b-2 font-medium text-sm ${step === idx ? 'border-blue-600 text-blue-700' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
+                                    onClick={() => setStep(idx)}
+                                >
+                                    {s.label}
+                                </button>
+                            ))}
+                        </nav>
+                    </div>
+
+                    {/* Fields for current step/tab */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {steps[step].fields.map(field => (
+                            <div key={field}>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{fieldLabels[field]}</label>
+                                <input
+                                    type={['contract_amount','payroll','supplies','collected','net_income','personnel'].includes(field) ? 'number' : 'text'}
+                                    className="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 px-3 py-2"
+                                    value={form[field]}
+                                    onChange={e => handleChange(field, field === 'personnel' ? Number(e.target.value) : e.target.value)}
+                                    required
+                                />
+                                {errors[field] && (
+                                    <p className="text-red-500 text-xs mt-1">{errors[field]}</p>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Navigation Buttons */}
+                    <div className="flex justify-between pt-8">
+                        <button
+                            type="button"
+                            onClick={handleBack}
+                            disabled={step === 0}
+                            className={`px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 text-sm font-medium transition-all ${step === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        >
+                            Back
+                        </button>
+                        {step < steps.length - 1 ? (
+                            <button
+                                type="button"
+                                onClick={handleNext}
+                                className="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium shadow-sm transition-all"
+                            >
+                                Next
+                            </button>
+                        ) : (
+                            <button
+                                type="submit"
+                                disabled={processing}
+                                className="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium shadow-sm transition-all"
+                            >
+                                {processing ? 'Saving...' : 'Create Project'}
+                            </button>
+                        )}
+                    </div>
+                </form>
+            </div>
+        </AppLayout>
+    );
+};
+
+export default CreateProject;

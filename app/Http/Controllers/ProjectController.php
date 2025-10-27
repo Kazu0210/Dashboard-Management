@@ -24,23 +24,21 @@ class ProjectController extends Controller
     public function store()
     {
         $data = request()->validate([
-            'name' => 'required|string|max:255',
-            'status' => 'required|in:ongoing,completed,on-hold',
-            'startDate' => 'required|date',
-            'endDate' => 'required|date|after_or_equal:startDate',
-            'manager' => 'required|string|max:255',
-            'budget' => 'required|numeric|min:0',
+            'project_name' => 'required|string|max:255',
+            'client' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+            'contract_amount' => 'required|numeric|min:0',
+            'duration' => 'required|string|max:50',
+            'personnel' => 'required|integer|min:0',
+            'payroll' => 'required|numeric|min:0',
+            'supplies' => 'required|numeric|min:0',
+            'billing_status' => 'required|string|max:50',
+            'collected' => 'required|numeric|min:0',
+            'net_income' => 'required|numeric|min:0',
+            'status' => 'required|string|max:50',
         ]);
 
-        // Convert camelCase to snake_case for DB
-        $project = Project::create([
-            'name' => $data['name'],
-            'status' => $data['status'],
-            'start_date' => $data['startDate'],
-            'end_date' => $data['endDate'],
-            'manager' => $data['manager'],
-            'budget' => $data['budget'],
-        ]);
+        $project = Project::create($data);
 
         return redirect()->route('admin.projects.index')->with('success', 'Project created successfully.');
     }
@@ -56,12 +54,18 @@ class ProjectController extends Controller
     public function update($id)
     {
         $data = request()->validate([
-            'name' => 'required|string|max:255',
-            'status' => 'required|in:ongoing,completed,on-hold',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'manager' => 'required|string|max:255',
-            'budget' => 'required|numeric|min:0',
+            'project_name' => 'required|string|max:255',
+            'client' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+            'contract_amount' => 'required|numeric|min:0',
+            'duration' => 'required|string|max:50',
+            'personnel' => 'required|integer|min:0',
+            'payroll' => 'required|numeric|min:0',
+            'supplies' => 'required|numeric|min:0',
+            'billing_status' => 'required|string|max:50',
+            'collected' => 'required|numeric|min:0',
+            'net_income' => 'required|numeric|min:0',
+            'status' => 'required|string|max:50',
         ]);
 
         $project = Project::findOrFail($id);

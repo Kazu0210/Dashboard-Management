@@ -3,7 +3,7 @@ import { Link, usePage } from '@inertiajs/react';
 
 const breadcrumbs = [
     { title: "Home", href: "/" },
-    { title: "Collections", href: "/admin/collections" },
+    { title: "Projects", href: "/admin/projects" },
 ];
 
 type Collection = {
@@ -25,21 +25,21 @@ const Collections = () => {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <div className="min-h-screen bg-gray-50 p-6">
-                {/* Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-                    <div>
-                        <h2 className="text-2xl font-semibold text-gray-800">Collections</h2>
-                        <p className="text-sm text-gray-500">
-                            View and manage project billing and collection records.
-                        </p>
+                    {/* Header */}
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                        <div>
+                            <h2 className="text-3xl font-extrabold text-blue-900 tracking-tight">Project Monitoring</h2>
+                            <p className="text-base text-gray-500 mt-1">
+                                View, monitor, and manage all projects in one place. Stay updated on status, finances, and progress.
+                            </p>
+                        </div>
+                        <Link
+                            href={`/admin/projects/create`}
+                            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-blue-600 text-white text-base font-semibold hover:bg-blue-700 transition-all shadow-sm"
+                        >
+                            <span className="text-lg">＋</span> New Project
+                        </Link>
                     </div>
-                    <Link
-                        href={`/admin/collections/create`}
-                        className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-all shadow-sm"
-                    >
-                        <span>＋</span> Add Collection
-                    </Link>
-                </div>
 
                 {/* Table Card */}
                 <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
