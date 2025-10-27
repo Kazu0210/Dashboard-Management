@@ -1,8 +1,6 @@
-
-
-
 import { RecentActivity } from "@/components/RecentActivity";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Building, DollarSign, Users, Package, Wrench, CreditCard, Receipt, Clock, CheckCircle, TrendingUp, BarChart } from "lucide-react";
 import AppLayout from '@/layouts/app-layout';
 
 // const breadcrumbs = [
@@ -14,119 +12,155 @@ const Dashboard = () => {
   return (
     <AppLayout>
     {/* <AppLayout breadcrumbs={breadcrumbs}> */}
-      <div className="space-y-6 p-4 bg-background min-h-screen">
+      <div className="space-y-6 p-4 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
         <div>
           <h2 className="text-3xl font-bold text-black">Overview</h2>
           <p className="text-lg text-black mt-1">Welcome back! Here's what's happening today.</p>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
+          <Card className="bg-gradient-to-br from-blue-500 to-blue-700">
             <CardHeader>
-              <CardTitle>Total Projects</CardTitle>
-              <CardDescription>Total active and completed manpower contracts</CardDescription>
+              <CardTitle className="text-white flex items-center">
+                <Building className="h-5 w-5 mr-2" />
+                Total Projects
+              </CardTitle>
+              <CardDescription className="text-white/80">Total active and completed manpower contracts</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-black">17</p>
+              <p className="text-2xl font-bold text-white">17</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-gradient-to-br from-green-500 to-green-700">
             <CardHeader>
-              <CardTitle>Total Contract Value</CardTitle>
-              <CardDescription>Combined value of all service agreements</CardDescription>
+              <CardTitle className="text-white flex items-center">
+                <DollarSign className="h-5 w-5 mr-2" />
+                Total Contract Value
+              </CardTitle>
+              <CardDescription className="text-white/80">Combined value of all service agreements</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-black">₱65,400,000</p>
+              <p className="text-2xl font-bold text-white">₱65,400,000</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-gradient-to-br from-purple-500 to-purple-700">
             <CardHeader>
-              <CardTitle>Total Employees Deployed</CardTitle>
-              <CardDescription>Active janitors, messengers, and maintenance staff</CardDescription>
+              <CardTitle className="text-white flex items-center">
+                <Users className="h-5 w-5 mr-2" />
+                Total Employees Deployed
+              </CardTitle>
+              <CardDescription className="text-white/80">Active janitors, messengers, and maintenance staff</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-black">380</p>
+              <p className="text-2xl font-bold text-white">380</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-gradient-to-br from-red-500 to-red-700">
             <CardHeader>
-              <CardTitle>Total Payroll (This Month)</CardTitle>
-              <CardDescription>Payroll disbursed for current month</CardDescription>
+              <CardTitle className="text-white flex items-center">
+                <DollarSign className="h-5 w-5 mr-2" />
+                Total Payroll (This Month)
+              </CardTitle>
+              <CardDescription className="text-white/80">Payroll disbursed for current month</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-black">₱3,250,000</p>
+              <p className="text-2xl font-bold text-white">₱3,250,000</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-gradient-to-br from-orange-500 to-orange-700">
             <CardHeader>
-              <CardTitle>Total Supplies Issued</CardTitle>
-              <CardDescription>Value of consumables released to projects</CardDescription>
+              <CardTitle className="text-white flex items-center">
+                <Package className="h-5 w-5 mr-2" />
+                Total Supplies Issued
+              </CardTitle>
+              <CardDescription className="text-white/80">Value of consumables released to projects</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-black">₱450,000</p>
+              <p className="text-2xl font-bold text-white">₱450,000</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-gradient-to-br from-gray-500 to-gray-700">
             <CardHeader>
-              <CardTitle>Delivered Tools & Equipment</CardTitle>
-              <CardDescription>Total cost of issued tools/equipment</CardDescription>
+              <CardTitle className="text-white flex items-center">
+                <Wrench className="h-5 w-5 mr-2" />
+                Delivered Tools & Equipment
+              </CardTitle>
+              <CardDescription className="text-white/80">Total cost of issued tools/equipment</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-black">₱1,200,000</p>
+              <p className="text-2xl font-bold text-white">₱1,200,000</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-gradient-to-br from-yellow-500 to-yellow-700">
             <CardHeader>
-              <CardTitle>Accounts Receivable</CardTitle>
-              <CardDescription>Total amount due from clients</CardDescription>
+              <CardTitle className="text-white flex items-center">
+                <CreditCard className="h-5 w-5 mr-2" />
+                Accounts Receivable
+              </CardTitle>
+              <CardDescription className="text-white/80">Total amount due from clients</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-black">₱5,000,000</p>
+              <p className="text-2xl font-bold text-white">₱5,000,000</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-gradient-to-br from-pink-500 to-pink-700">
             <CardHeader>
-              <CardTitle>Accounts Payable</CardTitle>
-              <CardDescription>Total company liabilities/payables</CardDescription>
+              <CardTitle className="text-white flex items-center">
+                <Receipt className="h-5 w-5 mr-2" />
+                Accounts Payable
+              </CardTitle>
+              <CardDescription className="text-white/80">Total company liabilities/payables</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-black">₱1,800,000</p>
+              <p className="text-2xl font-bold text-white">₱1,800,000</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-gradient-to-br from-cyan-500 to-cyan-700">
             <CardHeader>
-              <CardTitle>Pending Billing</CardTitle>
-              <CardDescription>Unbilled services for the current cycle</CardDescription>
+              <CardTitle className="text-white flex items-center">
+                <Clock className="h-5 w-5 mr-2" />
+                Pending Billing
+              </CardTitle>
+              <CardDescription className="text-white/80">Unbilled services for the current cycle</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-black">₱2,500,000</p>
+              <p className="text-2xl font-bold text-white">₱2,500,000</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-gradient-to-br from-lime-500 to-lime-700">
             <CardHeader>
-              <CardTitle>Total Actual Collected</CardTitle>
-              <CardDescription>Total amount collected from clients</CardDescription>
+              <CardTitle className="text-white flex items-center">
+                <CheckCircle className="h-5 w-5 mr-2" />
+                Total Actual Collected
+              </CardTitle>
+              <CardDescription className="text-white/80">Total amount collected from clients</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-black">₱59,000,000</p>
+              <p className="text-2xl font-bold text-white">₱59,000,000</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-gradient-to-br from-teal-500 to-teal-700">
             <CardHeader>
-              <CardTitle>Gross Income</CardTitle>
-              <CardDescription>Income minus direct costs (payroll & supplies)</CardDescription>
+              <CardTitle className="text-white flex items-center">
+                <TrendingUp className="h-5 w-5 mr-2" />
+                Gross Income
+              </CardTitle>
+              <CardDescription className="text-white/80">Income minus direct costs (payroll & supplies)</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-black">₱12,000,000</p>
+              <p className="text-2xl font-bold text-white">₱12,000,000</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-gradient-to-br from-indigo-500 to-indigo-700">
             <CardHeader>
-              <CardTitle>Net Income</CardTitle>
-              <CardDescription>Gross Income minus admin & operating expenses</CardDescription>
+              <CardTitle className="text-white flex items-center">
+                <BarChart className="h-5 w-5 mr-2" />
+                Net Income
+              </CardTitle>
+              <CardDescription className="text-white/80">Gross Income minus admin & operating expenses</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-black">₱8,000,000</p>
+              <p className="text-2xl font-bold text-white">₱8,000,000</p>
             </CardContent>
           </Card>
         </div>
