@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { ChartBarLabelCustom } from '@/components/ChartBarLabelCustom';
 import { Head, Link, usePage } from '@inertiajs/react';
 
 import {
@@ -30,7 +31,6 @@ export default function Welcome() {
         { label: 'Active Projects', value: 32 },
         { label: 'Revenue', value: '₱1,200,000' },
         { label: 'Growth', value: '12%' },
-        { label: 'Total Projects', value: String(project_count), description: 'Total active and completed manpower contracts' },
     ];
 
     // Sample data
@@ -55,18 +55,24 @@ export default function Welcome() {
         { name: 'Group C', value: 300 },
         { name: 'Group D', value: 200 },
     ];
+
+    const chartData = [
+        { month: "January", desktop: 50, mobile: 80 },
+        { month: "February", desktop: 305, mobile: 200 },
+        { month: "March", desktop: 237, mobile: 120 },
+        { month: "April", desktop: 73, mobile: 190 },
+        { month: "May", desktop: 209, mobile: 130 },
+        { month: "June", desktop: 214, mobile: 140 },
+    ]
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
     return (
         <div className="min-h-screen w-full bg-gray-50 p-6 md:p-10">
             {/* Key Metrics Section */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 mb-8">
-                {metrics.map((m) => (
-                    <Card key={m.label} className="flex flex-col items-center justify-center py-6 shadow-sm">
-                        <div className="text-xs text-gray-500 uppercase tracking-wider text-center">{m.label}</div>
-                        <div className="text-2xl font-bold text-blue-700 mb-1">{m.value}</div>
-                    </Card>
-                ))}
+                <div className="col-span-2">
+                    <ChartBarLabelCustom chartData={chartData} />
+                </div>
             </div>
 
             {/* Charts Section */}
