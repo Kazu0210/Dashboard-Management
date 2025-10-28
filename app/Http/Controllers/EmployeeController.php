@@ -12,10 +12,13 @@ class EmployeeController extends Controller
     {
         $rows = DB::table('employees')
             ->leftJoin('employment_types', 'employees.employment_type_id', '=', 'employment_types.id')
+            ->leftJoin('statuses', 'employees.status_id', '=', 'statuses.id')
             ->select(
                 'employees.*',
                 'employment_types.id as employment_type_id',
-                'employment_types.name as employment_type_name'
+                'employment_types.name as employment_type_name',
+                'statuses.id as status_id',
+                'statuses.name as status_name'
             )
             ->get();
 
@@ -26,11 +29,13 @@ class EmployeeController extends Controller
                 'last_name' => $r->last_name,
                 'email' => $r->email,
                 'phone' => $r->phone,
-                'position' => $r->position,
-                'hired_at' => $r->hired_at,
-                'salary' => $r->salary,
                 'employment_type' => $r->employment_type_id ? ['id' => $r->employment_type_id, 'name' => $r->employment_type_name] : null,
-                'status' => ['name' => $r->status],
+                'status' => $r->status_id ? ['id' => $r->status_id, 'name' => $r->status_name] : null,
+                'monthly_salary' => $r->monthly_salary,
+                'attendance_rate' => $r->attendance_rate,
+                'date_hired' => $r->date_hired,
+                'date_resigned' => $r->date_resigned,
+                'is_active' => (bool) $r->is_active,
                 'created_at' => $r->created_at,
                 'updated_at' => $r->updated_at,
             ];
@@ -39,7 +44,7 @@ class EmployeeController extends Controller
         return \Inertia\Inertia::render('Employees/Index', [
             'employees' => $employees,
             'types' => DB::table('employment_types')->get()->toArray(),
-            'statuses' => ['active', 'inactive'],
+            'statuses' => DB::table('statuses')->get()->toArray(),
         ]);
     }
 
@@ -47,22 +52,25 @@ class EmployeeController extends Controller
     {
         return \Inertia\Inertia::render('Employees/Create', [
             'types' => DB::table('employment_types')->get()->toArray(),
-            'statuses' => ['active', 'inactive'],
+            'statuses' => DB::table('statuses')->get()->toArray(),
         ]);
     }
 
     public function store(Request $request)
     {
+
         $data = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'nullable|string|max:255',
             'email' => 'required|email|unique:employees,email',
             'phone' => 'nullable|string|max:50',
-            'position' => 'nullable|string|max:255',
-            'hired_at' => 'nullable|date',
-            'salary' => 'nullable|numeric',
             'employment_type_id' => 'required|exists:employment_types,id',
-            'status' => 'required|in:active,inactive',
+            'status_id' => 'required|exists:statuses,id',
+            'monthly_salary' => 'nullable|numeric',
+            'attendance_rate' => 'nullable|numeric',
+            'date_hired' => 'nullable|date',
+            'date_resigned' => 'nullable|date',
+            'is_active' => 'boolean',
         ]);
 
         Employee::create($data);
@@ -74,7 +82,14 @@ class EmployeeController extends Controller
     {
         $r = DB::table('employees')
             ->leftJoin('employment_types', 'employees.employment_type_id', '=', 'employment_types.id')
-            ->select('employees.*', 'employment_types.id as employment_type_id', 'employment_types.name as employment_type_name')
+            ->leftJoin('statuses', 'employees.status_id', '=', 'statuses.id')
+            ->select(
+                'employees.*',
+                'employment_types.id as employment_type_id',
+                'employment_types.name as employment_type_name',
+                'statuses.id as status_id',
+                'statuses.name as status_name'
+            )
             ->where('employees.id', $id)
             ->first();
 
@@ -88,11 +103,13 @@ class EmployeeController extends Controller
             'last_name' => $r->last_name,
             'email' => $r->email,
             'phone' => $r->phone,
-            'position' => $r->position,
-            'hired_at' => $r->hired_at,
-            'salary' => $r->salary,
             'employment_type' => $r->employment_type_id ? ['id' => $r->employment_type_id, 'name' => $r->employment_type_name] : null,
-            'status' => ['name' => $r->status],
+            'status' => $r->status_id ? ['id' => $r->status_id, 'name' => $r->status_name] : null,
+            'monthly_salary' => $r->monthly_salary,
+            'attendance_rate' => $r->attendance_rate,
+            'date_hired' => $r->date_hired,
+            'date_resigned' => $r->date_resigned,
+            'is_active' => (bool) $r->is_active,
             'created_at' => $r->created_at,
             'updated_at' => $r->updated_at,
         ];
@@ -117,22 +134,25 @@ class EmployeeController extends Controller
         return \Inertia\Inertia::render('Employees/Edit', [
             'employee' => $employee,
             'types' => DB::table('employment_types')->get()->toArray(),
-            'statuses' => ['active', 'inactive'],
+            'statuses' => DB::table('statuses')->get()->toArray(),
         ]);
     }
 
     public function update(Request $request, $id)
     {
+
         $data = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'nullable|string|max:255',
             'email' => 'required|email|unique:employees,email,'.$id,
             'phone' => 'nullable|string|max:50',
-            'position' => 'nullable|string|max:255',
-            'hired_at' => 'nullable|date',
-            'salary' => 'nullable|numeric',
             'employment_type_id' => 'required|exists:employment_types,id',
-            'status' => 'required|in:active,inactive',
+            'status_id' => 'required|exists:statuses,id',
+            'monthly_salary' => 'nullable|numeric',
+            'attendance_rate' => 'nullable|numeric',
+            'date_hired' => 'nullable|date',
+            'date_resigned' => 'nullable|date',
+            'is_active' => 'boolean',
         ]);
 
         DB::table('employees')->where('id', $id)->update($data + ['updated_at' => now()]);

@@ -15,6 +15,11 @@ type Employee = {
   phone?: string;
   employment_type?: { name: string } | null;
   status?: { name: string } | null;
+  monthly_salary?: number | string | null;
+  attendance_rate?: number | null;
+  date_hired?: string | null;
+  date_resigned?: string | null;
+  is_active?: boolean;
 };
 
 export default function Index() {
@@ -106,6 +111,11 @@ export default function Index() {
                   <th className="px-5 py-3 text-left">Phone</th>
                   <th className="px-5 py-3 text-left">Type</th>
                   <th className="px-5 py-3 text-left">Status</th>
+                  <th className="px-5 py-3 text-left">Monthly Salary</th>
+                  <th className="px-5 py-3 text-left">Attendance Rate</th>
+                  <th className="px-5 py-3 text-left">Date Hired</th>
+                  <th className="px-5 py-3 text-left">Date Resigned</th>
+                  <th className="px-5 py-3 text-left">Active</th>
                   <th className="px-5 py-3 text-left">Actions</th>
                 </tr>
               </thead>
@@ -118,6 +128,11 @@ export default function Index() {
                       <td className="px-5 py-3 text-gray-600">{emp.phone ?? '—'}</td>
                       <td className="px-5 py-3 text-gray-600">{emp.employment_type?.name ?? '—'}</td>
                       <td className="px-5 py-3 text-gray-600">{emp.status?.name ?? '—'}</td>
+                      <td className="px-5 py-3 text-gray-600">{emp.monthly_salary ? `₱${Number(emp.monthly_salary).toLocaleString()}` : '—'}</td>
+                      <td className="px-5 py-3 text-gray-600">{emp.attendance_rate != null ? `${emp.attendance_rate}%` : '—'}</td>
+                      <td className="px-5 py-3 text-gray-600">{emp.date_hired ?? '—'}</td>
+                      <td className="px-5 py-3 text-gray-600">{emp.date_resigned ?? '—'}</td>
+                      <td className="px-5 py-3 text-gray-600">{emp.is_active ? 'Yes' : 'No'}</td>
                       <td className="px-5 py-3">
                         <div className="flex gap-2">
                           <Link
@@ -153,7 +168,7 @@ export default function Index() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={6} className="px-6 py-8 text-center text-gray-400 text-sm">
+                    <td colSpan={11} className="px-6 py-8 text-center text-gray-400 text-sm">
                       No employees found.
                     </td>
                   </tr>
