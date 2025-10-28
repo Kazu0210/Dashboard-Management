@@ -2,11 +2,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { Users, UserPlus, UserMinus, Wallet, Pencil, Trash2 } from 'lucide-react';
-
-import React from 'react';
-
-import DataTable, { TableColumn } from 'react-data-table-component';
+import { Users, UserPlus, UserMinus, Wallet } from 'lucide-react';
 
 const breadcrumbs = [
   { title: 'Home', href: '/' },
@@ -28,126 +24,9 @@ type Employee = {
   is_active?: boolean;
 };
 
-
-export default function Index() {
+export default function EmployeesTemplate() {
   const { employees: employeesRaw, employee_count, new_hired_count, resigned_count, average_salary } = usePage().props;
   const employees: Employee[] = Array.isArray(employeesRaw) ? employeesRaw : [];
-
-  // Search state
-  const [search, setSearch] = React.useState('');
-  const filteredEmployees = React.useMemo(() => {
-    if (!search.trim()) return employees;
-    const lower = search.toLowerCase();
-    return employees.filter(emp =>
-      (`${emp.first_name} ${emp.last_name}`.toLowerCase().includes(lower) ||
-        (emp.email && emp.email.toLowerCase().includes(lower)) ||
-        (emp.phone && emp.phone.toLowerCase().includes(lower)))
-    );
-  }, [search, employees]);
-
-
-  // DataTable columns
-  const columns: TableColumn<Employee>[] = [
-    {
-      name: 'Name',
-      selector: row => `${row.first_name} ${row.last_name}`,
-      sortable: true,
-      wrap: true,
-    },
-    {
-      name: 'Email',
-      selector: row => row.email ?? '—',
-      sortable: true,
-    },
-    {
-      name: 'Phone',
-      selector: row => row.phone ?? '—',
-      sortable: true,
-    },
-    {
-      name: 'Type',
-      selector: row => row.employment_type?.name ?? '—',
-      sortable: true,
-    },
-    {
-      name: 'Status',
-      cell: row => (
-        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${row.status?.name === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
-          {row.status?.name ?? '—'}
-        </span>
-      ),
-      sortable: true,
-    },
-    {
-      name: 'Salary',
-      selector: row => row.monthly_salary ? `₱${Number(row.monthly_salary).toLocaleString()}` : '—',
-      sortable: true,
-    },
-    {
-      name: 'Attendance',
-      selector: row => row.attendance_rate != null ? `${row.attendance_rate}%` : '—',
-      sortable: true,
-    },
-    {
-      name: 'Hired',
-      selector: row => row.date_hired ?? '—',
-      sortable: true,
-    },
-    {
-      name: 'Resigned',
-      selector: row => row.date_resigned ?? '—',
-      sortable: true,
-    },
-    {
-      name: 'Active',
-      cell: row => (
-        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${row.is_active ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>
-          {row.is_active ? 'Yes' : 'No'}
-        </span>
-      ),
-      sortable: true,
-    },
-    {
-      name: 'Actions',
-      cell: row => (
-        <div className="flex gap-2">
-          <Link
-            href={`/admin/employees/${row.id}/edit`}
-            className="px-3 py-1.5 rounded-md bg-blue-500 text-white hover:bg-blue-600 text-xs transition-all shadow-sm flex items-center justify-center"
-            title="Edit"
-          >
-            <Pencil size={16} />
-          </Link>
-          <form
-            method="POST"
-            action={`/admin/employees/${row.id}`}
-            onSubmit={e => {
-              if (!confirm('Are you sure you want to delete this employee?')) e.preventDefault();
-            }}
-          >
-            <input
-              type="hidden"
-              name="_token"
-              value={
-                (typeof window !== 'undefined' && (window as any).Laravel?.csrfToken) ||
-                (typeof document !== 'undefined' && document.querySelector('meta[name=csrf-token]')?.getAttribute('content')) ||
-                ''
-              }
-            />
-            <input type="hidden" name="_method" value="DELETE" />
-            <button
-              type="submit"
-              className="px-3 py-1.5 rounded-md bg-red-500 text-white hover:bg-red-600 text-xs transition-all shadow-sm flex items-center justify-center"
-              title="Delete"
-            >
-              <Trash2 size={16} />
-            </button>
-          </form>
-        </div>
-      ),
-  ignoreRowClick: true,
-    },
-  ];
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
@@ -237,27 +116,104 @@ export default function Index() {
           </Link>
         </div>
 
-        {/* Employee DataTable with Search */}
+        {/* Employee Table */}
         <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
-          <div className="p-4">
-            <input
-              type="text"
-              className="w-full max-w-xs px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm mb-4"
-              placeholder="Search employees..."
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-            />
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm">
+              <thead className="bg-gray-50 border-b text-gray-600 font-medium">
+                <tr>
+                  {['Name', 'Email', 'Phone', 'Type', 'Status', 'Salary', 'Attendance', 'Hired', 'Resigned', 'Active', 'Actions'].map((header) => (
+                    <th key={header} className="px-5 py-3 text-left">{header}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {employees.length > 0 ? (
+                  employees.map((emp) => (
+                    <tr
+                      key={emp.id}
+                      className="border-b border-gray-100 hover:bg-gray-50/80 transition-colors"
+                    >
+                      <td className="px-5 py-3 font-medium text-gray-800">
+                        {emp.first_name} {emp.last_name}
+                      </td>
+                      <td className="px-5 py-3 text-gray-600">{emp.email ?? '—'}</td>
+                      <td className="px-5 py-3 text-gray-600">{emp.phone ?? '—'}</td>
+                      <td className="px-5 py-3 text-gray-600">{emp.employment_type?.name ?? '—'}</td>
+                      <td className="px-5 py-3">
+                        <span
+                          className={`px-2.5 py-1 rounded-full text-xs font-medium ${
+                            emp.status?.name === 'active'
+                              ? 'bg-green-100 text-green-700'
+                              : 'bg-gray-100 text-gray-600'
+                          }`}
+                        >
+                          {emp.status?.name ?? '—'}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3 text-gray-600">
+                        {emp.monthly_salary ? `₱${Number(emp.monthly_salary).toLocaleString()}` : '—'}
+                      </td>
+                      <td className="px-5 py-3 text-gray-600">
+                        {emp.attendance_rate != null ? `${emp.attendance_rate}%` : '—'}
+                      </td>
+                      <td className="px-5 py-3 text-gray-600">{emp.date_hired ?? '—'}</td>
+                      <td className="px-5 py-3 text-gray-600">{emp.date_resigned ?? '—'}</td>
+                      <td className="px-5 py-3">
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                            emp.is_active ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'
+                          }`}
+                        >
+                          {emp.is_active ? 'Yes' : 'No'}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3 flex gap-2">
+                        <Link
+                          href={`/admin/employees/${emp.id}/edit`}
+                          className="px-3 py-1.5 rounded-md bg-blue-500 text-white hover:bg-blue-600 text-xs transition-all shadow-sm"
+                        >
+                          Edit
+                        </Link>
+                        <form
+                          method="POST"
+                          action={`/admin/employees/${emp.id}`}
+                          onSubmit={(e) => {
+                            if (!confirm('Are you sure you want to delete this employee?')) e.preventDefault();
+                          }}
+                        >
+                          <input
+                            type="hidden"
+                            name="_token"
+                            value={
+                              (typeof window !== 'undefined' && (window as any).Laravel?.csrfToken) ||
+                              (typeof document !== 'undefined' &&
+                                document.querySelector('meta[name=csrf-token]')?.getAttribute('content')) ||
+                              ''
+                            }
+                          />
+                          <input type="hidden" name="_method" value="DELETE" />
+                          <button
+                            type="submit"
+                            className="px-3 py-1.5 rounded-md bg-red-500 text-white hover:bg-red-600 text-xs transition-all shadow-sm"
+                          >
+                            Delete
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={11} className="px-6 py-8 text-center text-gray-400 text-sm">
+                      No employees found.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
-          <DataTable
-            columns={columns}
-            data={filteredEmployees}
-            pagination
-            highlightOnHover
-            pointerOnHover
-            noDataComponent={<div className="px-6 py-8 text-center text-gray-400 text-sm">No employees found.</div>}
-          />
         </div>
-        {/* Pagination removed, handled by DataTable */}
       </div>
     </AppLayout>
   );

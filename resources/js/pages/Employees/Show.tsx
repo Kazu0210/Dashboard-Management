@@ -42,12 +42,24 @@ export default function Show() {
             <div className="font-medium">{employee.status?.name ?? '—'}</div>
           </div>
           <div>
-            <div className="text-sm text-gray-500">Hired At</div>
-            <div className="font-medium">{employee.hired_at ?? '—'}</div>
+            <div className="text-sm text-gray-500">Monthly Salary</div>
+            <div className="font-medium">{employee.monthly_salary ? `₱${Number(employee.monthly_salary).toLocaleString()}` : '—'}</div>
           </div>
           <div>
-            <div className="text-sm text-gray-500">Salary</div>
-            <div className="font-medium">{employee.salary ?? '—'}</div>
+            <div className="text-sm text-gray-500">Attendance Rate</div>
+            <div className="font-medium">{employee.attendance_rate != null ? `${employee.attendance_rate}%` : '—'}</div>
+          </div>
+          <div>
+            <div className="text-sm text-gray-500">Date Hired</div>
+            <div className="font-medium">{employee.date_hired ?? '—'}</div>
+          </div>
+          <div>
+            <div className="text-sm text-gray-500">Date Resigned</div>
+            <div className="font-medium">{employee.date_resigned ?? '—'}</div>
+          </div>
+          <div>
+            <div className="text-sm text-gray-500">Active</div>
+            <div className="font-medium">{employee.is_active ? 'Yes' : 'No'}</div>
           </div>
         </div>
       </div>

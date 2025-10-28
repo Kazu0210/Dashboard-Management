@@ -10,17 +10,20 @@ const breadcrumbs = [
 
 const Create = () => {
   const { types = [] } = usePage().props as any;
+  const { statuses = [] } = usePage().props as any;
 
   const [form, setForm] = useState({
     first_name: '',
     last_name: '',
     email: '',
     phone: '',
-    position: '',
-    hired_at: '',
-    salary: '',
     employment_type_id: '',
-    status: 'active',
+    status_id: '',
+    monthly_salary: '',
+    attendance_rate: '',
+    date_hired: '',
+    date_resigned: '',
+    is_active: true,
   });
 
   const [processing, setProcessing] = useState(false);
@@ -132,40 +135,53 @@ const Create = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">Position</label>
+                    <label className="block text-sm font-medium mb-1 text-gray-700">Monthly Salary</label>
                     <input
-                      name="position"
-                      type="text"
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.position}
-                      onChange={handleChange}
-                    />
-                    {errors.position && <div className="text-red-500 text-sm">{errors.position}</div>}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">Hired At</label>
-                    <input
-                      name="hired_at"
-                      type="date"
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.hired_at}
-                      onChange={handleChange}
-                    />
-                    {errors.hired_at && <div className="text-red-500 text-sm">{errors.hired_at}</div>}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">Salary</label>
-                    <input
-                      name="salary"
+                      name="monthly_salary"
                       type="number"
                       step="0.01"
                       className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.salary}
+                      value={form.monthly_salary}
                       onChange={handleChange}
                     />
-                    {errors.salary && <div className="text-red-500 text-sm">{errors.salary}</div>}
+                    {errors.monthly_salary && <div className="text-red-500 text-sm">{errors.monthly_salary}</div>}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-1 text-gray-700">Attendance Rate (%)</label>
+                    <input
+                      name="attendance_rate"
+                      type="number"
+                      step="0.01"
+                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
+                      value={form.attendance_rate}
+                      onChange={handleChange}
+                    />
+                    {errors.attendance_rate && <div className="text-red-500 text-sm">{errors.attendance_rate}</div>}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-1 text-gray-700">Date Hired</label>
+                    <input
+                      name="date_hired"
+                      type="date"
+                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
+                      value={form.date_hired}
+                      onChange={handleChange}
+                    />
+                    {errors.date_hired && <div className="text-red-500 text-sm">{errors.date_hired}</div>}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-1 text-gray-700">Date Resigned</label>
+                    <input
+                      name="date_resigned"
+                      type="date"
+                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
+                      value={form.date_resigned}
+                      onChange={handleChange}
+                    />
+                    {errors.date_resigned && <div className="text-red-500 text-sm">{errors.date_resigned}</div>}
                   </div>
 
                   <div>
@@ -187,15 +203,27 @@ const Create = () => {
                   <div>
                     <label className="block text-sm font-medium mb-1 text-gray-700">Status</label>
                     <select
-                      name="status"
+                      name="status_id"
                       className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.status}
+                      value={form.status_id}
                       onChange={handleChange}
                     >
-                      <option value="active">Active</option>
-                      <option value="inactive">Inactive</option>
+                      <option value="">Select status</option>
+                      {statuses.map((t: any) => (
+                        <option key={t.id} value={t.id} className="capitalize">{t.name}</option>
+                      ))}
                     </select>
-                    {errors.status && <div className="text-red-500 text-sm">{errors.status}</div>}
+                    {errors.status_id && <div className="text-red-500 text-sm">{errors.status_id}</div>}
+                  </div>
+
+                  <div className="flex items-center gap-2 mt-2">
+                    <input
+                      type="checkbox"
+                      name="is_active"
+                      checked={form.is_active}
+                      onChange={e => setForm(f => ({ ...f, is_active: e.target.checked }))}
+                    />
+                    <label className="text-sm font-medium text-gray-700">Active</label>
                   </div>
                 </div>
               </div>

@@ -41,11 +41,13 @@ export default function Edit() {
     last_name: employee.last_name || '',
     email: employee.email || '',
     phone: employee.phone || '',
-    position: employee.position || '',
-    hired_at: employee.hired_at || '',
-    salary: employee.salary || '',
     employment_type_id: employee.employment_type_id || employee.employment_type?.id || '',
-    status: employee.status?.name || 'active',
+    status_id: employee.status_id || employee.status?.id || '',
+    monthly_salary: employee.monthly_salary || '',
+    attendance_rate: employee.attendance_rate || '',
+    date_hired: employee.date_hired || '',
+    date_resigned: employee.date_resigned || '',
+    is_active: employee.is_active ?? true,
   });
 
   const [processing, setProcessing] = useState(false);
@@ -57,11 +59,13 @@ export default function Edit() {
       last_name: employee.last_name || '',
       email: employee.email || '',
       phone: employee.phone || '',
-      position: employee.position || '',
-      hired_at: employee.hired_at || '',
-      salary: employee.salary || '',
       employment_type_id: employee.employment_type_id || employee.employment_type?.id || '',
-      status: employee.status?.name || 'active',
+      status_id: employee.status_id || employee.status?.id || '',
+      monthly_salary: employee.monthly_salary || '',
+      attendance_rate: employee.attendance_rate || '',
+      date_hired: employee.date_hired || '',
+      date_resigned: employee.date_resigned || '',
+      is_active: employee.is_active ?? true,
     });
   }, [employee]);
 
@@ -160,39 +164,53 @@ export default function Edit() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Position</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Monthly Salary</label>
                 <input
-                  name="position"
-                  value={form.position}
-                  onChange={handleChange}
-                  className="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-800 px-3 py-2 transition-all"
-                />
-                {errors.position && <div className="text-red-500 text-sm">{errors.position}</div>}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Hired At</label>
-                <input
-                  type="date"
-                  name="hired_at"
-                  value={form.hired_at}
-                  onChange={handleChange}
-                  className="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-800 px-3 py-2 transition-all"
-                />
-                {errors.hired_at && <div className="text-red-500 text-sm">{errors.hired_at}</div>}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Salary</label>
-                <input
+                  name="monthly_salary"
                   type="number"
                   step="0.01"
-                  name="salary"
-                  value={form.salary}
+                  value={form.monthly_salary}
                   onChange={handleChange}
                   className="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-800 px-3 py-2 transition-all"
                 />
-                {errors.salary && <div className="text-red-500 text-sm">{errors.salary}</div>}
+                {errors.monthly_salary && <div className="text-red-500 text-sm">{errors.monthly_salary}</div>}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Attendance Rate (%)</label>
+                <input
+                  name="attendance_rate"
+                  type="number"
+                  step="0.01"
+                  value={form.attendance_rate}
+                  onChange={handleChange}
+                  className="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-800 px-3 py-2 transition-all"
+                />
+                {errors.attendance_rate && <div className="text-red-500 text-sm">{errors.attendance_rate}</div>}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Date Hired</label>
+                <input
+                  name="date_hired"
+                  type="date"
+                  value={form.date_hired}
+                  onChange={handleChange}
+                  className="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-800 px-3 py-2 transition-all"
+                />
+                {errors.date_hired && <div className="text-red-500 text-sm">{errors.date_hired}</div>}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Date Resigned</label>
+                <input
+                  name="date_resigned"
+                  type="date"
+                  value={form.date_resigned}
+                  onChange={handleChange}
+                  className="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-800 px-3 py-2 transition-all"
+                />
+                {errors.date_resigned && <div className="text-red-500 text-sm">{errors.date_resigned}</div>}
               </div>
 
               <div>
@@ -214,15 +232,25 @@ export default function Edit() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
                 <select
-                  name="status"
-                  value={form.status}
+                  name="status_id"
+                  value={form.status_id}
                   onChange={handleChange}
                   className="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-800 px-3 py-2 transition-all"
                 >
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
+                  <option value="">Select status</option>
+                  {/* You may want to map statuses from props here */}
                 </select>
-                {errors.status && <div className="text-red-500 text-sm">{errors.status}</div>}
+                {errors.status_id && <div className="text-red-500 text-sm">{errors.status_id}</div>}
+              </div>
+
+              <div className="flex items-center gap-2 mt-2">
+                <input
+                  type="checkbox"
+                  name="is_active"
+                  checked={form.is_active}
+                  onChange={e => setForm(f => ({ ...f, is_active: e.target.checked }))}
+                />
+                <label className="text-sm font-medium text-gray-700">Active</label>
               </div>
             </div>
 
@@ -256,17 +284,13 @@ export default function Edit() {
               </div>
 
               <div className="py-3">
-                <p className="text-xs text-gray-500">Current Status</p>
+                <p className="text-xs text-gray-500">Active</p>
                 <span
                   className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                    (form.status || '').toLowerCase() === 'active'
-                      ? 'bg-green-100 text-green-700'
-                      : (form.status || '').toLowerCase() === 'inactive'
-                      ? 'bg-gray-100 text-gray-700'
-                      : 'bg-yellow-100 text-yellow-700'
+                    form.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
                   }`}
                 >
-                  {form.status || 'N/A'}
+                  {form.is_active ? 'Active' : 'Inactive'}
                 </span>
               </div>
             </div>
