@@ -27,6 +27,7 @@ class EmployeeController extends Controller
             ->whereMonth('date_hired', now()->month)
             ->count();
         $resigned_count = Employee::whereNotNull('date_resigned')->count();
+        $average_salary = Employee::avg('monthly_salary');
 
         $employees = $rows->map(function ($r) {
             return [
@@ -53,7 +54,8 @@ class EmployeeController extends Controller
             'statuses' => DB::table('statuses')->get()->toArray(),
             'employee_count' => $employee_count,
             'new_hired_count' => $new_hired_count,
-            'resigned_count' => $resigned_count
+            'resigned_count' => $resigned_count,
+            'average_salary' => $average_salary,
         ]);
     }
 

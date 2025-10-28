@@ -27,6 +27,7 @@ export default function Index() {
   const { employee_count } = usePage().props;
   const { new_hired_count } = usePage().props;
   const { resigned_count } = usePage().props;
+  const { average_salary } = usePage().props;
   const employees: Employee[] = Array.isArray(employeesRaw) ? employeesRaw : [];
 
   return (
@@ -63,7 +64,7 @@ export default function Index() {
               <span className="text-3xl font-bold">{String(resigned_count)}</span>
             </CardContent>
           </Card>
-          <Card>
+          {/* <Card>
             <CardHeader>
               <CardTitle className="text-lg">Attendance Compliance</CardTitle>
               <CardDescription>Based on monthly DTRs</CardDescription>
@@ -71,14 +72,14 @@ export default function Index() {
             <CardContent>
               <span className="text-3xl font-bold">97%</span>
             </CardContent>
-          </Card>
+          </Card> */}
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">Average Monthly Salary</CardTitle>
               <CardDescription>Varies per site</CardDescription>
             </CardHeader>
             <CardContent>
-              <span className="text-3xl font-bold">₱12,000</span>
+              <span>{average_salary ? `₱${Number(average_salary).toLocaleString()}` : '—'}</span>
             </CardContent>
           </Card>
         </div>
