@@ -28,10 +28,22 @@ type Employee = {
   is_active?: boolean;
 };
 
-export default function Index() {
 
+export default function Index() {
   const { employees: employeesRaw, employee_count, new_hired_count, resigned_count, average_salary } = usePage().props;
   const employees: Employee[] = Array.isArray(employeesRaw) ? employeesRaw : [];
+
+  // Search state
+  const [search, setSearch] = React.useState('');
+  const filteredEmployees = React.useMemo(() => {
+    if (!search.trim()) return employees;
+    const lower = search.toLowerCase();
+    return employees.filter(emp =>
+      (`${emp.first_name} ${emp.last_name}`.toLowerCase().includes(lower) ||
+        (emp.email && emp.email.toLowerCase().includes(lower)) ||
+        (emp.phone && emp.phone.toLowerCase().includes(lower)))
+    );
+  }, [search, employees]);
 
 
   // DataTable columns
@@ -225,11 +237,20 @@ export default function Index() {
           </Link>
         </div>
 
-        {/* Employee DataTable */}
+        {/* Employee DataTable with Search */}
         <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+          <div className="p-4">
+            <input
+              type="text"
+              className="w-full max-w-xs px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm mb-4"
+              placeholder="Search employees..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+          </div>
           <DataTable
             columns={columns}
-            data={employees}
+            data={filteredEmployees}
             pagination
             highlightOnHover
             pointerOnHover
