@@ -2,7 +2,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { Users, UserPlus, UserMinus, Wallet, Pencil, Trash2 } from 'lucide-react';
+import { Users, UserPlus, UserMinus, Wallet, Pencil, Trash2, Upload, Download } from 'lucide-react';
 
 import React from 'react';
 
@@ -239,14 +239,32 @@ export default function Index() {
 
         {/* Employee DataTable with Search */}
         <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
-          <div className="p-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 gap-2">
             <input
               type="text"
-              className="w-full max-w-xs px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm mb-4"
+              className="w-full max-w-xs px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
               placeholder="Search employees..."
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
+            <div className="flex gap-2 mt-2 sm:mt-0">
+              <button
+                type="button"
+                className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 text-sm font-semibold shadow-md flex items-center gap-2 cursor-pointer"
+                disabled
+                title="Import"
+              >
+                <Upload size={18} /> Import
+              </button>
+              <button
+                type="button"
+                className="px-4 py-2 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 text-sm font-semibold shadow-md flex items-center gap-2 cursor-pointer"
+                disabled
+                title="Export"
+              >
+                <Download size={18} /> Export
+              </button>
+            </div>
           </div>
           <DataTable
             columns={columns}
