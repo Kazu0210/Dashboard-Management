@@ -22,6 +22,8 @@ class EmployeeController extends Controller
             )
             ->get();
 
+        $employee_count = Employee::count();
+
         $employees = $rows->map(function ($r) {
             return [
                 'id' => $r->id,
@@ -45,6 +47,7 @@ class EmployeeController extends Controller
             'employees' => $employees,
             'types' => DB::table('employment_types')->get()->toArray(),
             'statuses' => DB::table('statuses')->get()->toArray(),
+            'employee_count' => $employee_count
         ]);
     }
 

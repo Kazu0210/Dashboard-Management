@@ -24,7 +24,9 @@ type Employee = {
 
 export default function Index() {
   const { employees: employeesRaw } = usePage().props;
+  const { employee_count } = usePage().props;
   const employees: Employee[] = Array.isArray(employeesRaw) ? employeesRaw : [];
+
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
@@ -39,7 +41,7 @@ export default function Index() {
               <CardDescription>Company-wide deployment</CardDescription>
             </CardHeader>
             <CardContent>
-              <span className="text-3xl font-bold">380</span>
+              <span className="text-3xl font-bold">{String(employee_count)}</span>
             </CardContent>
           </Card>
           <Card>
