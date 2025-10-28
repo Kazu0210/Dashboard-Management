@@ -23,6 +23,10 @@ class EmployeeController extends Controller
             ->get();
 
         $employee_count = Employee::count();
+        $new_hired_count = Employee::whereYear('date_hired', now()->year)
+            ->whereMonth('date_hired', now()->month)
+            ->count();
+        $resigned_count = Employee::whereNotNull('date_resigned')->count();
 
         $employees = $rows->map(function ($r) {
             return [
@@ -47,7 +51,9 @@ class EmployeeController extends Controller
             'employees' => $employees,
             'types' => DB::table('employment_types')->get()->toArray(),
             'statuses' => DB::table('statuses')->get()->toArray(),
-            'employee_count' => $employee_count
+            'employee_count' => $employee_count,
+            'new_hired_count' => $new_hired_count,
+            'resigned_count' => $resigned_count
         ]);
     }
 

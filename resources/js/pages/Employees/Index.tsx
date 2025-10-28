@@ -25,8 +25,9 @@ type Employee = {
 export default function Index() {
   const { employees: employeesRaw } = usePage().props;
   const { employee_count } = usePage().props;
+  const { new_hired_count } = usePage().props;
+  const { resigned_count } = usePage().props;
   const employees: Employee[] = Array.isArray(employeesRaw) ? employeesRaw : [];
-
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
@@ -46,20 +47,11 @@ export default function Index() {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Active Deployment Rate</CardTitle>
-              <CardDescription>360 active, 20 on-leave</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <span className="text-3xl font-bold">95%</span>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
               <CardTitle className="text-lg">New Hires This Month</CardTitle>
               <CardDescription>Added for new projects</CardDescription>
             </CardHeader>
             <CardContent>
-              <span className="text-3xl font-bold">15</span>
+              <span className="text-3xl font-bold">{String(new_hired_count)}</span>
             </CardContent>
           </Card>
           <Card>
@@ -68,7 +60,7 @@ export default function Index() {
               <CardDescription>Regular staff turnover</CardDescription>
             </CardHeader>
             <CardContent>
-              <span className="text-3xl font-bold">10</span>
+              <span className="text-3xl font-bold">{String(resigned_count)}</span>
             </CardContent>
           </Card>
           <Card>
