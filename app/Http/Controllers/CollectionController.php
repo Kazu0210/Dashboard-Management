@@ -9,6 +9,11 @@ use Inertia\Inertia;
 
 class CollectionController extends Controller
 {
+    /**
+     * Display a listing of the collections.
+     *
+     * @return \Inertia\Response
+     */
     public function index()
     {
         $collections = Collection::with('project')->orderBy('date', 'desc')->get();
@@ -18,6 +23,11 @@ class CollectionController extends Controller
         ]);
     }
 
+    /**
+     * Show the form for creating a new collection.
+     *
+     * @return \Inertia\Response
+     */
     public function create()
     {
         $projects = Project::all();
@@ -26,6 +36,12 @@ class CollectionController extends Controller
         ]);
     }
 
+    /**
+     * Show the form for editing the specified collection.
+     *
+     * @param int $id
+     * @return \Inertia\Response
+     */
     public function edit($id)
     {
         $collection = Collection::findOrFail($id);
@@ -37,6 +53,11 @@ class CollectionController extends Controller
         ]);
     }
 
+    /**
+     * Store a newly created collection in storage.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store()
     {
         $request = request()->validate([
@@ -52,6 +73,12 @@ class CollectionController extends Controller
         return redirect()->route('admin.collections.index')->with('success', 'Collection created successfully.');
     }
 
+    /**
+     * Update the specified collection in storage.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update($id)
     {
         $collection = Collection::findOrFail($id);
@@ -69,6 +96,12 @@ class CollectionController extends Controller
         return redirect()->route('admin.collections.index')->with('success', 'Collection updated successfully.');
     }
 
+    /**
+     * Remove the specified collection from storage.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function delete($id)
     {
         $collection = Collection::findOrFail($id);
