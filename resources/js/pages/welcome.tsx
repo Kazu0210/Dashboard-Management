@@ -1,4 +1,6 @@
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Head, Link, usePage } from '@inertiajs/react';
+
 import {
     ResponsiveContainer,
     LineChart,
@@ -14,13 +16,21 @@ import {
     Cell,
 } from 'recharts';
 
+type ProjectStat = {
+    name: string;
+}
+
 export default function Welcome() {
+    const { project_status: project_statusRaw, project_count } = usePage().props;
+    const project_status: ProjectStat[] = Array.isArray(project_statusRaw) ? project_statusRaw : [];
+
     // Key metrics mock
     const metrics = [
         { label: 'Total Users', value: 1200 },
         { label: 'Active Projects', value: 32 },
         { label: 'Revenue', value: '₱1,200,000' },
         { label: 'Growth', value: '12%' },
+        { label: 'Total Projects', value: String(project_count), description: 'Total active and completed manpower contracts' },
     ];
 
     // Sample data
@@ -53,8 +63,8 @@ export default function Welcome() {
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 mb-8">
                 {metrics.map((m) => (
                     <Card key={m.label} className="flex flex-col items-center justify-center py-6 shadow-sm">
+                        <div className="text-xs text-gray-500 uppercase tracking-wider text-center">{m.label}</div>
                         <div className="text-2xl font-bold text-blue-700 mb-1">{m.value}</div>
-                        <div className="text-xs text-gray-500 uppercase tracking-wider">{m.label}</div>
                     </Card>
                 ))}
             </div>

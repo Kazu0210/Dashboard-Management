@@ -9,25 +9,20 @@ use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\ProjectMonitoringController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\GuestController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SupplyExpenseController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
+// Route for Guest Users
+Route::get('/', [GuestController::class, 'index'])->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
-
-    // // Actual Collection Tracker page
-    // Route::get('collections', function () {
-    //     return Inertia::render('Projects/ActualCollection');
-    // })->name('collections.index');
 });
 
 // Project monitoring API endpoints (authenticated)
