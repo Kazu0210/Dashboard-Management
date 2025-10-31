@@ -11,8 +11,17 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = Project::all();
+        $project_count = $projects->count();
+        $completed_count = $projects->where('status', 'Completed')->count();
+        $ongoing_count = $projects->where('status', 'Ongoing')->count();
+        $total_billed = $projects->sum('contract_amount');
+
         return Inertia::render('Projects/Index', [
-            'projects' => $projects
+            'projects' => $projects,
+            'project_count' => $project_count,
+            'completed_count' => $completed_count,
+            'ongoing_count' => $ongoing_count,
+            'total_billed' => $total_billed,
         ]);
     }
 
@@ -72,6 +81,14 @@ class ProjectController extends Controller
         $project->update($data);
 
         return redirect()->route('admin.projects.index')->with('success', 'Project updated successfully.');
+    }
+
+    public function show($id)
+    {
+        $project = Project::findOrFail($id);
+        return Inertia::render('Projects/Show', [
+            'project' => $project
+        ]);
     }
 
     public function destroy($id)
