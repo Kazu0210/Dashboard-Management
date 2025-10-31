@@ -237,12 +237,6 @@ export default function Index() {
                         <h2 className="text-3xl font-semibold text-gray-900">Projects</h2>
                         <p className="text-gray-500 text-sm mt-1">Monitor and manage all projects.</p>
                     </div>
-                    <Link
-                        href={`/admin/projects/create`}
-                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-all shadow-md"
-                    >
-                        <span className="text-lg">＋</span> Add Project
-                    </Link>
                 </div>
 
                 {/* Project DataTable with Search */}
@@ -272,6 +266,12 @@ export default function Index() {
                             >
                                 <Download size={18} /> Export
                             </button>
+                            <Link
+                                href={`/admin/projects/create`}
+                                className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-all shadow-md"
+                            >
+                                <span className="text-lg">＋</span> Add Project
+                            </Link>
                         </div>
                     </div>
                     <DataTable
