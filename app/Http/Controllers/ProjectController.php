@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Requests\ImportProjectsRequest;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -11,6 +12,18 @@ use App\Exports\ProjectsTemplateExport;
 
 class ProjectController extends Controller
 {
+    /**
+     * Import projects from uploaded Excel file.
+     */
+    public function import(ImportProjectsRequest $request)
+    {
+        try {
+            Excel::import(new \App\Imports\ProjectsImport, $request->file('file'));
+            return redirect()->route('admin.projects.index')->with('success', 'Projects imported successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.projects.index')->with('error', 'Import failed: ' . $e->getMessage());
+        }
+    }
     /**
      * Download Excel template for project import.
      */
