@@ -3,7 +3,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { Users, UserPlus, UserMinus, Wallet, Pencil, Trash2, Upload, Download } from 'lucide-react';
+import { Users, UserPlus, UserMinus, Wallet, Pencil, Trash2, Upload, Download, Eye } from 'lucide-react';
 import React from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
 
@@ -95,10 +95,10 @@ export default function Index() {
                 <div className="flex gap-2">
                     <Link
                         href={`/admin/projects/${row.id}`}
-                        className="px-3 py-1.5 rounded-md bg-gray-500 text-white hover:bg-gray-600 text-xs transition-all shadow-sm flex items-center justify-center"
+                        className="px-3 py-1.5 rounded-md bg-green-500 text-white hover:bg-green-600 text-xs transition-all shadow-sm flex items-center justify-center"
                         title="View"
                     >
-                        View
+                        <Eye size={16} />
                     </Link>
                     <Link
                         href={`/admin/projects/${row.id}/edit`}
