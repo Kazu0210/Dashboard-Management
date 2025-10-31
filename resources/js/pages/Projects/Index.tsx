@@ -250,14 +250,29 @@ export default function Index() {
                             onChange={e => setSearch(e.target.value)}
                         />
                         <div className="flex gap-2 mt-2 sm:mt-0">
-                            <button
-                                type="button"
-                                className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 text-sm font-semibold shadow-md flex items-center gap-2 cursor-pointer"
-                                disabled
-                                title="Import"
-                            >
-                                <Upload size={18} /> Import
-                            </button>
+                            <div className="relative group">
+                                <button
+                                    type="button"
+                                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-green-600 text-white text-sm font-medium rounded-xl hover:bg-green-700 transition-all shadow-md"
+                                    title="Import"
+                                >
+                                    <Upload size={18} /> Import
+                                </button>
+                                <div className="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto pointer-events-none transition-opacity z-10">
+                                    <a
+                                        href="/admin/projects/template/download"
+                                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg"
+                                    >
+                                        Download Excel Import Template
+                                    </a>
+                                    <button
+                                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-b-lg cursor-not-allowed opacity-60"
+                                        disabled
+                                    >
+                                        Import (Coming Soon)
+                                    </button>
+                                </div>
+                            </div>
                             <button
                                 type="button"
                                 className="px-4 py-2 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 text-sm font-semibold shadow-md flex items-center gap-2 cursor-pointer"

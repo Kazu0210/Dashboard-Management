@@ -2,12 +2,22 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ProjectsTemplateExport;
 
 class ProjectController extends Controller
 {
+    /**
+     * Download Excel template for project import.
+     */
+    public function downloadTemplate()
+    {
+        return Excel::download(new ProjectsTemplateExport, 'Projects_Import_Template.xlsx');
+    }
     public function index()
     {
         $projects = Project::all();
