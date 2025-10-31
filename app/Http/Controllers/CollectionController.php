@@ -102,7 +102,7 @@ class CollectionController extends Controller
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function delete($id)
+    public function destroy($id)
     {
         $collection = Collection::findOrFail($id);
         $collection->delete();

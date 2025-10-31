@@ -15,6 +15,25 @@ export default function SupplyExpensesIndex() {
         return String(v);
     };
 
+    const exportCollection = async (id: number) => {
+        try {
+            const response = await fetch(`/api/supply-expenses/${id}/export`);
+            if (!response.ok) throw new Error('Export failed');
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `supply-expense-${id}-export.csv`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (error) {
+            console.error('Export failed:', error);
+            alert('Failed to export data');
+        }
+    };
+
     return (
         <SidebarProvider>
             <div className="flex min-h-screen bg-gray-50">
@@ -58,6 +77,13 @@ export default function SupplyExpensesIndex() {
                                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <Link href={`/admin/supply-expenses/${e.id}`} className="text-indigo-600 hover:underline mr-4">View</Link>
                                                 <Link href={`/admin/supply-expenses/${e.id}/edit`} className="text-indigo-600 hover:underline mr-4">Edit</Link>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => exportCollection(e.id)}
+                                                    className="text-gray-600 hover:underline mr-4"
+                                                >
+                                                    Export
+                                                </button>
                                                 <button type="button" onClick={() => {
                                                     if (!confirm('Are you sure you want to delete this supply expense? This action cannot be undone.')) return;
 
