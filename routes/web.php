@@ -13,6 +13,7 @@ use App\Http\Controllers\GuestController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SupplyExpenseController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -20,9 +21,7 @@ use Inertia\Inertia;
 Route::get('/', [GuestController::class, 'index'])->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
 // Project monitoring API endpoints (authenticated)

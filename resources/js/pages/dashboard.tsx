@@ -2,13 +2,10 @@ import { RecentActivity } from "@/components/RecentActivity";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Building, DollarSign, Users, Package, Wrench, CreditCard, Receipt, Clock, CheckCircle, TrendingUp, BarChart } from "lucide-react";
 import AppLayout from '@/layouts/app-layout';
-
-// const breadcrumbs = [
-//   { title: "Home", href: "/" },
-//   { title: "Dashboard", href: "/dashboard" },
-// ];
+import { usePage } from "@inertiajs/react";
 
 const Dashboard = () => {
+  const { projectCount, ongoingCount, completedCount } = usePage().props;
   return (
     <AppLayout>
     {/* <AppLayout breadcrumbs={breadcrumbs}> */}
@@ -19,18 +16,26 @@ const Dashboard = () => {
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card className="bg-gradient-to-br from-blue-500 to-blue-700">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Building className="h-5 w-5 mr-2" />
-                Total Projects
-              </CardTitle>
-              <CardDescription className="text-white/80">Total active and completed manpower contracts</CardDescription>
+          <Card className="relative overflow-hidden border-none shadow-xl rounded-2xl bg-white/80 backdrop-blur-lg">
+            <div className="absolute -top-8 -right-8 w-32 h-32 bg-blue-500 opacity-20 rounded-full z-0" />
+            <CardHeader className="relative z-10 pb-2">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="bg-blue-600 rounded-full p-3 shadow-lg flex items-center justify-center">
+                  <Building className="h-7 w-7 text-white" />
+                </div>
+                <div>
+                  <CardTitle className="text-lg font-bold text-gray-900">Projects Overview</CardTitle>
+                  <CardDescription className="text-xs text-gray-500">Summary of all projects</CardDescription>
+                </div>
+              </div>
+              <div className="flex flex-col gap-1 mt-2">
+                <div className="text-sm text-gray-700">Total Projects: <span className="font-bold text-blue-700">{String(projectCount)}</span></div>
+                <div className="text-sm text-gray-700">Ongoing: <span className="font-bold text-blue-700">{String(ongoingCount)}</span></div>
+                <div className="text-sm text-gray-700">Completed: <span className="font-bold text-blue-700">{String(completedCount)}</span></div>
+              </div>
             </CardHeader>
-            <CardContent>
-              <p className="text-2xl font-bold text-white">17</p>
-            </CardContent>
           </Card>
+          
           <Card className="bg-gradient-to-br from-green-500 to-green-700">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
