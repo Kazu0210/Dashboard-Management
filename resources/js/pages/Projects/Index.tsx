@@ -15,12 +15,16 @@ const breadcrumbs = [
 
 type Project = {
     id: number;
-    project: string;
-    billing_period: string;
-    billed_amount: string;
-    collected: string;
-    balance: string;
+    project_name: string;
+    client: string;
+    location: string;
+    contract_amount: number;
+    duration: string;
     status: string;
+    personnel: number;
+    billing_status: string;
+    collected: number;
+    net_income: number;
     created_at: string;
     updated_at: string;
 };
@@ -35,8 +39,9 @@ export default function Index() {
         if (!search.trim()) return projects;
         const lower = search.toLowerCase();
         return projects.filter(p =>
-            p.project.toLowerCase().includes(lower) ||
-            p.billing_period.toLowerCase().includes(lower) ||
+            p.project_name.toLowerCase().includes(lower) ||
+            p.client.toLowerCase().includes(lower) ||
+            p.location.toLowerCase().includes(lower) ||
             p.status.toLowerCase().includes(lower)
         );
     }, [search, projects]);
@@ -45,44 +50,56 @@ export default function Index() {
     const columns: TableColumn<Project>[] = [
         {
             name: 'Project',
-            selector: row => row.project,
+            selector: row => row.project_name,
             sortable: true,
             wrap: true,
         },
         {
-            name: 'Billing Period',
-            selector: row => row.billing_period,
+            name: 'Client',
+            selector: row => row.client,
             sortable: true,
         },
         {
-            name: 'Billed Amount',
-            selector: row => `₱${row.billed_amount}`,
-            sortable: true,
-        },
-        {
-            name: 'Collected',
-            selector: row => `₱${row.collected}`,
-            sortable: true,
-        },
-        {
-            name: 'Balance',
-            selector: row => `₱${row.balance}`,
+            name: 'Contract Amount',
+            selector: row => `₱${Number(row.contract_amount).toLocaleString()}`,
             sortable: true,
         },
         {
             name: 'Status',
             cell: row => (
                 <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                    row.status === 'Paid' ? 'bg-green-100 text-green-700' :
-                    row.status === 'Partial' ? 'bg-yellow-100 text-yellow-700' :
-                    'bg-red-100 text-red-600'}`}>{row.status}</span>
+                    row.status === 'Completed' ? 'bg-green-100 text-green-700' :
+                    row.status === 'Ongoing' ? 'bg-yellow-100 text-yellow-700' :
+                    'bg-gray-100 text-gray-600'}`}>{row.status}</span>
             ),
+            sortable: true,
+        },
+        {
+            name: 'Billing Status',
+            selector: row => row.billing_status,
+            sortable: true,
+        },
+        {
+            name: 'Collected',
+            selector: row => `₱${Number(row.collected).toLocaleString()}`,
+            sortable: true,
+        },
+        {
+            name: 'Net Income',
+            selector: row => `₱${Number(row.net_income).toLocaleString()}`,
             sortable: true,
         },
         {
             name: 'Actions',
             cell: row => (
                 <div className="flex gap-2">
+                    <Link
+                        href={`/admin/projects/${row.id}`}
+                        className="px-3 py-1.5 rounded-md bg-gray-500 text-white hover:bg-gray-600 text-xs transition-all shadow-sm flex items-center justify-center"
+                        title="View"
+                    >
+                        View
+                    </Link>
                     <Link
                         href={`/admin/projects/${row.id}/edit`}
                         className="px-3 py-1.5 rounded-md bg-blue-500 text-white hover:bg-blue-600 text-xs transition-all shadow-sm flex items-center justify-center"

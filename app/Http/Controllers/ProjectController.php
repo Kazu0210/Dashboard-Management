@@ -83,6 +83,14 @@ class ProjectController extends Controller
         return redirect()->route('admin.projects.index')->with('success', 'Project updated successfully.');
     }
 
+    public function show($id)
+    {
+        $project = Project::findOrFail($id);
+        return Inertia::render('Projects/Show', [
+            'project' => $project
+        ]);
+    }
+
     public function destroy($id)
     {
         $project = Project::findOrFail($id);
