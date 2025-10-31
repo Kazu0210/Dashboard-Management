@@ -5,7 +5,7 @@ import AppLayout from '@/layouts/app-layout';
 import { usePage } from "@inertiajs/react";
 
 const Dashboard = () => {
-  const { projectCount, ongoingCount, completedCount } = usePage().props;
+  const { projectCount, ongoingCount, completedCount, contractCount, fullTimeCount, partTimeCount } = usePage().props;
   return (
     <AppLayout>
     {/* <AppLayout breadcrumbs={breadcrumbs}> */}
@@ -57,7 +57,23 @@ const Dashboard = () => {
               <CardDescription className="text-white/80">Active janitors, messengers, and maintenance staff</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-white">380</p>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="w-3 h-3 rounded-full bg-blue-300 inline-block"></span>
+                  <span className="text-white text-sm">Contract:</span>
+                  <span className="text-lg font-bold text-white">{String(contractCount)}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-3 h-3 rounded-full bg-green-300 inline-block"></span>
+                  <span className="text-white text-sm">Full Time:</span>
+                  <span className="text-lg font-bold text-white">{String(fullTimeCount)}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-3 h-3 rounded-full bg-yellow-300 inline-block"></span>
+                  <span className="text-white text-sm">Part Time:</span>
+                  <span className="text-lg font-bold text-white">{String(partTimeCount)}</span>
+                </div>
+              </div>
             </CardContent>
           </Card>
           <Card className="bg-gradient-to-br from-red-500 to-red-700">
