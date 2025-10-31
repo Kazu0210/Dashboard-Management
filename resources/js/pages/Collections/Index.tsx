@@ -31,6 +31,25 @@ const CollectionIndex = () => {
     }).catch(() => alert('Failed to delete the collection.'));
   }
 
+  async function exportCollection(id: number): Promise<void> {
+    try {
+      const response = await fetch(`/api/collections/${id}/export`);
+      if (!response.ok) throw new Error('Export failed');
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `collection-${id}-export.csv`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Export failed:', error);
+      alert('Failed to export data');
+    }
+  }
+
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <div className="space-y-6 p-4 bg-gray-50 min-h-screen">
@@ -105,7 +124,13 @@ const CollectionIndex = () => {
                           >
                             Edit
                           </Link>
-
+                          <button
+                            type="button"
+                            onClick={() => exportCollection(c.id)}
+                            className="text-sm text-gray-600 hover:underline"
+                          >
+                            Export
+                          </button>
                           <button
                             type="button"
                             onClick={() => deleteCollection(c.id)}

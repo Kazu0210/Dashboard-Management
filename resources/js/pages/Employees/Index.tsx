@@ -33,6 +33,25 @@ export default function Index() {
   const { employees: employeesRaw, employee_count, new_hired_count, resigned_count, average_salary } = usePage().props;
   const employees: Employee[] = Array.isArray(employeesRaw) ? employeesRaw : [];
 
+  const exportCollection = async (id: number) => {
+    try {
+        const response = await fetch(`/api/employees/${id}/export`);
+        if (!response.ok) throw new Error('Export failed');
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `employee-${id}-export.csv`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    } catch (error) {
+        console.error('Export failed:', error);
+        alert('Failed to export data');
+    }
+  };
+
   // Search state
   const [search, setSearch] = React.useState('');
   const filteredEmployees = React.useMemo(() => {
@@ -118,6 +137,14 @@ export default function Index() {
           >
             <Pencil size={16} />
           </Link>
+          <button
+            type="button"
+            onClick={() => exportCollection(row.id)}
+            className="px-3 py-1.5 rounded-md bg-gray-500 text-white hover:bg-gray-600 text-xs transition-all shadow-sm flex items-center justify-center"
+            title="Export"
+          >
+            <Download size={16} />
+          </button>
           <form
             method="POST"
             action={`/admin/employees/${row.id}`}
