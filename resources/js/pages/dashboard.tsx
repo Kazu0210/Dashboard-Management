@@ -48,34 +48,45 @@ const Dashboard = () => {
               <p className="text-2xl font-bold text-white">₱65,400,000</p>
             </CardContent>
           </Card>
-          <Card className="bg-gradient-to-br from-purple-500 to-purple-700">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Users className="h-5 w-5 mr-2" />
-                Total Employees Deployed
-              </CardTitle>
-              <CardDescription className="text-white/80">Active janitors, messengers, and maintenance staff</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full bg-blue-300 inline-block"></span>
-                  <span className="text-white text-sm">Contract:</span>
-                  <span className="text-lg font-bold text-white">{String(contractCount)}</span>
+
+          <Card className="relative overflow-hidden border-none shadow-xl rounded-2xl bg-white/90 backdrop-blur-lg">
+            <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-purple-400 opacity-20 rounded-full z-0" />
+            <CardHeader className="relative z-10 pb-2">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="bg-purple-600 rounded-lg p-3 shadow-lg flex items-center justify-center">
+                  <Users className="h-7 w-7 text-white" />
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full bg-green-300 inline-block"></span>
-                  <span className="text-white text-sm">Full Time:</span>
-                  <span className="text-lg font-bold text-white">{String(fullTimeCount)}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full bg-yellow-300 inline-block"></span>
-                  <span className="text-white text-sm">Part Time:</span>
-                  <span className="text-lg font-bold text-white">{String(partTimeCount)}</span>
+                <div>
+                  <CardTitle className="text-lg font-bold text-gray-900">Employees Deployed</CardTitle>
+                  <CardDescription className="text-xs text-gray-500">Active janitors, messengers, maintenance staff</CardDescription>
                 </div>
               </div>
-            </CardContent>
+              <div className="flex flex-row gap-6 mt-4 justify-between">
+                <div className="flex flex-col items-center flex-1">
+                  <span className="inline-flex items-center gap-1">
+                    <span className="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+                    <span className="text-xs text-gray-600">Contract</span>
+                  </span>
+                  <span className="text-2xl font-bold text-purple-700 mt-1">{String(contractCount)}</span>
+                </div>
+                <div className="flex flex-col items-center flex-1">
+                  <span className="inline-flex items-center gap-1">
+                    <span className="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                    <span className="text-xs text-gray-600">Full Time</span>
+                  </span>
+                  <span className="text-2xl font-bold text-purple-700 mt-1">{String(fullTimeCount)}</span>
+                </div>
+                <div className="flex flex-col items-center flex-1">
+                  <span className="inline-flex items-center gap-1">
+                    <span className="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
+                    <span className="text-xs text-gray-600">Part Time</span>
+                  </span>
+                  <span className="text-2xl font-bold text-purple-700 mt-1">{String(partTimeCount)}</span>
+                </div>
+              </div>
+            </CardHeader>
           </Card>
+
           <Card className="bg-gradient-to-br from-red-500 to-red-700">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
