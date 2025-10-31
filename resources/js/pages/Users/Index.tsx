@@ -13,6 +13,25 @@ type User = {
 
 const UsersPage = () => {
 	const { users } = usePage<{ users: User[] }>().props;
+
+	const exportCollection = async (id: number) => {
+		try {
+			const response = await fetch(`/api/users/${id}/export`);
+			if (!response.ok) throw new Error('Export failed');
+			const blob = await response.blob();
+			const url = window.URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = `user-${id}-export.csv`;
+			document.body.appendChild(a);
+			a.click();
+			window.URL.revokeObjectURL(url);
+			document.body.removeChild(a);
+		} catch (error) {
+			console.error('Export failed:', error);
+			alert('Failed to export data');
+		}
+	};
 	return (
 		<AppLayout>
 			<div className="space-y-6 p-4 bg-white min-h-screen text-green-900 transition-colors">
@@ -57,6 +76,14 @@ const UsersPage = () => {
 												>
 													Edit
 												</Link>
+												<button
+													type="button"
+													onClick={() => exportCollection(user.id)}
+													className="text-gray-600 hover:underline"
+													title="Export"
+												>
+													Export
+												</button>
 												<button
 													type="button"
 													className="text-red-600 hover:underline"

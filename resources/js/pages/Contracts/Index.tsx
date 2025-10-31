@@ -22,6 +22,25 @@ export default function ContractsIndex() {
             },
         });
     };
+
+    const exportCollection = async (id: number) => {
+        try {
+            const response = await fetch(`/api/contracts/${id}/export`);
+            if (!response.ok) throw new Error('Export failed');
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `contract-${id}-export.csv`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (error) {
+            console.error('Export failed:', error);
+            alert('Failed to export data');
+        }
+    };
     const formatDateOnly = (v: any) => {
         if (!v) return '—';
         if (typeof v === 'string') {
@@ -81,6 +100,13 @@ export default function ContractsIndex() {
                                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <Link href={`/admin/contracts/${c.id}`} className="text-indigo-600 hover:underline">View</Link>
                                                 <Link href={`/admin/contracts/${c.id}/edit`} className="text-indigo-600 hover:underline ml-4">Edit</Link>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => exportCollection(c.id)}
+                                                    className="text-gray-600 hover:underline ml-4"
+                                                >
+                                                    Export
+                                                </button>
                                                 <button type="button" onClick={() => handleDelete(c.id)} className="text-red-600 hover:underline ml-4">Delete</button>
                                             </td>
                                         </tr>

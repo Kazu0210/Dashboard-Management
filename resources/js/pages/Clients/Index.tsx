@@ -20,6 +20,25 @@ const ClientsIndex = () => {
     const { clients: clientsRaw } = usePage().props;
     const clients: Client[] = Array.isArray(clientsRaw) ? clientsRaw : [];
 
+    const exportCollection = async (id: number) => {
+        try {
+            const response = await fetch(`/api/clients/${id}/export`);
+            if (!response.ok) throw new Error('Export failed');
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `client-${id}-export.csv`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (error) {
+            console.error('Export failed:', error);
+            alert('Failed to export data');
+        }
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <div className="min-h-screen bg-gray-50 p-6">
@@ -66,6 +85,13 @@ const ClientsIndex = () => {
                                                     >
                                                         Edit
                                                     </Link>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => exportCollection(client.id)}
+                                                        className="px-3 py-1.5 rounded-md bg-gray-500 text-white hover:bg-gray-600 text-xs transition-all"
+                                                    >
+                                                        Export
+                                                    </button>
                                                     <form
                                                         method="POST"
                                                         action={`/admin/clients/${client.id}`}

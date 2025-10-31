@@ -7,12 +7,26 @@ const CreateCollectionIndex = () => {
     };
 
     const { data, setData, post, processing, errors } = useForm({
-        date: new Date().toISOString().slice(0, 10),
         project_id: '',
-        collector: '',
-        amount: '',
-        notes: '',
+        billing_period: '',
+        billed_amount: '',
+        collected_amount: '',
+        balance: '',
+        status: 'Pending',
     });
+
+    // Auto calculate balance
+    const handleAmountChange = (field: 'billed_amount' | 'collected_amount', value: string) => {
+        const numericValue = value === '' ? '' : Number(value);
+        setData(field, numericValue);
+
+        const billed = field === 'billed_amount' ? numericValue : Number(data.billed_amount);
+        const collected = field === 'collected_amount' ? numericValue : Number(data.collected_amount);
+
+        if (!isNaN(billed) && !isNaN(collected)) {
+            setData('balance', billed - collected);
+        }
+    };
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -31,10 +45,7 @@ const CreateCollectionIndex = () => {
                                 Fill out the form to add a new collection record.
                             </p>
                         </div>
-                        <Link
-                            href="/admin/collections"
-                            className="text-sm text-gray-600 hover:underline"
-                        >
+                        <Link href="/admin/collections" className="text-sm text-gray-600 hover:underline">
                             Back to list
                         </Link>
                     </div>
@@ -42,41 +53,12 @@ const CreateCollectionIndex = () => {
                     <div className="mt-6">
                         <div className="bg-white rounded-lg p-6 shadow w-full">
                             <form onSubmit={handleSubmit} className="space-y-5">
-                                <div>
-                                    <label
-                                        htmlFor="date"
-                                        className="block text-sm font-medium text-gray-700"
-                                    >
-                                        Date
-                                    </label>
-                                    <input
-                                        id="date"
-                                        name="date"
-                                        type="date"
-                                        value={data.date}
-                                        onChange={(e) => setData('date', e.target.value)}
-                                        className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        required
-                                        disabled={processing}
-                                    />
-                                    {errors.date && (
-                                        <div className="text-red-600 text-sm mt-1">
-                                            {errors.date}
-                                        </div>
-                                    )}
-                                </div>
 
+                                {/* Project */}
                                 <div>
-                                    <label
-                                        htmlFor="project_id"
-                                        className="block text-sm font-medium text-gray-700"
-                                    >
-                                        Project
-                                    </label>
+                                    <label className="block text-sm font-medium text-gray-700">Project</label>
                                     <select
-                                        id="project_id"
-                                        name="project_id"
-                                        className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2"
                                         value={data.project_id}
                                         onChange={(e) => setData('project_id', e.target.value)}
                                         required
@@ -89,99 +71,94 @@ const CreateCollectionIndex = () => {
                                             </option>
                                         ))}
                                     </select>
-                                    {errors.project_id && (
-                                        <div className="text-red-600 text-sm mt-1">
-                                            {errors.project_id}
-                                        </div>
-                                    )}
+                                    {errors.project_id && <div className="text-red-600 text-sm">{errors.project_id}</div>}
                                 </div>
 
+                                {/* Billing Period */}
                                 <div>
-                                    <label
-                                        htmlFor="collector"
-                                        className="block text-sm font-medium text-gray-700"
-                                    >
-                                        Collector
-                                    </label>
+                                    <label className="block text-sm font-medium text-gray-700">Billing Period</label>
                                     <input
-                                        id="collector"
-                                        name="collector"
                                         type="text"
-                                        value={data.collector}
-                                        onChange={(e) => setData('collector', e.target.value)}
-                                        className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        value={data.billing_period}
+                                        onChange={(e) => setData('billing_period', e.target.value)}
+                                        className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2"
+                                        placeholder="Example: January 2025 / Q1-2025"
                                         required
                                         disabled={processing}
                                     />
-                                    {errors.collector && (
-                                        <div className="text-red-600 text-sm mt-1">
-                                            {errors.collector}
-                                        </div>
-                                    )}
+                                    {errors.billing_period && <div className="text-red-600 text-sm">{errors.billing_period}</div>}
                                 </div>
 
+                                {/* Billed Amount */}
                                 <div>
-                                    <label
-                                        htmlFor="amount"
-                                        className="block text-sm font-medium text-gray-700"
-                                    >
-                                        Amount
-                                    </label>
+                                    <label className="block text-sm font-medium text-gray-700">Billed Amount</label>
                                     <input
-                                        id="amount"
-                                        name="amount"
                                         type="number"
-                                        value={data.amount}
-                                        onChange={(e) => setData('amount', e.target.value)}
-                                        className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        value={data.billed_amount}
+                                        onChange={(e) => handleAmountChange('billed_amount', e.target.value)}
+                                        className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2"
                                         required
                                         disabled={processing}
                                     />
-                                    {errors.amount && (
-                                        <div className="text-red-600 text-sm mt-1">
-                                            {errors.amount}
-                                        </div>
-                                    )}
+                                    {errors.billed_amount && <div className="text-red-600 text-sm">{errors.billed_amount}</div>}
                                 </div>
 
+                                {/* Collected */}
                                 <div>
-                                    <label
-                                        htmlFor="notes"
-                                        className="block text-sm font-medium text-gray-700"
-                                    >
-                                        Notes
-                                    </label>
+                                    <label className="block text-sm font-medium text-gray-700">Collected</label>
                                     <input
-                                        id="notes"
-                                        name="notes"
-                                        type="text"
-                                        value={data.notes}
-                                        onChange={(e) => setData('notes', e.target.value)}
-                                        className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        type="number"
+                                        value={data.collected_amount}
+                                        onChange={(e) => handleAmountChange('collected_amount', e.target.value)}
+                                        className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2"
+                                        required
                                         disabled={processing}
                                     />
-                                    {errors.notes && (
-                                        <div className="text-red-600 text-sm mt-1">
-                                            {errors.notes}
-                                        </div>
-                                    )}
+                                    {errors.collected_amount && <div className="text-red-600 text-sm">{errors.collected_amount}</div>}
                                 </div>
 
-                                <div className="flex justify-end gap-2 mt-2">
-                                    <Link
-                                        href="/admin/collections"
-                                        className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50"
+                                {/* Balance (readonly) */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">Balance</label>
+                                    <input
+                                        type="number"
+                                        value={data.balance}
+                                        readOnly
+                                        className="mt-1 w-full bg-gray-100 border border-gray-300 rounded-md px-3 py-2"
+                                    />
+                                </div>
+
+                                {/* Status */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">Status</label>
+                                    <select
+                                        value={data.status}
+                                        onChange={(e) => setData('status', e.target.value)}
+                                        className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2"
+                                        required
+                                        disabled={processing}
                                     >
+                                        <option value="Pending">Pending</option>
+                                        <option value="Partial">Partial</option>
+                                        <option value="Paid">Paid</option>
+                                    </select>
+                                    {errors.status && <div className="text-red-600 text-sm">{errors.status}</div>}
+                                </div>
+
+                                {/* Action buttons */}
+                                <div className="flex justify-end gap-2 mt-2">
+                                    <Link href="/admin/collections" className="px-4 py-2 border rounded-md text-sm">
                                         Cancel
                                     </Link>
                                     <button
                                         type="submit"
-                                        className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 disabled:opacity-60"
+                                        className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm"
                                         disabled={processing}
                                     >
                                         {processing ? 'Creating...' : 'Create'}
                                     </button>
                                 </div>
+
                             </form>
                         </div>
                     </div>
