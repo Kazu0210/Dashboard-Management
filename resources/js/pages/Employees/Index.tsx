@@ -79,11 +79,6 @@ export default function Index() {
       sortable: true,
     },
     {
-      name: 'Phone',
-      selector: row => row.phone ?? '—',
-      sortable: true,
-    },
-    {
       name: 'Type',
       selector: row => row.employment_type?.name ?? '—',
       sortable: true,
@@ -93,35 +88,6 @@ export default function Index() {
       cell: row => (
         <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${row.status?.name === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
           {row.status?.name ?? '—'}
-        </span>
-      ),
-      sortable: true,
-    },
-    {
-      name: 'Salary',
-      selector: row => row.monthly_salary ? `₱${Number(row.monthly_salary).toLocaleString()}` : '—',
-      sortable: true,
-    },
-    {
-      name: 'Attendance',
-      selector: row => row.attendance_rate != null ? `${row.attendance_rate}%` : '—',
-      sortable: true,
-    },
-    {
-      name: 'Hired',
-      selector: row => row.date_hired ?? '—',
-      sortable: true,
-    },
-    {
-      name: 'Resigned',
-      selector: row => row.date_resigned ?? '—',
-      sortable: true,
-    },
-    {
-      name: 'Active',
-      cell: row => (
-        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${row.is_active ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>
-          {row.is_active ? 'Yes' : 'No'}
         </span>
       ),
       sortable: true,
