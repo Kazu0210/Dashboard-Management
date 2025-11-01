@@ -302,11 +302,65 @@ export default function Index() {
                     </motion.div>
                 </div>
 
-                {/* Header Section */}
+                {/* Header Section with Grouped Buttons */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
                     <div>
                         <h2 className="text-3xl font-semibold text-gray-900">Projects</h2>
                         <p className="text-gray-500 text-sm mt-1">Monitor and manage all projects.</p>
+                    </div>
+                    <div className="flex gap-2 flex-wrap">
+                        <div className="relative group">
+                            <button
+                                type="button"
+                                className="inline-flex items-center gap-2 px-5 py-2.5 bg-green-600 text-white text-sm font-medium rounded-xl hover:bg-green-700 transition-all shadow-md"
+                                title="Import"
+                                onClick={handleImportClick}
+                                disabled={importing}
+                            >
+                                <Upload size={18} /> {importing ? 'Importing...' : 'Import'}
+                            </button>
+                            <input
+                                type="file"
+                                accept=".xlsx,.xls,.csv"
+                                ref={fileInputRef}
+                                style={{ display: 'none' }}
+                                onChange={handleFileChange}
+                            />
+                            <div className="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto pointer-events-none transition-opacity z-10">
+                                <a
+                                    href="/admin/projects/template/download"
+                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg"
+                                >
+                                    Download Excel Import Template
+                                </a>
+                                <button
+                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-b-lg cursor-pointer"
+                                    onClick={handleImportClick}
+                                    disabled={importing}
+                                >
+                                    Import Excel File
+                                </button>
+                            </div>
+                            {importError && (
+                                <div className="absolute left-0 mt-2 w-56 bg-red-100 text-red-700 text-xs rounded-lg p-2 z-20 border border-red-300">
+                                    {importError}
+                                </div>
+                            )}
+                        </div>
+                        <button
+                            type="button"
+                            className="px-4 py-2 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 text-sm font-semibold shadow-md flex items-center gap-2 cursor-pointer"
+                            onClick={handleExportAll}
+                            title="Export"
+                        >
+                            <Download size={18} /> Export
+                        </button>
+                        <Link
+                            href={`/admin/projects/create`}
+                            className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-all shadow-md"
+                        >
+                            <span className="text-lg">＋</span> Add Project
+                        </Link>
                     </div>
                 </div>
 
@@ -320,60 +374,6 @@ export default function Index() {
                             value={search}
                             onChange={e => setSearch(e.target.value)}
                         />
-                        <div className="flex gap-2 mt-2 sm:mt-0">
-                            <div className="relative group">
-                                <button
-                                    type="button"
-                                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-green-600 text-white text-sm font-medium rounded-xl hover:bg-green-700 transition-all shadow-md"
-                                    title="Import"
-                                    onClick={handleImportClick}
-                                    disabled={importing}
-                                >
-                                    <Upload size={18} /> {importing ? 'Importing...' : 'Import'}
-                                </button>
-                                <input
-                                    type="file"
-                                    accept=".xlsx,.xls,.csv"
-                                    ref={fileInputRef}
-                                    style={{ display: 'none' }}
-                                    onChange={handleFileChange}
-                                />
-                                <div className="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto pointer-events-none transition-opacity z-10">
-                                    <a
-                                        href="/admin/projects/template/download"
-                                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg"
-                                    >
-                                        Download Excel Import Template
-                                    </a>
-                                    <button
-                                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-b-lg cursor-pointer"
-                                        onClick={handleImportClick}
-                                        disabled={importing}
-                                    >
-                                        Import Excel File
-                                    </button>
-                                </div>
-                                {importError && (
-                                    <div className="absolute left-0 mt-2 w-56 bg-red-100 text-red-700 text-xs rounded-lg p-2 z-20 border border-red-300">
-                                        {importError}
-                                    </div>
-                                )}
-                            </div>
-                            <button
-                                type="button"
-                                className="px-4 py-2 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 text-sm font-semibold shadow-md flex items-center gap-2 cursor-pointer"
-                                onClick={handleExportAll}
-                                title="Export"
-                            >
-                                <Download size={18} /> Export
-                            </button>
-                            <Link
-                                href={`/admin/projects/create`}
-                                className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-all shadow-md"
-                            >
-                                <span className="text-lg">＋</span> Add Project
-                            </Link>
-                        </div>
                     </div>
                     <DataTable
                         columns={columns}
