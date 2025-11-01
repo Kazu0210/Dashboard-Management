@@ -18,11 +18,9 @@ class ProjectsImport implements ToModel, WithHeadingRow, WithStartRow
     public function model(array $row)
     {
         // Access columns by header name, e.g., $row['project_name']
-        Log::info('Excel row:', $row);
-        // Example: return new Project([
-        //     'name' => $row['project_name'],
-        //     'description' => $row['description'],
-        // ]);
+        foreach ($row as $key => $value) {
+            Project::create($row);
+        }
     }
 
     public function startRow(): int
