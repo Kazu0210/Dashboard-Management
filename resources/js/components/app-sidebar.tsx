@@ -43,6 +43,7 @@ const mainNavItems: NavItem[] = [
     },
     { title: "Employee Management", href: "/admin/employees", icon: Users },
     { title: "DOLE Cases", href: "/admin/dole-cases", icon: FileWarning },
+    { title: "Financial Summary", href: "/admin/financial-summary", icon: BarChart2 },
 ];
 
 const footerNavItems: NavItem[] = [];

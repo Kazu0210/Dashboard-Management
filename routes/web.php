@@ -17,6 +17,8 @@ use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+use App\Http\Controllers\FinancialSummaryController;
+
 // Route for Guest Users
 Route::get('/', [GuestController::class, 'index'])->name('home');
 
@@ -24,14 +26,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
-// Project monitoring API endpoints (authenticated)
-// Route::middleware(['auth', 'verified'])->group(function () {
-//     Route::get('projects', [ProjectMonitoringController::class, 'index'])->name('projects.index');
-//     Route::post('projects', [ProjectMonitoringController::class, 'store'])->name('projects.store');
-// });
-
 Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('admin/employees/export', [EmployeeController::class, 'export'])->name('employees.export');
+    
 });
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -124,5 +121,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::post('projects/import', [ProjectController::class, 'import'])->name('projects.import');
     Route::get('projects/template/download', [ProjectController::class, 'downloadTemplate'])->name('projects.template.download');
     Route::get('projects/export', [ProjectController::class, 'export'])->name('projects.export');
-});
 
+    // Financial Summary
+    Route::get('financial-summary', [FinancialSummaryController::class, 'index'])->name('financial.summary');
+});
