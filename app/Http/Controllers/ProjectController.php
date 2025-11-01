@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProjectsExport;
+
 
 use App\Http\Requests\ImportProjectsRequest;
 use App\Models\Project;
@@ -14,6 +16,13 @@ use Illuminate\Support\Facades\Log;
 
 class ProjectController extends Controller
 {
+    /**
+     * Export all projects as Excel using template columns.
+     */
+    public function export()
+    {
+        return Excel::download(new ProjectsExport, 'Projects_Export.xlsx');
+    }
     /**
      * Import projects from uploaded Excel file.
      */
@@ -32,7 +41,6 @@ class ProjectController extends Controller
             return redirect()->route('admin.projects.index')->with('error', 'Import failed: ' . $e->getMessage());
         }
     }
-    
     public function downloadTemplate()
     {
         return Excel::download(new ProjectsTemplateExport, 'Projects_Import_Template.xlsx');

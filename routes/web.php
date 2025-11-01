@@ -35,6 +35,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     // Download Excel template for projects import
     Route::get('projects/template/download', [\App\Http\Controllers\ProjectController::class, 'downloadTemplate'])->name('projects.template.download');
+    // Export all projects as Excel
+    Route::get('projects/export', [\App\Http\Controllers\ProjectController::class, 'export'])->name('projects.export');
     Route::get('dole-cases', [DoleCaseController::class, 'index'])->name('dole-cases.index');
     Route::get('dole-cases/create', [DoleCaseController::class, 'create'])->name('dole-cases.create');
     Route::post('dole-cases', [DoleCaseController::class, 'store'])->name('dole-cases.store');

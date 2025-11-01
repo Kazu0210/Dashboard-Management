@@ -30,6 +30,7 @@ type Project = {
 };
 
 export default function Index() {
+
     const { projects: projectsRaw, project_count, completed_count, ongoing_count, total_billed, total_collected } = usePage().props;
     const projects: Project[] = Array.isArray(projectsRaw) ? projectsRaw : [];
 
@@ -45,6 +46,30 @@ export default function Index() {
             p.status.toLowerCase().includes(lower)
         );
     }, [search, projects]);
+
+    // Export all projects as Excel using template columns
+    const handleExportAll = async () => {
+        try {
+            const response = await fetch('/admin/projects/export', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                },
+            });
+            if (!response.ok) throw new Error('Export failed');
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Projects_Export.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (error) {
+            alert('Failed to export data');
+        }
+    };
 
     // Import state
     const [importing, setImporting] = React.useState(false);
@@ -328,7 +353,7 @@ export default function Index() {
                             <button
                                 type="button"
                                 className="px-4 py-2 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 text-sm font-semibold shadow-md flex items-center gap-2 cursor-pointer"
-                                disabled
+                                onClick={handleExportAll}
                                 title="Export"
                             >
                                 <Download size={18} /> Export
