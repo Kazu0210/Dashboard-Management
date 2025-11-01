@@ -6,10 +6,33 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Employee;
 use App\Exports\EmployeesTemplateExport;
+use App\Imports\EmployeesImport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Log;
 
 class EmployeeController extends Controller
 {
+    /**
+     * Import employees from Excel file (basic scaffold)
+     */
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls',
+        ]);
+
+        try {
+            Excel::import(new EmployeesImport, $request->file('file'));
+        } catch (\Exception $e) {
+            Log::error('Employee import failed', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return response()->json(['message' => 'Import failed', 'error' => $e->getMessage()], 500);
+        }
+
+        return response()->json(['message' => 'Employees imported successfully.'], 200);
+    }
     /**
      * Download Excel template for employee import
      */

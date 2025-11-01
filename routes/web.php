@@ -33,12 +33,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    // Download Excel template for projects import
-    Route::get('projects/template/download', [\App\Http\Controllers\ProjectController::class, 'downloadTemplate'])->name('projects.template.download');
-    // Download Excel template for employees import
-    Route::get('employees/template/download', [\App\Http\Controllers\EmployeeController::class, 'downloadTemplate'])->name('employees.template.download');
-    // Export all projects as Excel
-    Route::get('projects/export', [\App\Http\Controllers\ProjectController::class, 'export'])->name('projects.export');
     Route::get('dole-cases', [DoleCaseController::class, 'index'])->name('dole-cases.index');
     Route::get('dole-cases/create', [DoleCaseController::class, 'create'])->name('dole-cases.create');
     Route::post('dole-cases', [DoleCaseController::class, 'store'])->name('dole-cases.store');
@@ -55,6 +49,10 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::put('employees/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
     Route::delete('employees/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
     Route::get('employees/{employee}', [EmployeeController::class, 'show'])->name('employees.show');
+    // Import employees from Excel
+    Route::post('employees/import', [EmployeeController::class, 'import'])->name('employees.import');
+    // Download Excel template for employees import
+    Route::get('employees/template/download', [EmployeeController::class, 'downloadTemplate'])->name('employees.template.download');
 
     // Contracts
     Route::get('contracts', [ContractController::class, 'index'])->name('contracts.index');
@@ -123,5 +121,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
 
     // Import projects from Excel
     Route::post('projects/import', [ProjectController::class, 'import'])->name('projects.import');
+    Route::get('projects/template/download', [ProjectController::class, 'downloadTemplate'])->name('projects.template.download');
+    Route::get('projects/export', [ProjectController::class, 'export'])->name('projects.export');
 });
 
