@@ -21,4 +21,19 @@ class Employee extends Model
         "date_resigned",
         "is_active",
     ];
+    /**
+     * Get the employment type for the employee.
+     */
+    public function employmentType()
+    {
+        return $this->belongsTo(\App\Models\EmploymentType::class, 'employment_type_id');
+    }
+
+    /**
+     * Get the status for the employee.
+     */
+    public function status()
+    {
+        return $this->belongsTo(\App\Models\ProjectStatus::class, 'status_id');
+    }
 }

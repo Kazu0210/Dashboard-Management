@@ -30,7 +30,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 //     Route::post('projects', [ProjectMonitoringController::class, 'store'])->name('projects.store');
 // });
 
-
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+    Route::get('admin/employees/export', [EmployeeController::class, 'export'])->name('employees.export');
+});
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('dole-cases', [DoleCaseController::class, 'index'])->name('dole-cases.index');
@@ -49,9 +51,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::put('employees/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
     Route::delete('employees/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
     Route::get('employees/{employee}', [EmployeeController::class, 'show'])->name('employees.show');
-    // Import employees from Excel
     Route::post('employees/import', [EmployeeController::class, 'import'])->name('employees.import');
-    // Download Excel template for employees import
+    
     Route::get('employees/template/download', [EmployeeController::class, 'downloadTemplate'])->name('employees.template.download');
 
     // Contracts

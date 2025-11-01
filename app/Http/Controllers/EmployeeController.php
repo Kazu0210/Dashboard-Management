@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\EmployeesExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Employee;
@@ -33,6 +34,17 @@ class EmployeeController extends Controller
 
         return response()->json(['message' => 'Employees imported successfully.'], 200);
     }
+    
+    /**
+     * Export employees
+     */
+    public function export()
+    {
+        $date = now()->format('Y-m-d');
+        $fileName = "Employees_Export_{$date}.xlsx";
+        return Excel::download(new EmployeesExport, $fileName);
+    }
+    
     /**
      * Download Excel template for employee import
      */

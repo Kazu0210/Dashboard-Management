@@ -42,9 +42,26 @@ export default function Index() {
   };
 
   // Export button handler
-  const handleExportClick = () => {
-    console.log('Export button clicked');
-  };
+  const handleExportAll = async () => {
+    try {
+      const response = await fetch('/admin/employees/export', {
+        method: 'GET',
+      });
+      if (!response.ok) throw new Error('Export failed');
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'employees-export.xlsx';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Export failed:', error);
+      alert('Failed to export employees');
+    }
+  }
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -305,7 +322,7 @@ export default function Index() {
             <button
               type="button"
               className="px-4 py-2 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 text-sm font-semibold shadow-md flex items-center gap-2 cursor-pointer"
-              onClick={handleExportClick}
+              onClick={handleExportAll}
               title="Export"
             >
               <Download size={18} /> Export
