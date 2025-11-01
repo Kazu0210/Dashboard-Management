@@ -33,8 +33,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    // Import projects from Excel
-    Route::post('projects/import', [\App\Http\Controllers\ProjectController::class, 'import'])->name('projects.import');
     // Download Excel template for projects import
     Route::get('projects/template/download', [\App\Http\Controllers\ProjectController::class, 'downloadTemplate'])->name('projects.template.download');
     Route::get('dole-cases', [DoleCaseController::class, 'index'])->name('dole-cases.index');
@@ -118,5 +116,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('projects/{id}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
     Route::put('projects/{id}', [ProjectController::class, 'update'])->name('projects.update');
     Route::delete('projects/{id}', [ProjectController::class, 'destroy'])->name('projects.destroy');
+
+    // Import projects from Excel
+    Route::post('projects/import', [ProjectController::class, 'import'])->name('projects.import');
 });
 

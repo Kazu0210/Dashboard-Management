@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ProjectsTemplateExport;
+use App\Imports\ProjectsImport;
+use Illuminate\Support\Facades\Log;
 
 class ProjectController extends Controller
 {
@@ -18,9 +20,12 @@ class ProjectController extends Controller
     public function import(ImportProjectsRequest $request)
     {
         try {
-            Excel::import(new \App\Imports\ProjectsImport, $request->file('file'));
+            Excel::import(new ProjectsImport, $request->file('file'));
             return redirect()->route('admin.projects.index')->with('success', 'Projects imported successfully.');
         } catch (\Exception $e) {
+            Log::error('Import failed: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+            ]);
             return redirect()->route('admin.projects.index')->with('error', 'Import failed: ' . $e->getMessage());
         }
     }

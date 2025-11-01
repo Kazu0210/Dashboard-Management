@@ -46,6 +46,43 @@ export default function Index() {
         );
     }, [search, projects]);
 
+    // Import state
+    const [importing, setImporting] = React.useState(false);
+    const [importError, setImportError] = React.useState<string|null>(null);
+    const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+    const handleImportClick = () => {
+        setImportError(null);
+        fileInputRef.current?.click();
+    };
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setImporting(true);
+        setImportError(null);
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+            // Add CSRF token if needed
+            const csrf = (typeof window !== 'undefined' && (window as any).Laravel?.csrfToken) ||
+                (typeof document !== 'undefined' && document.querySelector('meta[name=csrf-token]')?.getAttribute('content')) || '';
+            formData.append('_token', csrf);
+            const response = await fetch('/admin/projects/import', {
+                method: 'POST',
+                body: formData,
+            });
+            if (!response.ok) throw new Error('Import failed');
+            // Optionally, refresh the page or show a success message
+            window.location.reload();
+        } catch (err: any) {
+            setImportError(err.message || 'Import failed');
+        } finally {
+            setImporting(false);
+            if (fileInputRef.current) fileInputRef.current.value = '';
+        }
+    };
+
     // DataTable columns
     const columns: TableColumn<Project>[] = [
         {
@@ -255,9 +292,18 @@ export default function Index() {
                                     type="button"
                                     className="inline-flex items-center gap-2 px-5 py-2.5 bg-green-600 text-white text-sm font-medium rounded-xl hover:bg-green-700 transition-all shadow-md"
                                     title="Import"
+                                    onClick={handleImportClick}
+                                    disabled={importing}
                                 >
-                                    <Upload size={18} /> Import
+                                    <Upload size={18} /> {importing ? 'Importing...' : 'Import'}
                                 </button>
+                                <input
+                                    type="file"
+                                    accept=".xlsx,.xls,.csv"
+                                    ref={fileInputRef}
+                                    style={{ display: 'none' }}
+                                    onChange={handleFileChange}
+                                />
                                 <div className="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto pointer-events-none transition-opacity z-10">
                                     <a
                                         href="/admin/projects/template/download"
@@ -266,12 +312,18 @@ export default function Index() {
                                         Download Excel Import Template
                                     </a>
                                     <button
-                                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-b-lg cursor-not-allowed opacity-60"
-                                        disabled
+                                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-b-lg cursor-pointer"
+                                        onClick={handleImportClick}
+                                        disabled={importing}
                                     >
-                                        Import (Coming Soon)
+                                        Import Excel File
                                     </button>
                                 </div>
+                                {importError && (
+                                    <div className="absolute left-0 mt-2 w-56 bg-red-100 text-red-700 text-xs rounded-lg p-2 z-20 border border-red-300">
+                                        {importError}
+                                    </div>
+                                )}
                             </div>
                             <button
                                 type="button"
