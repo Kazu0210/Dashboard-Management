@@ -41,6 +41,11 @@ export default function Index() {
     fileInputRef.current?.click();
   };
 
+  // Export button handler
+  const handleExportClick = () => {
+    console.log('Export button clicked');
+  };
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -300,11 +305,12 @@ export default function Index() {
             <button
               type="button"
               className="px-4 py-2 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 text-sm font-semibold shadow-md flex items-center gap-2 cursor-pointer"
-              disabled
+              onClick={handleExportClick}
               title="Export"
             >
               <Download size={18} /> Export
             </button>
+
             <Link
               href={`/admin/employees/create`}
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-all shadow-md"
