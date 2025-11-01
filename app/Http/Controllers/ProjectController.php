@@ -19,6 +19,9 @@ class ProjectController extends Controller
      */
     public function import(ImportProjectsRequest $request)
     {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls',
+        ]);
         try {
             Excel::import(new ProjectsImport, $request->file('file'));
             return redirect()->route('admin.projects.index')->with('success', 'Projects imported successfully.');
@@ -29,9 +32,7 @@ class ProjectController extends Controller
             return redirect()->route('admin.projects.index')->with('error', 'Import failed: ' . $e->getMessage());
         }
     }
-    /**
-     * Download Excel template for project import.
-     */
+    
     public function downloadTemplate()
     {
         return Excel::download(new ProjectsTemplateExport, 'Projects_Import_Template.xlsx');

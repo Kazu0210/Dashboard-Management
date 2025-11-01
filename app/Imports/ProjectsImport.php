@@ -4,14 +4,29 @@ namespace App\Imports;
 
 use App\Models\Project;
 use Illuminate\Support\Facades\Log;
-use Maatwebsite\Excel\Row;
-use Maatwebsite\Excel\Concerns\OnEachRow;
+use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithStartRow;
 
-class ProjectsImport implements OnEachRow, WithHeadingRow
+class ProjectsImport implements ToModel, WithHeadingRow, WithStartRow
 {
-    public function onRow(Row $row)
+    /**
+    * @param array $rows
+    *
+    * @return \Illuminate\Database\Eloquent\Model|null
+    */
+    public function model(array $row)
     {
-        Log::info('Importing row: ' . json_encode($row->toArray()));
+        // Access columns by header name, e.g., $row['project_name']
+        Log::info('Excel row:', $row);
+        // Example: return new Project([
+        //     'name' => $row['project_name'],
+        //     'description' => $row['description'],
+        // ]);
+    }
+
+    public function startRow(): int
+    {
+        return 2; // Start importing from the second row (skip header)
     }
 }
