@@ -47,6 +47,7 @@ class ProjectController extends Controller
     {
         return Excel::download(new ProjectsTemplateExport, 'Projects_Import_Template.xlsx');
     }
+    
     public function index()
     {
         $projects = Project::all();

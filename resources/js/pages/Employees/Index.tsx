@@ -4,6 +4,7 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { Users, UserPlus, UserMinus, Wallet, Pencil, Trash2, Upload, Download, Eye } from 'lucide-react';
 
+
 import React from 'react';
 
 import DataTable, { TableColumn } from 'react-data-table-component';
@@ -30,6 +31,42 @@ type Employee = {
 
 
 export default function Index() {
+  // Import state
+  const [importing, setImporting] = React.useState(false);
+  const [importError, setImportError] = React.useState<string|null>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleImportClick = () => {
+    setImportError(null);
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImporting(true);
+    setImportError(null);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      // Add CSRF token if needed
+      const csrf = (typeof window !== 'undefined' && (window as any).Laravel?.csrfToken) ||
+        (typeof document !== 'undefined' && document.querySelector('meta[name=csrf-token]')?.getAttribute('content')) || '';
+      formData.append('_token', csrf);
+      const response = await fetch('/admin/employees/import', {
+        method: 'POST',
+        body: formData,
+      });
+      if (!response.ok) throw new Error('Import failed');
+      // Optionally, refresh the page or show a success message
+      window.location.reload();
+    } catch (err: any) {
+      setImportError(err.message || 'Import failed');
+    } finally {
+      setImporting(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
   const { employees: employeesRaw, employee_count, new_hired_count, resigned_count, average_salary } = usePage().props;
   const employees: Employee[] = Array.isArray(employeesRaw) ? employeesRaw : [];
 
@@ -222,20 +259,44 @@ export default function Index() {
             <p className="text-gray-500 text-sm mt-1">Manage and monitor all employee records.</p>
           </div>
           <div className="flex gap-2 flex-wrap">
-            <Link
-              href={`/admin/employees/create`}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-all shadow-md"
-            >
-              <span className="text-lg">＋</span> Add Employee
-            </Link>
-            <button
-              type="button"
-              className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 text-sm font-semibold shadow-md flex items-center gap-2 cursor-pointer"
-              disabled
-              title="Import"
-            >
-              <Upload size={18} /> Import
-            </button>
+            <div className="relative group">
+              <button
+                type="button"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-green-600 text-white text-sm font-medium rounded-xl hover:bg-green-700 transition-all shadow-md"
+                title="Import"
+                onClick={handleImportClick}
+                disabled={importing}
+              >
+                <Upload size={18} /> {importing ? 'Importing...' : 'Import'}
+              </button>
+              <input
+                type="file"
+                accept=".xlsx,.xls,.csv"
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+                onChange={handleFileChange}
+              />
+              <div className="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto pointer-events-none transition-opacity z-10">
+                <a
+                  href="/admin/employees/template/download"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg"
+                >
+                  Download Excel Import Template
+                </a>
+                <button
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-b-lg cursor-pointer"
+                  onClick={handleImportClick}
+                  disabled={importing}
+                >
+                  Import Excel File
+                </button>
+              </div>
+              {importError && (
+                <div className="absolute left-0 mt-2 w-56 bg-red-100 text-red-700 text-xs rounded-lg p-2 z-20 border border-red-300">
+                  {importError}
+                </div>
+              )}
+            </div>
             <button
               type="button"
               className="px-4 py-2 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 text-sm font-semibold shadow-md flex items-center gap-2 cursor-pointer"
@@ -244,6 +305,12 @@ export default function Index() {
             >
               <Download size={18} /> Export
             </button>
+            <Link
+              href={`/admin/employees/create`}
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-all shadow-md"
+            >
+              <span className="text-lg">＋</span> Add Employee
+            </Link>
           </div>
         </div>
 

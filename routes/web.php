@@ -35,6 +35,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     // Download Excel template for projects import
     Route::get('projects/template/download', [\App\Http\Controllers\ProjectController::class, 'downloadTemplate'])->name('projects.template.download');
+    // Download Excel template for employees import
+    Route::get('employees/template/download', [\App\Http\Controllers\EmployeeController::class, 'downloadTemplate'])->name('employees.template.download');
     // Export all projects as Excel
     Route::get('projects/export', [\App\Http\Controllers\ProjectController::class, 'export'])->name('projects.export');
     Route::get('dole-cases', [DoleCaseController::class, 'index'])->name('dole-cases.index');

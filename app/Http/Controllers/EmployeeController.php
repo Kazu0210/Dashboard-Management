@@ -5,9 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Employee;
+use App\Exports\EmployeesTemplateExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EmployeeController extends Controller
 {
+    /**
+     * Download Excel template for employee import
+     */
+    public function downloadTemplate()
+    {
+        return Excel::download(new EmployeesTemplateExport, 'Employees_Import_Template.xlsx');
+    }
     public function index()
     {
         $rows = DB::table('employees')
