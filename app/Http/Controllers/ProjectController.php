@@ -21,7 +21,9 @@ class ProjectController extends Controller
      */
     public function export()
     {
-        return Excel::download(new ProjectsExport, 'Projects_Export.xlsx');
+        $date = now()->format('Y-m-d');
+        $fileName = "Projects_Export_{$date}.xlsx";
+        return Excel::download(new ProjectsExport, $fileName);
     }
     /**
      * Import projects from uploaded Excel file.
@@ -31,7 +33,7 @@ class ProjectController extends Controller
         $request->validate([
             'file' => 'required|file|mimes:xlsx,xls',
         ]);
-        try {
+        try { 
             Excel::import(new ProjectsImport, $request->file('file'));
             return redirect()->route('admin.projects.index')->with('success', 'Projects imported successfully.');
         } catch (\Exception $e) {

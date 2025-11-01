@@ -61,7 +61,16 @@ export default function Index() {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'Projects_Export.xlsx';
+            // Try to get filename from Content-Disposition header
+            const disposition = response.headers.get('Content-Disposition');
+            let fileName = 'Projects_Export.xlsx';
+            if (disposition && disposition.indexOf('filename=') !== -1) {
+                const match = disposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+                if (match && match[1]) {
+                    fileName = match[1].replace(/['"]/g, '');
+                }
+            }
+            a.download = fileName;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
