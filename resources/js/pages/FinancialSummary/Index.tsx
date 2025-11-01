@@ -38,13 +38,14 @@ const ValueLabelInside = (props: any) => {
 export default function Index() {
   const summary = (usePage().props as any).summary ?? [];
 
+  const currentYear = new Date().getFullYear();
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Financial Summary" />
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 p-6">
         <div className="mb-10">
-          <h2 className="text-3xl font-semibold text-gray-900 mb-1">IV. FINANCIAL SUMMARY (2024 Overview)</h2>
-          <p className="text-gray-500 text-sm">Overview of financial performance for the year 2024.</p>
+          <h2 className="text-3xl font-semibold text-gray-900 mb-1">FINANCIAL SUMMARY ({currentYear} Overview)</h2>
+          <p className="text-gray-500 text-sm">Overview of financial performance for the year {currentYear}.</p>
         </div>
         <Card className="shadow-lg bg-white/90 backdrop-blur rounded-2xl border border-gray-100">
         <CardHeader>
