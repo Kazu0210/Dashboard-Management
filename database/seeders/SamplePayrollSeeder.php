@@ -42,6 +42,6 @@ class SamplePayrollSeeder extends Seeder
             ];
         }
 
-        DB::table('payroll_records')->insert($records);
+        DB::table('payrolls')->insert($records);
     }
 }

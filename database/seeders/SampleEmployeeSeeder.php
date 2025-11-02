@@ -18,7 +18,7 @@ class SampleEmployeeSeeder extends Seeder
         $faker = Faker::create();
 
         // Optional: Clear table before seeding
-        DB::table('employees')->truncate();
+        // DB::table('employees')->truncate();
 
         for ($i = 0; $i < 380; $i++) {
             Employee::create([

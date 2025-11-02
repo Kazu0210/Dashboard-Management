@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             SampleEmployeeSeeder::class,
             SampleProjectSeeder::class,
             SamplePayrollSeeder::class,
+            SampleExpenseSeeder::class,
         ]);
     }
 }
