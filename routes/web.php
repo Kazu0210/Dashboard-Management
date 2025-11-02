@@ -130,4 +130,6 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('payrolls', [PayrollsController::class, 'index'])->name('payrolls.index');
     Route::get('payrolls/create', [PayrollsController::class, 'create'])->name('payrolls.create');
     Route::post('payrolls/store', [PayrollsController::class, 'store'])->name('payrolls.store');
+    Route::get('payrolls/view', [PayrollsController::class, 'view'])->name('payrolls.view');
+    Route::get('payrolls/{id}', [PayrollsController::class, 'show'])->name('payrolls.show');
 });

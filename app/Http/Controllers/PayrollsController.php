@@ -57,4 +57,29 @@ class PayrollsController extends Controller
 
         return Inertia::render('Payrolls/Index');
     }
+
+    public function view()
+    {
+        return Inertia::render('Payrolls/View');
+    }
+
+    public function show($id)
+    {
+        $payroll = Payrolls::with('employee')->findOrFail($id);
+        $payrollData = [
+            'id' => $payroll->id,
+            'employee_name' => $payroll->employee ? $payroll->employee->first_name . ' ' . $payroll->employee->last_name : '',
+            'pay_period_start' => $payroll->pay_period_start,
+            'pay_period_end' => $payroll->pay_period_end,
+            'basic_salary' => $payroll->basic_salary,
+            'allowances' => $payroll->allowances,
+            'deductions' => $payroll->deductions,
+            'net_pay' => $payroll->net_pay,
+            'status' => $payroll->status,
+            'paid_at' => $payroll->paid_at,
+        ];
+        return Inertia::render('Payrolls/Show', [
+            'payroll' => $payrollData
+        ]);
+    }
 }
