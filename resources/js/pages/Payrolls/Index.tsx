@@ -122,39 +122,6 @@ export default function Index() {
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Payrolls" />
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 p-6">
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mb-10">
-          {/* Total Payroll */}
-          <motion.div whileHover={{ scale: 1.02 }}>
-            <Card className="border-none shadow-md bg-white/80 backdrop-blur rounded-2xl">
-              <CardHeader className="flex flex-row items-center justify-between">
-                <div>
-                  <CardTitle className="text-sm font-medium text-gray-500">Total Payroll</CardTitle>
-                  <CardDescription className="text-xs text-gray-400">All Employees</CardDescription>
-                </div>
-                <Wallet className="w-5 h-5 text-blue-500" />
-              </CardHeader>
-              <CardContent>
-                <span className="text-4xl font-bold text-gray-800">{total_payroll ? `₱${Number(total_payroll).toLocaleString()}` : '—'}</span>
-              </CardContent>
-            </Card>
-          </motion.div>
-          {/* Average Net Pay */}
-          <motion.div whileHover={{ scale: 1.02 }}>
-            <Card className="border-none shadow-md bg-white/80 backdrop-blur rounded-2xl">
-              <CardHeader className="flex flex-row items-center justify-between">
-                <div>
-                  <CardTitle className="text-sm font-medium text-gray-500">Average Net Pay</CardTitle>
-                  <CardDescription className="text-xs text-gray-400">Per Payroll</CardDescription>
-                </div>
-                <Wallet className="w-5 h-5 text-amber-500" />
-              </CardHeader>
-              <CardContent>
-                <span className="text-3xl font-bold text-gray-800">{average_net_pay ? `₱${Number(average_net_pay).toLocaleString()}` : '—'}</span>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
         {/* Header Section with Grouped Buttons */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
