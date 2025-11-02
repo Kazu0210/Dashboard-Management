@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PayrollsExport;
 use App\Imports\PayrollsImport;
 use Illuminate\Support\Facades\Log;
 use App\Models\Employee;
@@ -13,6 +14,13 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class PayrollsController extends Controller
 {
+    /**
+     * Export payrolls to Excel file
+     */
+    public function export()
+    {
+        return Excel::download(new PayrollsExport, 'Payrolls.xlsx');
+    }
     /**
      * Import payrolls from Excel file
      */
