@@ -131,6 +131,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('payrolls/create', [PayrollsController::class, 'create'])->name('payrolls.create');
     Route::post('payrolls/store', [PayrollsController::class, 'store'])->name('payrolls.store');
     Route::get('payrolls/view', [PayrollsController::class, 'view'])->name('payrolls.view');
+    Route::get('payrolls/template/download', [PayrollsController::class, 'downloadTemplate'])->name('payrolls.template.download');
     Route::get('payrolls/{id}', [PayrollsController::class, 'show'])->name('payrolls.show');
     Route::get('payrolls/{id}/edit', [PayrollsController::class, 'edit'])->name('payrolls.edit');
     Route::put('payrolls/{id}', [PayrollsController::class, 'update'])->name('payrolls.update');

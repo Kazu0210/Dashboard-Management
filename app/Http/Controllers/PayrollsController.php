@@ -6,9 +6,15 @@ use App\Models\Employee;
 use App\Models\Payrolls;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Exports\PayrollsTemplateExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PayrollsController extends Controller
 {
+    public function downloadTemplate()
+    {
+        return Excel::download(new PayrollsTemplateExport, 'Payrolls_Import_Template.xlsx');
+    }
     public function destroy($id)
     {
         $payroll = Payrolls::findOrFail($id);
