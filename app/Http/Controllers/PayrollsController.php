@@ -9,6 +9,33 @@ use Inertia\Inertia;
 
 class PayrollsController extends Controller
 {
+    public function edit($id)
+    {
+        $payroll = Payrolls::findOrFail($id);
+        $employees = Employee::all();
+        return Inertia::render('Payrolls/Edit', [
+            'payroll' => $payroll,
+            'employees' => $employees
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'employee_id' => 'required|exists:employees,id',
+            'pay_period_start' => 'required|date',
+            'pay_period_end' => 'required|date|after_or_equal:pay_period_start',
+            'basic_salary' => 'required|numeric',
+            'allowances' => 'nullable|numeric',
+            'deductions' => 'nullable|numeric',
+            'net_pay' => 'required|numeric',
+            'status' => 'required|string',
+            'paid_at' => 'nullable|date',
+        ]);
+        $payroll = Payrolls::findOrFail($id);
+        $payroll->update($validated);
+        return redirect()->route('admin.payrolls.index')->with('success', 'Payroll updated successfully.');
+    }
     public function index()
     {
         $payrolls = Payrolls::with('employee')->get();
