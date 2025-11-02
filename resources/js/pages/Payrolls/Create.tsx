@@ -1,6 +1,7 @@
 import AppLayout from '@/layouts/app-layout';
 import { router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
+import Select from 'react-select';
 
 const breadcrumbs = [
   { title: 'Home', href: '/' },
@@ -43,6 +44,11 @@ const Create = () => {
     });
   };
 
+  const employeeOptions = employees.map((emp: any) => ({
+    value: emp.id,
+    label: `${emp.first_name} ${emp.last_name}`
+  }));
+
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <div className="min-h-screen bg-background p-6">
@@ -78,18 +84,15 @@ const Create = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium mb-1 text-gray-700">Employee</label>
-                    <select
+                    <Select
                       name="employee_id"
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.employee_id}
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="">Select employee</option>
-                      {employees.map((emp: any) => (
-                        <option key={emp.id} value={emp.id}>{emp.first_name} {emp.last_name}</option>
-                      ))}
-                    </select>
+                      options={employeeOptions}
+                      value={employeeOptions.find(opt => opt.value === form.employee_id) || null}
+                      onChange={option => setForm(f => ({ ...f, employee_id: option ? option.value : '' }))}
+                      isClearable
+                      placeholder="Select employee..."
+                      classNamePrefix="react-select"
+                    />
                     {errors.employee_id && <div className="text-red-500 text-sm">{errors.employee_id}</div>}
                   </div>
                   <div>
