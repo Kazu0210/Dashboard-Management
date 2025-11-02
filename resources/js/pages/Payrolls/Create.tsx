@@ -87,8 +87,11 @@ const Create = () => {
                     <Select
                       name="employee_id"
                       options={employeeOptions}
-                      value={employeeOptions.find(opt => opt.value === form.employee_id) || null}
-                      onChange={option => setForm(f => ({ ...f, employee_id: option ? option.value : '' }))}
+                      value={employeeOptions.find((opt: any) => opt.value === form.employee_id) || null}
+                      onChange={option => {
+                        setForm(f => ({ ...f, employee_id: option ? option.value : '' }));
+                        console.log('Employee selected:', option);
+                      }}
                       isClearable
                       placeholder="Select employee..."
                       classNamePrefix="react-select"
