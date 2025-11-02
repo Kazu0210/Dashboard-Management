@@ -22,11 +22,40 @@ class PayrollsImport implements ToModel, WithHeadingRow, WithStartRow
             $employeeExists = Employee::whereRaw('CONCAT(first_name, " ", last_name) = ?', [$employeeName])->exists();
         }
         if ($employeeExists) {
+            // If employee exists on the employees table
             Log::info("Payroll import row #{$count}: Employee exists", [
                 'row' => $row,
                 'employee_exists' => true,
             ]);
-            // You can add logic here for when the employee exists
+            
+            $employee = Employee::whereRaw('CONCAT(first_name, " ", last_name) = ?', [$employeeName])->first();
+            $employeeId = $employee ? $employee->id : null;
+            Log::info("Payroll import row #{$count}: Employee ID found", [
+                'employee_id' => $employeeId,
+            ]);
+
+            // Convert Excel serial dates to Y-m-d or Y-m-d H:i:s
+            $pay_period_start = isset($row['pay_period_start']) ? 
+                (is_numeric($row['pay_period_start']) ? 
+                    \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['pay_period_start'])->format('Y-m-d') : $row['pay_period_start']) : null;
+            $pay_period_end = isset($row['pay_period_end']) ? 
+                (is_numeric($row['pay_period_end']) ? 
+                    \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['pay_period_end'])->format('Y-m-d') : $row['pay_period_end']) : null;
+            $paid_at = isset($row['paid_at']) ? 
+                (is_numeric($row['paid_at']) ? 
+                    \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['paid_at'])->format('Y-m-d H:i:s') : $row['paid_at']) : null;
+
+            $payrollRecord = Payrolls::create([
+                'employee_id' => $employeeId,
+                'pay_period_start' => $pay_period_start,
+                'pay_period_end' => $pay_period_end,
+                'basic_salary' => $row['basic_salary'] ?? 0,
+                'allowances' => $row['allowances'] ?? 0,
+                'deductions' => $row['deductions'] ?? 0,
+                'net_pay' => $row['net_pay'] ?? 0,
+                'status' => $row['status'] ?? 'pending',
+                'paid_at' => $paid_at,
+            ]);
         } else {
             Log::warning("Payroll import row #{$count}: Employee does NOT exist", [
                 'row' => $row,
