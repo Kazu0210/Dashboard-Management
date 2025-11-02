@@ -34,7 +34,7 @@ const Create = () => {
     e.preventDefault();
     setProcessing(true);
     setErrors({});
-    router.post('/admin/payrolls', form, {
+    router.post('/admin/payrolls/store', form, {
       onError: (err) => {
         setErrors(err);
         setProcessing(false);
@@ -89,8 +89,18 @@ const Create = () => {
                       options={employeeOptions}
                       value={employeeOptions.find((opt: any) => opt.value === form.employee_id) || null}
                       onChange={option => {
-                        setForm(f => ({ ...f, employee_id: option ? option.value : '' }));
-                        console.log('Employee selected:', option);
+                        const selected = employees.find((emp: any) => emp.id === (option ? option.value : ''));
+                        setForm(f => ({
+                          ...f,
+                          employee_id: option ? option.value : '',
+                          basic_salary: selected && selected.monthly_salary ? selected.monthly_salary : ''
+                        }));
+                        if (selected) {
+                          console.log('Employee selected:', option);
+                          console.log('Monthly Salary:', selected.monthly_salary);
+                        } else {
+                          console.log('Employee cleared');
+                        }
                       }}
                       isClearable
                       placeholder="Select employee..."

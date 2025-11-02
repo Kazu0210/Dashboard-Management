@@ -38,6 +38,6 @@ class PayrollsController extends Controller
 
         Payrolls::create($validated);
 
-        return redirect()->route('payrolls.index')->with('success', 'Payroll record created successfully.');
+        return Inertia::render('Payrolls/Index');
     }
 }
