@@ -217,14 +217,7 @@ export default function SupplyExpensesIndex() {
                                                 >
                                                     <Pencil size={16} />
                                                 </Link>
-                                                <button
-                                                    type="button"
-                                                    className="px-3 py-1.5 rounded-md bg-yellow-500 text-white hover:bg-yellow-600 text-xs transition-all shadow-sm flex items-center justify-center"
-                                                    title="Export"
-                                                    onClick={() => exportCollection(e.id)}
-                                                >
-                                                    <Download size={16} />
-                                                </button>
+                                                                        {/* Export button removed as requested */}
                                                 <form
                                                     method="POST"
                                                     action={`/admin/supply-expenses/${e.id}`}
