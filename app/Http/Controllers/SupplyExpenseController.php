@@ -8,9 +8,32 @@ use App\Models\SupplyExpense;
 use Illuminate\Support\Facades\Auth;
 use App\Exports\SupplyExpensesTemplateExport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\SupplyExpensesImport;
+use Illuminate\Support\Facades\Log;
 
 class SupplyExpenseController extends Controller
 {
+    /**
+     * Import supply expenses from Excel file
+     */
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls',
+        ]);
+
+        try {
+            Excel::import(new SupplyExpensesImport, $request->file('file'));
+        } catch (\Exception $e) {
+            Log::error('SupplyExpense import failed', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return response()->json(['message' => 'Import failed', 'error' => $e->getMessage()], 500);
+        }
+
+        return response()->json(['message' => 'Supply expenses imported successfully.'], 200);
+    }
     /**
      * Download Excel template for supply expenses import
      */

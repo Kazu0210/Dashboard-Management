@@ -71,6 +71,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::put('supply-expenses/{id}', [SupplyExpenseController::class, 'update'])->name('supply-expenses.update');
     Route::delete('supply-expenses/{id}', [SupplyExpenseController::class, 'destroy'])->name('supply-expenses.destroy');
     Route::get('supply-expenses/template/download', [SupplyExpenseController::class, 'downloadTemplate'])->name('supply-expenses.template.download');
+    Route::post('supply-expenses/import', [SupplyExpenseController::class, 'import'])->name('supply-expenses.import');
 
     // Accounts Receivable
     Route::get('accounts-receivable', [AccountsReceivableController::class, 'index'])->name('accounts-receivable.index');
