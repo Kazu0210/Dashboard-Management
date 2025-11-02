@@ -45,6 +45,7 @@ const mainNavItems: NavItem[] = [
     { title: "DOLE Cases", href: "/admin/dole-cases", icon: FileWarning },
     { title: "Financial Summary", href: "/admin/financial-summary", icon: BarChart2 },
     { title: "Payroll", href: "/admin/payrolls", icon: DollarSign },
+    { title: "Supply Expense", href: "/admin/supply-expenses", icon: FileText },
 ];
 
 const footerNavItems: NavItem[] = [];
