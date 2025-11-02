@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             SampleEmployeeSeeder::class,
             SampleProjectSeeder::class,
+            SamplePayrollSeeder::class,
         ]);
     }
 }
