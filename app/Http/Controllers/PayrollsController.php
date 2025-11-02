@@ -9,6 +9,12 @@ use Inertia\Inertia;
 
 class PayrollsController extends Controller
 {
+    public function destroy($id)
+    {
+        $payroll = Payrolls::findOrFail($id);
+        $payroll->delete();
+        return redirect()->route('admin.payrolls.index')->with('success', 'Payroll deleted successfully.');
+    }
     public function edit($id)
     {
         $payroll = Payrolls::findOrFail($id);

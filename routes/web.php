@@ -134,4 +134,5 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('payrolls/{id}', [PayrollsController::class, 'show'])->name('payrolls.show');
     Route::get('payrolls/{id}/edit', [PayrollsController::class, 'edit'])->name('payrolls.edit');
     Route::put('payrolls/{id}', [PayrollsController::class, 'update'])->name('payrolls.update');
+    Route::delete('payrolls/{id}', [PayrollsController::class, 'destroy'])->name('payrolls.destroy');
 });
