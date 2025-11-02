@@ -66,12 +66,13 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('supply-expenses', [SupplyExpenseController::class, 'index'])->name('supply-expenses.index');
     Route::get('supply-expenses/create', [SupplyExpenseController::class, 'create'])->name('supply-expenses.create');
     Route::post('supply-expenses', [SupplyExpenseController::class, 'store'])->name('supply-expenses.store');
+    Route::get('supply-expenses/export', [SupplyExpenseController::class, 'export'])->name('supply-expenses.export');
+    Route::get('supply-expenses/template/download', [SupplyExpenseController::class, 'downloadTemplate'])->name('supply-expenses.template.download');
+    Route::post('supply-expenses/import', [SupplyExpenseController::class, 'import'])->name('supply-expenses.import');
     Route::get('supply-expenses/{id}', [SupplyExpenseController::class, 'show'])->name('supply-expenses.show');
     Route::get('supply-expenses/{id}/edit', [SupplyExpenseController::class, 'edit'])->name('supply-expenses.edit');
     Route::put('supply-expenses/{id}', [SupplyExpenseController::class, 'update'])->name('supply-expenses.update');
     Route::delete('supply-expenses/{id}', [SupplyExpenseController::class, 'destroy'])->name('supply-expenses.destroy');
-    Route::get('supply-expenses/template/download', [SupplyExpenseController::class, 'downloadTemplate'])->name('supply-expenses.template.download');
-    Route::post('supply-expenses/import', [SupplyExpenseController::class, 'import'])->name('supply-expenses.import');
 
     // Accounts Receivable
     Route::get('accounts-receivable', [AccountsReceivableController::class, 'index'])->name('accounts-receivable.index');

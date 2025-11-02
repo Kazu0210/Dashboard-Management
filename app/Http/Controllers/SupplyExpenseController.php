@@ -7,12 +7,23 @@ use Inertia\Inertia;
 use App\Models\SupplyExpense;
 use Illuminate\Support\Facades\Auth;
 use App\Exports\SupplyExpensesTemplateExport;
+use App\Exports\SupplyExpensesExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\SupplyExpensesImport;
 use Illuminate\Support\Facades\Log;
 
 class SupplyExpenseController extends Controller
 {
+    /**
+     * Export all supply expenses to Excel
+     */
+    public function export()
+    {
+        $date = now()->format('Y-m-d');
+        $fileName = "SupplyExpenses_Export_{$date}.xlsx";
+        return Excel::download(new SupplyExpensesExport, $fileName);
+    }
+
     /**
      * Import supply expenses from Excel file
      */
