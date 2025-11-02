@@ -93,9 +93,6 @@ export default function Index() {
   const columns: TableColumn<Payroll>[] = [
     { name: 'Employee', selector: row => row.employee_name, sortable: true },
     { name: 'Period', selector: row => `${row.pay_period_start} - ${row.pay_period_end}`, sortable: true },
-    { name: 'Basic Salary', selector: row => `₱${row.basic_salary.toLocaleString()}`, sortable: true },
-    { name: 'Allowances', selector: row => row.allowances ? `₱${row.allowances.toLocaleString()}` : '—', sortable: true },
-    { name: 'Deductions', selector: row => row.deductions ? `₱${row.deductions.toLocaleString()}` : '—', sortable: true },
     { name: 'Net Pay', selector: row => `₱${row.net_pay.toLocaleString()}`, sortable: true },
     { name: 'Status', selector: row => row.status, sortable: true },
     {
