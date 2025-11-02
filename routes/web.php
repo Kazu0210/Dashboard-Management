@@ -128,4 +128,5 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
 
     // Payroll
     Route::get('payrolls', [PayrollsController::class, 'index'])->name('payrolls.index');
+    Route::get('payrolls/create', [PayrollsController::class, 'create'])->name('payrolls.create');
 });
