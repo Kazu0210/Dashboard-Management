@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\PayrollsImport;
+use Illuminate\Support\Facades\Log;
 use App\Models\Employee;
 use App\Models\Payrolls;
 use Illuminate\Http\Request;
@@ -11,6 +13,27 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class PayrollsController extends Controller
 {
+    /**
+     * Import payrolls from Excel file
+     */
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls',
+        ]);
+
+        try {
+            Excel::import(new PayrollsImport, $request->file('file'));
+        } catch (\Exception $e) {
+            Log::error('Payroll import failed', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return response()->json(['message' => 'Import failed', 'error' => $e->getMessage()], 500);
+        }
+
+        return response()->json(['message' => 'Payrolls imported successfully.'], 200);
+    }
     public function downloadTemplate()
     {
         return Excel::download(new PayrollsTemplateExport, 'Payrolls_Import_Template.xlsx');
