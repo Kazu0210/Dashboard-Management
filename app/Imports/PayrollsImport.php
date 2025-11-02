@@ -13,37 +13,20 @@ class PayrollsImport implements ToModel, WithHeadingRow, WithStartRow
 {
     public function model(array $row)
     {
-        // Try to find employee by name (assuming format: First Last)
+        // Log all details of the row to laravel.log
+        static $count = 0;
+        $count++;
         $employeeName = $row['employee'] ?? null;
-        $employeeId = null;
+        $employeeExists = false;
         if ($employeeName) {
-            $parts = preg_split('/\s+/', trim($employeeName));
-            if (count($parts) >= 2) {
-                $firstName = $parts[0];
-                $lastName = $parts[1];
-                $employee = Employee::where('first_name', $firstName)
-                    ->where('last_name', $lastName)
-                    ->first();
-                if ($employee) {
-                    $employeeId = $employee->id;
-                }
-            }
+            $employeeExists = Employee::whereRaw('CONCAT(first_name, " ", last_name) = ?', [$employeeName])->exists();
         }
-        if (!$employeeId) {
-            Log::warning('Payroll import: Employee not found', ['employee' => $employeeName]);
-            return null;
-        }
-        return new Payrolls([
-            'employee_id' => $employeeId,
-            'pay_period_start' => $row['pay_period_start'] ?? null,
-            'pay_period_end' => $row['pay_period_end'] ?? null,
-            'basic_salary' => $row['basic_salary'] ?? null,
-            'allowances' => $row['allowances'] ?? null,
-            'deductions' => $row['deductions'] ?? null,
-            'net_pay' => $row['net_pay'] ?? null,
-            'status' => $row['status'] ?? null,
-            'paid_at' => $row['paid_at'] ?? null,
+        Log::info("Payroll import row #{$count} details", [
+            'row' => $row,
+            'employee_exists' => $employeeExists,
         ]);
+        // Do not insert any records
+        return null;
     }
 
     public function startRow(): int
