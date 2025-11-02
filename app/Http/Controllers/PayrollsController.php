@@ -11,7 +11,24 @@ class PayrollsController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Payrolls/Index');
+        $payrolls = Payrolls::with('employee')->get();
+        $payrollsData = $payrolls->map(function ($payroll) {
+            return [
+                'id' => $payroll->id,
+                'employee_name' => $payroll->employee ? $payroll->employee->first_name . ' ' . $payroll->employee->last_name : '',
+                'pay_period_start' => $payroll->pay_period_start,
+                'pay_period_end' => $payroll->pay_period_end,
+                'basic_salary' => $payroll->basic_salary,
+                'allowances' => $payroll->allowances,
+                'deductions' => $payroll->deductions,
+                'net_pay' => $payroll->net_pay,
+                'status' => $payroll->status,
+                'paid_at' => $payroll->paid_at,
+            ];
+        });
+        return Inertia::render('Payrolls/Index', [
+            'payrolls' => $payrollsData
+        ]);
     }
 
     public function create()
