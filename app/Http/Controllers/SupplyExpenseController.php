@@ -6,9 +6,18 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\SupplyExpense;
 use Illuminate\Support\Facades\Auth;
+use App\Exports\SupplyExpensesTemplateExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SupplyExpenseController extends Controller
 {
+    /**
+     * Download Excel template for supply expenses import
+     */
+    public function downloadTemplate()
+    {
+        return Excel::download(new SupplyExpensesTemplateExport, 'SupplyExpenses_Import_Template.xlsx');
+    }
     /**
      * Display a listing of the resource.
      */

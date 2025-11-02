@@ -129,21 +129,39 @@ export default function SupplyExpensesIndex() {
                                 style={{ display: 'none' }}
                                 onChange={handleFileChange}
                             />
-                            <div className="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto pointer-events-none transition-opacity z-10">
-                                <a
-                                    href="/admin/supply-expenses/template/download"
-                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg"
-                                >
-                                    Download Excel Import Template
-                                </a>
-                                <button
-                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-b-lg cursor-pointer"
-                                    onClick={handleImportClick}
-                                    disabled={importing}
-                                >
-                                    Import Excel File
-                                </button>
-                            </div>
+                                            <div className="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto pointer-events-none transition-opacity z-10">
+                                                <button
+                                                    type="button"
+                                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg cursor-pointer"
+                                                    onClick={async () => {
+                                                        try {
+                                                            const response = await fetch('/admin/supply-expenses/template/download');
+                                                            if (!response.ok) throw new Error('Download failed');
+                                                            const blob = await response.blob();
+                                                            const url = window.URL.createObjectURL(blob);
+                                                            const a = document.createElement('a');
+                                                            a.href = url;
+                                                            a.download = 'supply-expenses-import-template.xlsx';
+                                                            document.body.appendChild(a);
+                                                            a.click();
+                                                            window.URL.revokeObjectURL(url);
+                                                            document.body.removeChild(a);
+                                                        } catch (err) {
+                                                            alert('Failed to download template');
+                                                        }
+                                                    }}
+                                                    disabled={importing}
+                                                >
+                                                    Download Excel Import Template
+                                                </button>
+                                                <button
+                                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-b-lg cursor-pointer"
+                                                    onClick={handleImportClick}
+                                                    disabled={importing}
+                                                >
+                                                    Import Excel File
+                                                </button>
+                                            </div>
                             {importError && (
                                 <div className="absolute left-0 mt-2 w-56 bg-red-100 text-red-700 text-xs rounded-lg p-2 z-20 border border-red-300">
                                     {importError}
