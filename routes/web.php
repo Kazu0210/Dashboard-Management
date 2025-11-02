@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 use App\Http\Controllers\FinancialSummaryController;
+use App\Http\Controllers\PayrollsController;
 
 // Route for Guest Users
 Route::get('/', [GuestController::class, 'index'])->name('home');
@@ -124,4 +125,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
 
     // Financial Summary
     Route::get('financial-summary', [FinancialSummaryController::class, 'index'])->name('financial.summary');
+
+    // Payroll
+    Route::get('payrolls', [PayrollsController::class, 'index'])->name('payrolls.index');
 });
