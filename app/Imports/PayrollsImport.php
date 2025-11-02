@@ -21,10 +21,19 @@ class PayrollsImport implements ToModel, WithHeadingRow, WithStartRow
         if ($employeeName) {
             $employeeExists = Employee::whereRaw('CONCAT(first_name, " ", last_name) = ?', [$employeeName])->exists();
         }
-        Log::info("Payroll import row #{$count} details", [
-            'row' => $row,
-            'employee_exists' => $employeeExists,
-        ]);
+        if ($employeeExists) {
+            Log::info("Payroll import row #{$count}: Employee exists", [
+                'row' => $row,
+                'employee_exists' => true,
+            ]);
+            // You can add logic here for when the employee exists
+        } else {
+            Log::warning("Payroll import row #{$count}: Employee does NOT exist", [
+                'row' => $row,
+                'employee_exists' => false,
+            ]);
+            // You can add logic here for when the employee does not exist
+        }
         // Do not insert any records
         return null;
     }
