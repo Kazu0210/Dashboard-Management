@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Payrolls;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,10 +15,16 @@ class FinancialSummaryController extends Controller
             ->sum('contract_amount');
         $totalContractValue = Project::whereYear('created_at', now()->year)
             ->sum('contract_amount');
-            
+
+        // Get total payrolls
+        $currentMonthPayroll = Payrolls::where('created_at', '>=', now()->startOfMonth())
+            ->sum('net_pay');
+        $totalPayroll = Payrolls::whereYear('created_at', now()->year)
+            ->sum('net_pay');
+
         $summary = [
             ['category' => 'Total Contract Value', 'current_month' => $currentMonthContractValue, 'year_to_date' => $totalContractValue],
-            ['category' => 'Total Payroll', 'current_month' => 3250000, 'year_to_date' => 36220000],
+            ['category' => 'Total Payroll', 'current_month' => $currentMonthPayroll, 'year_to_date' => $totalPayroll],
             ['category' => 'Total Supplies', 'current_month' => 450000, 'year_to_date' => 4410000],
             ['category' => 'Total Admin Expenses', 'current_month' => 540000, 'year_to_date' => 5720000],
             ['category' => 'Total Collected', 'current_month' => 6150000, 'year_to_date' => 67900000],
