@@ -13,35 +13,74 @@ class ProjectsTemplateExport implements WithHeadings, WithColumnWidths
     public function columnWidths(): array
     {
         return [
-            'A' => 20, // Project Name
-            'B' => 18, // Client
-            'C' => 18, // Location
-            'D' => 18, // Contract Amount
-            'E' => 12, // Duration
-            'F' => 12, // Status
-            'G' => 12, // Personnel
-            'H' => 12, // Payroll
-            'I' => 12, // Supplies
-            'J' => 16, // Billing Status
-            'K' => 14, // Collected
-            'L' => 14, // Net Income
+            'A' => 15, // Project Number
+            'B' => 25, // Project Name
+            'C' => 8,  // Year
+            'D' => 10, // FTE
+            'E' => 20, // Average Rate per Employee
+            'F' => 18, // Bid Price - One Year
+            'G' => 18, // Half Year Bid Price
+            'H' => 12, // Status
+            'I' => 15, // Monthly (12)
+            'J' => 15, // Withholding Tax
+            'K' => 12, // VAT
+            'L' => 12, // Agency Fee
+            'M' => 12, // Supplies
+            'N' => 12, // Equipment
+            'O' => 18, // Salary Expenses (Year)
+            'P' => 18, // 13th Month Estimated
+            'Q' => 18, // SILP Estimated
+            'R' => 15, // SSS Contribution
+            'S' => 20, // Philhealth Contribution
+            'T' => 18, // Pagibig Contribution
+            'U' => 10, // ECC
+            'V' => 20, // Actual Supplies Cost (Year)
+            'W' => 25, // Actual Supplies Cost (Jan-June)
+            'X' => 20, // Actual Equipment Cost (Year)
+            'Y' => 18, // Profit Margin (10%)
+            'Z' => 25, // Total Supplies and Equipment
+            'AA' => 15, // VAT Savings
+            'AB' => 15, // Cost of Sales
+            'AC' => 20, // Total Service Income
+            'AD' => 18, // Admin Cost (8000)
+            'AE' => 15, // Total
         ];
     }
+
     public function headings(): array
     {
         return [
+            'Project Number',
             'Project Name',
-            'Client',
-            'Location',
-            'Contract Amount',
-            'Duration',
+            'Year',
+            'FTE',
+            'Average Rate per Employee',
+            'Bid Price - One Year',
+            'Half Year Bid Price',
             'Status',
-            'Personnel',
-            'Payroll',
+            'Monthly (12)',
+            'Withholding Tax',
+            'VAT',
+            'Agency Fee',
             'Supplies',
-            'Billing Status',
-            'Collected',
-            'Net Income',
+            'Equipment',
+            'Salary Expenses (Year)',
+            '13th Month Estimated',
+            'SILP Estimated',
+            'SSS Contribution',
+            'Philhealth Contribution',
+            'Pagibig Contribution',
+            'ECC',
+            'Actual Supplies Cost (Year)',
+            'Actual Supplies Cost (Jan-June)',
+            'Actual Equipment Cost (Year)',
+            'Profit Margin (10%)',
+            'Total Supplies and Equipment',
+            'VAT Savings',
+            'Cost of Sales',
+            'Total Service Income',
+            'Admin Cost (8000)',
+            'Total',
         ];
     }
 }

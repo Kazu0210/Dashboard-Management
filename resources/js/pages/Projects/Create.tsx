@@ -11,39 +11,80 @@ const breadcrumbs = [
 ];
 
 const steps = [
-    { label: 'Details', fields: ['project_name', 'client', 'location', 'duration'] },
-    { label: 'Financials', fields: ['contract_amount', 'personnel', 'payroll', 'supplies', 'collected', 'net_income'] },
-    { label: 'Status', fields: ['status', 'billing_status'] },
+    { label: 'Basic Info', fields: ['project_number', 'project_name', 'year', 'status'] },
+    { label: 'Rates & Pricing', fields: ['fte', 'average_rate_per_employee', 'bid_price_one_year', 'half_year_bid_price'] },
+    { label: 'Monthly & Taxes', fields: ['monthly_12', 'withholding_tax', 'vat', 'agency_fee'] },
+    { label: 'Resources', fields: ['supplies', 'equipment', 'salary_expenses_year', 'thirteenth_month_estimated'] },
+    { label: 'Contributions', fields: ['silp_estimated', 'sss_contribution', 'philhealth_contribution', 'pagibig_contribution', 'ecc'] },
+    { label: 'Costs & Income', fields: ['actual_supplies_cost_year', 'actual_equipment_cost_year', 'cost_of_sales', 'total_service_income', 'admin_cost_8000', 'total'] },
 ];
 
 const fieldLabels: Record<string, string> = {
+    project_number: 'Project Number',
     project_name: 'Project Name',
-    client: 'Client',
-    location: 'Location',
-    contract_amount: 'Contract Amount (₱)',
-    duration: 'Duration',
+    year: 'Year',
+    fte: 'FTE (Full Time Equivalent)',
+    average_rate_per_employee: 'Average Rate per Employee (₱)',
+    bid_price_one_year: 'Bid Price - One Year (₱)',
+    half_year_bid_price: 'Half Year Bid Price (₱)',
     status: 'Status',
-    personnel: 'Personnel',
-    payroll: 'Payroll (₱)',
+    monthly_12: 'Monthly (12) (₱)',
+    withholding_tax: 'Withholding Tax (₱)',
+    vat: 'VAT (₱)',
+    agency_fee: 'Agency Fee (₱)',
     supplies: 'Supplies (₱)',
-    billing_status: 'Billing Status',
-    collected: 'Collected (₱)',
-    net_income: 'Net Income (₱)',
+    equipment: 'Equipment (₱)',
+    salary_expenses_year: 'Salary Expenses (Year) (₱)',
+    thirteenth_month_estimated: '13th Month Estimated (₱)',
+    silp_estimated: 'SILP Estimated (₱)',
+    sss_contribution: 'SSS Contribution (₱)',
+    philhealth_contribution: 'Philhealth Contribution (₱)',
+    pagibig_contribution: 'Pagibig Contribution (₱)',
+    ecc: 'ECC (₱)',
+    actual_supplies_cost_year: 'Actual Supplies Cost (Year) (₱)',
+    actual_supplies_cost_jan_june: 'Actual Supplies Cost (Jan-June) (₱)',
+    actual_equipment_cost_year: 'Actual Equipment Cost (Year) (₱)',
+    profit_margin_10_percent: 'Profit Margin (10%) (₱)',
+    total_supplies_equipment: 'Total Supplies and Equipment (₱)',
+    vat_savings: 'VAT Savings (₱)',
+    cost_of_sales: 'Cost of Sales (₱)',
+    total_service_income: 'Total Service Income (₱)',
+    admin_cost_8000: 'Admin Cost (8000) (₱)',
+    total: 'Total (₱)',
 };
 
 const initialForm = {
+    project_number: '',
     project_name: '',
-    client: '',
-    location: '',
-    contract_amount: '',
-    duration: '',
-    status: '',
-    personnel: 0,
-    payroll: '',
+    year: new Date().getFullYear(),
+    fte: '',
+    average_rate_per_employee: '',
+    bid_price_one_year: '',
+    half_year_bid_price: '',
+    status: 'ongoing',
+    monthly_12: '',
+    withholding_tax: '',
+    vat: '',
+    agency_fee: '',
     supplies: '',
-    billing_status: '',
-    collected: '',
-    net_income: '',
+    equipment: '',
+    salary_expenses_year: '',
+    thirteenth_month_estimated: '',
+    silp_estimated: '',
+    sss_contribution: '',
+    philhealth_contribution: '',
+    pagibig_contribution: '',
+    ecc: '',
+    actual_supplies_cost_year: '',
+    actual_supplies_cost_jan_june: '',
+    actual_equipment_cost_year: '',
+    profit_margin_10_percent: '',
+    total_supplies_equipment: '',
+    vat_savings: '',
+    cost_of_sales: '',
+    total_service_income: '',
+    admin_cost_8000: '',
+    total: '',
 };
 
 const CreateProject = () => {
@@ -122,15 +163,30 @@ const CreateProject = () => {
                     {/* Fields for current step/tab */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {steps[step].fields.map(field => (
-                            <div key={field}>
+                            <div key={field} className={field === 'status' ? 'md:col-span-1' : ''}>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">{fieldLabels[field]}</label>
-                                <input
-                                    type={['contract_amount','payroll','supplies','collected','net_income','personnel'].includes(field) ? 'number' : 'text'}
-                                    className="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 px-3 py-2"
-                                    value={form[field]}
-                                    onChange={e => handleChange(field, field === 'personnel' ? Number(e.target.value) : e.target.value)}
-                                    required
-                                />
+                                {field === 'status' ? (
+                                    <select
+                                        className="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 px-3 py-2"
+                                        value={(form as any)[field]}
+                                        onChange={e => handleChange(field, e.target.value)}
+                                        required
+                                    >
+                                        <option value="ongoing">Ongoing</option>
+                                        <option value="completed">Completed</option>
+                                        <option value="pending">Pending</option>
+                                    </select>
+                                ) : (
+                                    <input
+                                        type={field === 'year' || ['fte', 'average_rate_per_employee', 'bid_price_one_year', 'half_year_bid_price', 'monthly_12', 'withholding_tax', 'vat', 'agency_fee', 'supplies', 'equipment', 'salary_expenses_year', 'thirteenth_month_estimated', 'silp_estimated', 'sss_contribution', 'philhealth_contribution', 'pagibig_contribution', 'ecc', 'actual_supplies_cost_year', 'actual_supplies_cost_jan_june', 'actual_equipment_cost_year', 'profit_margin_10_percent', 'total_supplies_equipment', 'vat_savings', 'cost_of_sales', 'total_service_income', 'admin_cost_8000', 'total'].includes(field) ? 'number' : 'text'}
+                                        step={field === 'fte' || field.includes('rate') || field.includes('margin') ? '0.01' : undefined}
+                                        className="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 px-3 py-2"
+                                        value={(form as any)[field]}
+                                        onChange={e => handleChange(field, field === 'year' ? Number(e.target.value) : e.target.value)}
+                                        required={field === 'project_number' || field === 'project_name' || field === 'year'}
+                                        placeholder={field === 'project_number' ? 'e.g., PROJ-2025-001' : undefined}
+                                    />
+                                )}
                                 {errors[field] && (
                                     <p className="text-red-500 text-xs mt-1">{errors[field]}</p>
                                 )}
