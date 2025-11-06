@@ -119,8 +119,11 @@ class ProjectController extends Controller
     public function edit($id)
     {
         $project = Project::findOrFail($id);
+        $projectStatuses = ProjectStatus::all();
+        
         return Inertia::render('Projects/Edit', [
-            'project' => $project
+            'project' => $project,
+            'projectStatuses' => $projectStatuses
         ]);
     }
 

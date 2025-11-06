@@ -48,9 +48,15 @@ type Project = {
     updated_at: string;
 };
 
+type ProjectStatus = {
+    id: number;
+    name: string;
+};
+
 const EditProject = () => {
-    const props = usePage().props as { project?: Project };
+    const props = usePage().props as { project?: Project; projectStatuses?: ProjectStatus[] };
     const project = props.project;
+    const projectStatuses = props.projectStatuses || [];
 
     if (!project) {
         return (
@@ -184,9 +190,12 @@ const EditProject = () => {
                                             onChange={e => setForm(f => ({ ...f, status: e.target.value }))}
                                             required
                                         >
-                                            <option value="ongoing">Ongoing</option>
-                                            <option value="completed">Completed</option>
-                                            <option value="pending">Pending</option>
+                                            <option value="">Select Status</option>
+                                            {projectStatuses.map((status) => (
+                                                <option key={status.id} value={status.name}>
+                                                    {status.name.charAt(0).toUpperCase() + status.name.slice(1)}
+                                                </option>
+                                            ))}
                                         </select>
                                     </div>
                                 </div>
