@@ -1,7 +1,10 @@
 
 
 import AppLayout from '@/layouts/app-layout';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Head } from '@inertiajs/react';
 import { router } from '@inertiajs/react';
+import { motion } from 'framer-motion';
 import { useState } from 'react';
 
 const breadcrumbs = [
@@ -119,110 +122,140 @@ const CreateProject = () => {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <div className="min-h-screen bg-gray-50 p-6">
+            <Head title="Create Project" />
+
+            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 p-6">
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
                     <div>
-                        <h2 className="text-2xl font-semibold text-blue-900">Create Project</h2>
-                        <p className="text-sm text-gray-500">
+                        <h2 className="text-3xl font-semibold text-gray-900">Create Project</h2>
+                        <p className="text-gray-500 text-sm mt-1">
                             Enter project information and financial details.
                         </p>
                     </div>
                 </div>
 
                 {/* Stepper */}
-                <div className="w-full mb-6">
-                    <ol className="flex items-center w-full text-sm font-medium text-gray-500">
-                        {steps.map((s, idx) => (
-                            <li key={s.label} className={`flex-1 flex items-center ${idx < step ? 'text-blue-600' : idx === step ? 'text-blue-900' : ''}`}>
-                                <span className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${idx <= step ? 'border-blue-600 bg-blue-100' : 'border-gray-300 bg-white'} mr-2`}>{idx + 1}</span>
-                                {s.label}
-                                {idx < steps.length - 1 && <span className="flex-1 h-0.5 bg-gray-300 mx-2" />}
-                            </li>
-                        ))}
-                    </ol>
-                </div>
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="w-full mb-10"
+                >
+                    <Card className="border-none shadow-md bg-white/80 backdrop-blur rounded-2xl">
+                        <CardContent className="p-6">
+                            <ol className="flex items-center w-full text-sm font-medium text-gray-500">
+                                {steps.map((s, idx) => (
+                                    <li key={s.label} className={`flex-1 flex items-center ${idx < step ? 'text-blue-600' : idx === step ? 'text-blue-900' : ''}`}>
+                                        <span className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${idx <= step ? 'border-blue-600 bg-blue-100' : 'border-gray-300 bg-white'} mr-2`}>{idx + 1}</span>
+                                        {s.label}
+                                        {idx < steps.length - 1 && <span className="flex-1 h-0.5 bg-gray-300 mx-2" />}
+                                    </li>
+                                ))}
+                            </ol>
+                        </CardContent>
+                    </Card>
+                </motion.div>
 
-                {/* Tabbed Card */}
-                <form onSubmit={handleSubmit} className="w-full bg-white border border-gray-100 rounded-xl shadow-sm p-8">
-                    <div className="mb-6 border-b border-gray-200">
-                        <nav className="-mb-px flex space-x-8">
-                            {steps.map((s, idx) => (
-                                <button
-                                    type="button"
-                                    key={s.label}
-                                    className={`whitespace-nowrap pb-2 px-1 border-b-2 font-medium text-sm ${step === idx ? 'border-blue-600 text-blue-700' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
-                                    onClick={() => setStep(idx)}
-                                >
-                                    {s.label}
-                                </button>
-                            ))}
-                        </nav>
-                    </div>
+                {/* Form Card */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                >
+                    <Card className="border-none shadow-md bg-white/80 backdrop-blur rounded-2xl overflow-hidden">
+                        <form onSubmit={handleSubmit}>
+                            <CardHeader className="pb-4">
+                                <CardTitle className="text-xl font-semibold text-gray-900">
+                                    {steps[step].label}
+                                </CardTitle>
+                                <CardDescription className="text-gray-500">
+                                    Step {step + 1} of {steps.length}
+                                </CardDescription>
+                            </CardHeader>
 
-                    {/* Fields for current step/tab */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {steps[step].fields.map(field => (
-                            <div key={field} className={field === 'status' ? 'md:col-span-1' : ''}>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">{fieldLabels[field]}</label>
-                                {field === 'status' ? (
-                                    <select
-                                        className="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 px-3 py-2"
-                                        value={(form as any)[field]}
-                                        onChange={e => handleChange(field, e.target.value)}
-                                        required
+                            <CardContent className="space-y-6">
+                                <div className="mb-6 border-b border-gray-200">
+                                    <nav className="-mb-px flex space-x-8">
+                                        {steps.map((s, idx) => (
+                                            <button
+                                                type="button"
+                                                key={s.label}
+                                                className={`whitespace-nowrap pb-2 px-1 border-b-2 font-medium text-sm transition-all ${step === idx ? 'border-blue-600 text-blue-700' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
+                                                onClick={() => setStep(idx)}
+                                            >
+                                                {s.label}
+                                            </button>
+                                        ))}
+                                    </nav>
+                                </div>
+
+                                {/* Fields for current step/tab */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {steps[step].fields.map(field => (
+                                        <div key={field} className={field === 'status' ? 'md:col-span-1' : ''}>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">{fieldLabels[field]}</label>
+                                            {field === 'status' ? (
+                                                <select
+                                                    className="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 px-4 py-3 transition-all"
+                                                    value={(form as any)[field]}
+                                                    onChange={e => handleChange(field, e.target.value)}
+                                                    required
+                                                >
+                                                    <option value="ongoing">Ongoing</option>
+                                                    <option value="completed">Completed</option>
+                                                    <option value="pending">Pending</option>
+                                                </select>
+                                            ) : (
+                                                <input
+                                                    type={field === 'year' || ['fte', 'average_rate_per_employee', 'bid_price_one_year', 'half_year_bid_price', 'monthly_12', 'withholding_tax', 'vat', 'agency_fee', 'supplies', 'equipment', 'salary_expenses_year', 'thirteenth_month_estimated', 'silp_estimated', 'sss_contribution', 'philhealth_contribution', 'pagibig_contribution', 'ecc', 'actual_supplies_cost_year', 'actual_supplies_cost_jan_june', 'actual_equipment_cost_year', 'profit_margin_10_percent', 'total_supplies_equipment', 'vat_savings', 'cost_of_sales', 'total_service_income', 'admin_cost_8000', 'total'].includes(field) ? 'number' : 'text'}
+                                                    step={field === 'fte' || field.includes('rate') || field.includes('margin') ? '0.01' : undefined}
+                                                    className="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 px-4 py-3 transition-all"
+                                                    value={(form as any)[field]}
+                                                    onChange={e => handleChange(field, field === 'year' ? Number(e.target.value) : e.target.value)}
+                                                    required={field === 'project_number' || field === 'project_name' || field === 'year'}
+                                                    placeholder={field === 'project_number' ? 'e.g., PROJ-2025-001' : undefined}
+                                                />
+                                            )}
+                                            {errors[field] && (
+                                                <p className="text-red-500 text-xs mt-1">{errors[field]}</p>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Navigation Buttons */}
+                                <div className="flex justify-between pt-8 border-t border-gray-200">
+                                    <button
+                                        type="button"
+                                        onClick={handleBack}
+                                        disabled={step === 0}
+                                        className={`px-6 py-3 rounded-xl bg-gray-200 text-gray-700 hover:bg-gray-300 text-sm font-medium transition-all shadow-sm ${step === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
                                     >
-                                        <option value="ongoing">Ongoing</option>
-                                        <option value="completed">Completed</option>
-                                        <option value="pending">Pending</option>
-                                    </select>
-                                ) : (
-                                    <input
-                                        type={field === 'year' || ['fte', 'average_rate_per_employee', 'bid_price_one_year', 'half_year_bid_price', 'monthly_12', 'withholding_tax', 'vat', 'agency_fee', 'supplies', 'equipment', 'salary_expenses_year', 'thirteenth_month_estimated', 'silp_estimated', 'sss_contribution', 'philhealth_contribution', 'pagibig_contribution', 'ecc', 'actual_supplies_cost_year', 'actual_supplies_cost_jan_june', 'actual_equipment_cost_year', 'profit_margin_10_percent', 'total_supplies_equipment', 'vat_savings', 'cost_of_sales', 'total_service_income', 'admin_cost_8000', 'total'].includes(field) ? 'number' : 'text'}
-                                        step={field === 'fte' || field.includes('rate') || field.includes('margin') ? '0.01' : undefined}
-                                        className="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 px-3 py-2"
-                                        value={(form as any)[field]}
-                                        onChange={e => handleChange(field, field === 'year' ? Number(e.target.value) : e.target.value)}
-                                        required={field === 'project_number' || field === 'project_name' || field === 'year'}
-                                        placeholder={field === 'project_number' ? 'e.g., PROJ-2025-001' : undefined}
-                                    />
-                                )}
-                                {errors[field] && (
-                                    <p className="text-red-500 text-xs mt-1">{errors[field]}</p>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Navigation Buttons */}
-                    <div className="flex justify-between pt-8">
-                        <button
-                            type="button"
-                            onClick={handleBack}
-                            disabled={step === 0}
-                            className={`px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 text-sm font-medium transition-all ${step === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
-                        >
-                            Back
-                        </button>
-                        {step < steps.length - 1 ? (
-                            <button
-                                type="button"
-                                onClick={handleNext}
-                                className="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium shadow-sm transition-all"
-                            >
-                                Next
-                            </button>
-                        ) : (
-                            <button
-                                type="submit"
-                                disabled={processing}
-                                className="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium shadow-sm transition-all"
-                            >
-                                {processing ? 'Saving...' : 'Create Project'}
-                            </button>
-                        )}
-                    </div>
-                </form>
+                                        Back
+                                    </button>
+                                    {step < steps.length - 1 ? (
+                                        <button
+                                            type="button"
+                                            onClick={handleNext}
+                                            className="px-8 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium shadow-md transition-all"
+                                        >
+                                            Next
+                                        </button>
+                                    ) : (
+                                        <button
+                                            type="submit"
+                                            disabled={processing}
+                                            className="px-8 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium shadow-md transition-all disabled:opacity-50"
+                                        >
+                                            {processing ? 'Creating...' : 'Create Project'}
+                                        </button>
+                                    )}
+                                </div>
+                            </CardContent>
+                        </form>
+                    </Card>
+                </motion.div>
             </div>
         </AppLayout>
     );
