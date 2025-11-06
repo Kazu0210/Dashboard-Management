@@ -3,9 +3,10 @@ import AppLayout from '@/layouts/app-layout';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { Users, UserPlus, UserMinus, Wallet, Pencil, Trash2, Upload, Download, Eye } from 'lucide-react';
+import { Users, UserPlus, UserMinus, Wallet, Pencil, Trash2, Upload, Download, Eye, Briefcase, Calculator } from 'lucide-react';
 import React from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
+import FlashMessages from '@/components/flash-messages';
 
 
 const breadcrumbs = [
@@ -15,23 +16,44 @@ const breadcrumbs = [
 
 type Project = {
     id: number;
+    project_number: string;
     project_name: string;
-    client: string;
-    location: string;
-    contract_amount: number;
-    duration: string;
+    year: number;
+    fte: number;
+    average_rate_per_employee: number;
+    bid_price_one_year: number;
+    half_year_bid_price: number;
     status: string;
-    personnel: number;
-    billing_status: string;
-    collected: number;
-    net_income: number;
+    monthly_12: number;
+    withholding_tax: number;
+    vat: number;
+    agency_fee: number;
+    supplies: number;
+    equipment: number;
+    salary_expenses_year: number;
+    thirteenth_month_estimated: number;
+    silp_estimated: number;
+    sss_contribution: number;
+    philhealth_contribution: number;
+    pagibig_contribution: number;
+    ecc: number;
+    actual_supplies_cost_year: number;
+    actual_supplies_cost_jan_june: number;
+    actual_equipment_cost_year: number;
+    profit_margin_10_percent: number;
+    total_supplies_equipment: number;
+    vat_savings: number;
+    cost_of_sales: number;
+    total_service_income: number;
+    admin_cost_8000: number;
+    total: number;
     created_at: string;
     updated_at: string;
 };
 
 export default function Index() {
 
-    const { projects: projectsRaw, project_count, completed_count, ongoing_count, total_billed, total_collected } = usePage().props;
+    const { projects: projectsRaw, project_count, completed_count, ongoing_count, total_bid_amount, total_service_income } = usePage().props;
     const projects: Project[] = Array.isArray(projectsRaw) ? projectsRaw : [];
 
     // Search state
@@ -41,9 +63,9 @@ export default function Index() {
         const lower = search.toLowerCase();
         return projects.filter(p =>
             p.project_name.toLowerCase().includes(lower) ||
-            p.client.toLowerCase().includes(lower) ||
-            p.location.toLowerCase().includes(lower) ||
-            p.status.toLowerCase().includes(lower)
+            p.project_number.toLowerCase().includes(lower) ||
+            p.status.toLowerCase().includes(lower) ||
+            p.year.toString().includes(lower)
         );
     }, [search, projects]);
 
@@ -120,44 +142,49 @@ export default function Index() {
     // DataTable columns
     const columns: TableColumn<Project>[] = [
         {
-            name: 'Project',
+            name: 'Project Number',
+            selector: row => row.project_number,
+            sortable: true,
+        },
+        {
+            name: 'Project Name',
             selector: row => row.project_name,
             sortable: true,
             wrap: true,
         },
         {
-            name: 'Client',
-            selector: row => row.client,
+            name: 'Year',
+            selector: row => row.year.toString(),
             sortable: true,
         },
         {
-            name: 'Contract Amount',
-            selector: row => `₱${Number(row.contract_amount).toLocaleString()}`,
+            name: 'FTE',
+            selector: row => row.fte && !isNaN(Number(row.fte)) ? Number(row.fte).toFixed(2) : '—',
+            sortable: true,
+        },
+        {
+            name: 'Bid Price (1 Year)',
+            selector: row => row.bid_price_one_year && !isNaN(Number(row.bid_price_one_year)) ? `₱${Number(row.bid_price_one_year).toLocaleString()}` : '—',
             sortable: true,
         },
         {
             name: 'Status',
             cell: row => (
                 <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                    row.status === 'Completed' ? 'bg-green-100 text-green-700' :
-                    row.status === 'Ongoing' ? 'bg-yellow-100 text-yellow-700' :
+                    row.status === 'completed' ? 'bg-green-100 text-green-700' :
+                    row.status === 'ongoing' ? 'bg-yellow-100 text-yellow-700' :
                     'bg-gray-100 text-gray-600'}`}>{row.status}</span>
             ),
             sortable: true,
         },
         {
-            name: 'Billing Status',
-            selector: row => row.billing_status,
+            name: 'Total Service Income',
+            selector: row => row.total_service_income && !isNaN(Number(row.total_service_income)) ? `₱${Number(row.total_service_income).toLocaleString()}` : '—',
             sortable: true,
         },
         {
-            name: 'Collected',
-            selector: row => `₱${Number(row.collected).toLocaleString()}`,
-            sortable: true,
-        },
-        {
-            name: 'Net Income',
-            selector: row => `₱${Number(row.net_income).toLocaleString()}`,
+            name: 'Total',
+            selector: row => row.total && !isNaN(Number(row.total)) ? `₱${Number(row.total).toLocaleString()}` : '—',
             sortable: true,
         },
         {
@@ -233,8 +260,9 @@ export default function Index() {
             <Head title="Projects" />
 
             <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 p-6">
+                <FlashMessages />
                 {/* Stats Section */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mb-10">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 mb-10">
                     {/* Total Projects */}
                     <motion.div whileHover={{ scale: 1.02 }}>
                         <Card className="border-none shadow-md bg-white/80 backdrop-blur rounded-2xl">
@@ -243,7 +271,7 @@ export default function Index() {
                                     <CardTitle className="text-sm font-medium text-gray-500">Total Projects</CardTitle>
                                     <CardDescription className="text-xs text-gray-400">All projects</CardDescription>
                                 </div>
-                                <Users className="w-5 h-5 text-blue-500" />
+                                <Briefcase className="w-5 h-5 text-blue-500" />
                             </CardHeader>
                             <CardContent>
                                 <span className="text-4xl font-bold text-gray-800">{String(project_count)}</span>
@@ -283,19 +311,37 @@ export default function Index() {
                         </Card>
                     </motion.div>
 
-                    {/* Total Billed */}
+                    {/* Total Bid Amount */}
                     <motion.div whileHover={{ scale: 1.02 }}>
                         <Card className="border-none shadow-md bg-white/80 backdrop-blur rounded-2xl">
                             <CardHeader className="flex flex-row items-center justify-between">
                                 <div>
-                                    <CardTitle className="text-sm font-medium text-gray-500">Total Billed</CardTitle>
-                                    <CardDescription className="text-xs text-gray-400">All time</CardDescription>
+                                    <CardTitle className="text-sm font-medium text-gray-500">Total Bid Amount</CardTitle>
+                                    <CardDescription className="text-xs text-gray-400">All projects</CardDescription>
                                 </div>
                                 <Wallet className="w-5 h-5 text-amber-500" />
                             </CardHeader>
                             <CardContent>
                                 <span className="text-3xl font-bold text-gray-800">
-                                    {total_billed ? `₱${Number(total_billed).toLocaleString()}` : '—'}
+                                    {total_bid_amount ? `₱${Number(total_bid_amount).toLocaleString()}` : '—'}
+                                </span>
+                            </CardContent>
+                        </Card>
+                    </motion.div>
+
+                    {/* Total Service Income */}
+                    <motion.div whileHover={{ scale: 1.02 }}>
+                        <Card className="border-none shadow-md bg-white/80 backdrop-blur rounded-2xl">
+                            <CardHeader className="flex flex-row items-center justify-between">
+                                <div>
+                                    <CardTitle className="text-sm font-medium text-gray-500">Total Service Income</CardTitle>
+                                    <CardDescription className="text-xs text-gray-400">All projects</CardDescription>
+                                </div>
+                                <Calculator className="w-5 h-5 text-green-500" />
+                            </CardHeader>
+                            <CardContent>
+                                <span className="text-3xl font-bold text-gray-800">
+                                    {total_service_income ? `₱${Number(total_service_income).toLocaleString()}` : '—'}
                                 </span>
                             </CardContent>
                         </Card>
@@ -370,7 +416,7 @@ export default function Index() {
                         <input
                             type="text"
                             className="w-full max-w-xs px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
-                            placeholder="Search projects..."
+                            placeholder="Search by project name, number, status, or year..."
                             value={search}
                             onChange={e => setSearch(e.target.value)}
                         />
@@ -381,6 +427,7 @@ export default function Index() {
                         pagination
                         highlightOnHover
                         pointerOnHover
+                        responsive
                         noDataComponent={<div className="px-6 py-8 text-center text-gray-400 text-sm">No projects found.</div>}
                     />
                 </div>
