@@ -34,7 +34,7 @@ class ProjectsImport implements ToModel, WithHeadingRow, WithStartRow
             'average_rate_per_employee' => $row['average_rate_per_employee'] ?? null,
             'bid_price_one_year' => $row['bid_price_one_year'] ?? null,
             'half_year_bid_price' => $row['half_year_bid_price'] ?? null,
-            'status' => $row['status'] ?? 'ongoing',
+            'status' => strtolower($row['status'] ?? 'ongoing'),
             'monthly_12' => $row['monthly_12'] ?? null,
             'withholding_tax' => $row['withholding_tax'] ?? null,
             'vat' => $row['vat'] ?? null,
