@@ -131,7 +131,7 @@ const CreateProject = () => {
                 </div>
 
                 {/* Stepper */}
-                <div className="max-w-3xl mx-auto mb-6">
+                <div className="w-full mb-6">
                     <ol className="flex items-center w-full text-sm font-medium text-gray-500">
                         {steps.map((s, idx) => (
                             <li key={s.label} className={`flex-1 flex items-center ${idx < step ? 'text-blue-600' : idx === step ? 'text-blue-900' : ''}`}>
@@ -144,7 +144,7 @@ const CreateProject = () => {
                 </div>
 
                 {/* Tabbed Card */}
-                <form onSubmit={handleSubmit} className="max-w-3xl mx-auto bg-white border border-gray-100 rounded-xl shadow-sm p-8">
+                <form onSubmit={handleSubmit} className="w-full bg-white border border-gray-100 rounded-xl shadow-sm p-8">
                     <div className="mb-6 border-b border-gray-200">
                         <nav className="-mb-px flex space-x-8">
                             {steps.map((s, idx) => (
