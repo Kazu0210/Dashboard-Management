@@ -1,11 +1,14 @@
-
-
 import AppLayout from '@/layouts/app-layout';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import { router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+
+type ProjectStatus = {
+    id: number;
+    name: string;
+};
 
 const breadcrumbs = [
     { title: 'Home', href: '/' },
@@ -91,6 +94,7 @@ const initialForm = {
 };
 
 const CreateProject = () => {
+    const { project_statuses } = usePage<{project_statuses: ProjectStatus[]}>().props;
     const [form, setForm] = useState(initialForm);
     const [processing, setProcessing] = useState(false);
     const [errors, setErrors] = useState<Record<string, any>>({});
@@ -111,7 +115,7 @@ const CreateProject = () => {
         e.preventDefault();
         setProcessing(true);
         setErrors({});
-        router.post('/admin/projects', form, {
+        router.post('/admin/projects/create', form, {
             onError: (err) => {
                 setErrors(err);
                 setProcessing(false);
@@ -202,9 +206,11 @@ const CreateProject = () => {
                                                     onChange={e => handleChange(field, e.target.value)}
                                                     required
                                                 >
-                                                    <option value="ongoing">Ongoing</option>
-                                                    <option value="completed">Completed</option>
-                                                    <option value="pending">Pending</option>
+                                                    {project_statuses?.map((status: ProjectStatus) => (
+                                                        <option key={status.id} value={status.name}>
+                                                            {status.name.charAt(0).toUpperCase() + status.name.slice(1)}
+                                                        </option>
+                                                    ))}
                                                 </select>
                                             ) : (
                                                 <input

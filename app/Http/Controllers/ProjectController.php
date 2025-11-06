@@ -12,6 +12,7 @@ use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ProjectsTemplateExport;
 use App\Imports\ProjectsImport;
+use App\Models\ProjectStatus;
 use Illuminate\Support\Facades\Log;
 
 class ProjectController extends Controller
@@ -69,7 +70,10 @@ class ProjectController extends Controller
 
     public function create()
     {
-        return Inertia::render('Projects/Create');
+        $project_statuses = ProjectStatus::all();
+        return Inertia::render('Projects/Create', [
+            'project_statuses' => $project_statuses
+        ]);
     }
 
     public function store()

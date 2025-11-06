@@ -161,13 +161,13 @@ export default function Index() {
         },
         {
             name: 'FTE',
-            selector: row => row.fte ? row.fte.toFixed(2) : '—',
+            selector: row => row.fte && !isNaN(Number(row.fte)) ? Number(row.fte).toFixed(2) : '—',
             sortable: true,
             width: '80px',
         },
         {
             name: 'Bid Price (1 Year)',
-            selector: row => row.bid_price_one_year ? `₱${Number(row.bid_price_one_year).toLocaleString()}` : '—',
+            selector: row => row.bid_price_one_year && !isNaN(Number(row.bid_price_one_year)) ? `₱${Number(row.bid_price_one_year).toLocaleString()}` : '—',
             sortable: true,
             width: '150px',
         },
@@ -184,13 +184,13 @@ export default function Index() {
         },
         {
             name: 'Total Service Income',
-            selector: row => row.total_service_income ? `₱${Number(row.total_service_income).toLocaleString()}` : '—',
+            selector: row => row.total_service_income && !isNaN(Number(row.total_service_income)) ? `₱${Number(row.total_service_income).toLocaleString()}` : '—',
             sortable: true,
             width: '160px',
         },
         {
             name: 'Total',
-            selector: row => row.total ? `₱${Number(row.total).toLocaleString()}` : '—',
+            selector: row => row.total && !isNaN(Number(row.total)) ? `₱${Number(row.total).toLocaleString()}` : '—',
             sortable: true,
             width: '120px',
         },
