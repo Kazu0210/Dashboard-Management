@@ -22,7 +22,7 @@ const steps = [
     { label: 'Monthly & Taxes', fields: ['monthly_12', 'withholding_tax', 'vat', 'agency_fee'] },
     { label: 'Resources', fields: ['supplies', 'equipment', 'salary_expenses_year', 'thirteenth_month_estimated'] },
     { label: 'Contributions', fields: ['silp_estimated', 'sss_contribution', 'philhealth_contribution', 'pagibig_contribution', 'ecc'] },
-    { label: 'Costs & Income', fields: ['actual_supplies_cost_year', 'actual_equipment_cost_year', 'cost_of_sales', 'total_service_income', 'admin_cost_8000', 'total'] },
+    { label: 'Costs & Income', fields: ['actual_supplies_cost_year', 'actual_equipment_cost_year', 'profit_margin_10_percent', 'total_supplies_equipment', 'vat_savings', 'cost_of_sales', 'total_service_income', 'admin_cost_8000', 'total'] },
 ];
 
 const fieldLabels: Record<string, string> = {
