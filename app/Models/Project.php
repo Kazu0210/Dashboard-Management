@@ -76,4 +76,12 @@ class Project extends Model
         'admin_cost_8000' => 'decimal:2',
         'total' => 'decimal:2',
     ];
+
+    /**
+     * Get the collections for the project.
+     */
+    public function collections()
+    {
+        return $this->hasMany(Collection::class);
+    }
 }

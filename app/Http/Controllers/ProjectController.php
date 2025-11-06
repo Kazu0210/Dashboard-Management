@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ProjectsExport;
-
-
 use App\Http\Requests\ImportProjectsRequest;
+use App\Models\Collection;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -178,8 +177,25 @@ class ProjectController extends Controller
 
     public function destroy($id)
     {
-        $project = Project::findOrFail($id);
-        $project->delete();
-        return redirect()->route('admin.projects.index')->with('success', 'Project deleted successfully.');
+        try {
+            $project = Project::findOrFail($id);
+            
+            // Check if project has associated collections
+            $collectionsCount = $project->collections()->count();
+            
+            if ($collectionsCount > 0) {
+                return redirect()->route('admin.projects.index')
+                    ->with('error', "Cannot delete project. It has {$collectionsCount} associated collection(s). Please delete the collections first.");
+            }
+            
+            $project->delete();
+            
+            return redirect()->route('admin.projects.index')
+                ->with('success', 'Project deleted successfully.');
+                
+        } catch (\Exception $e) {
+            return redirect()->route('admin.projects.index')
+                ->with('error', 'Failed to delete project: ' . $e->getMessage());
+        }
     }
 }

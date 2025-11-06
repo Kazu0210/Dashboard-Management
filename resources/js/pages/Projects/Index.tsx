@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { Users, UserPlus, UserMinus, Wallet, Pencil, Trash2, Upload, Download, Eye, Briefcase, Calculator } from 'lucide-react';
 import React from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
+import FlashMessages from '@/components/flash-messages';
 
 
 const breadcrumbs = [
@@ -267,6 +268,7 @@ export default function Index() {
             <Head title="Projects" />
 
             <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 p-6">
+                <FlashMessages />
                 {/* Stats Section */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 mb-10">
                     {/* Total Projects */}
