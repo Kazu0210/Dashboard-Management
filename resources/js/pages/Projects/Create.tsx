@@ -197,7 +197,7 @@ const CreateProject = () => {
                                             <label className="block text-sm font-medium text-gray-700 mb-2">{fieldLabels[field]}</label>
                                             {field === 'status' ? (
                                                 <select
-                                                    className="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 px-4 py-3 transition-all"
+                                                    className="w-full rounded-lg border-2 border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400 px-4 py-3 transition-all shadow-sm"
                                                     value={(form as any)[field]}
                                                     onChange={e => handleChange(field, e.target.value)}
                                                     required
@@ -210,7 +210,7 @@ const CreateProject = () => {
                                                 <input
                                                     type={field === 'year' || ['fte', 'average_rate_per_employee', 'bid_price_one_year', 'half_year_bid_price', 'monthly_12', 'withholding_tax', 'vat', 'agency_fee', 'supplies', 'equipment', 'salary_expenses_year', 'thirteenth_month_estimated', 'silp_estimated', 'sss_contribution', 'philhealth_contribution', 'pagibig_contribution', 'ecc', 'actual_supplies_cost_year', 'actual_supplies_cost_jan_june', 'actual_equipment_cost_year', 'profit_margin_10_percent', 'total_supplies_equipment', 'vat_savings', 'cost_of_sales', 'total_service_income', 'admin_cost_8000', 'total'].includes(field) ? 'number' : 'text'}
                                                     step={field === 'fte' || field.includes('rate') || field.includes('margin') ? '0.01' : undefined}
-                                                    className="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 px-4 py-3 transition-all"
+                                                    className="w-full rounded-lg border-2 border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400 px-4 py-3 transition-all shadow-sm"
                                                     value={(form as any)[field]}
                                                     onChange={e => handleChange(field, field === 'year' ? Number(e.target.value) : e.target.value)}
                                                     required={field === 'project_number' || field === 'project_name' || field === 'year'}
