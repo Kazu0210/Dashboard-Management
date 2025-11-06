@@ -105,6 +105,7 @@ const CreateProject = () => {
     };
 
     const handleNext = () => {
+        console.log('Current step:', step, 'Total steps:', steps.length, 'Next step will be:', Math.min(step + 1, steps.length - 1));
         setStep(s => Math.min(s + 1, steps.length - 1));
     };
     const handleBack = () => {
@@ -243,10 +244,14 @@ const CreateProject = () => {
                                     {step < steps.length - 1 ? (
                                         <button
                                             type="button"
-                                            onClick={handleNext}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                console.log('Next button clicked, current step:', step);
+                                                handleNext();
+                                            }}
                                             className="px-8 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium shadow-md transition-all"
                                         >
-                                            Next
+                                            Next (Step {step + 1} of {steps.length})
                                         </button>
                                     ) : (
                                         <button
