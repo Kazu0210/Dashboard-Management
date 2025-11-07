@@ -139,9 +139,9 @@ export default function Welcome() {
                 </div>
             </div>
 
-            {/* FTE Allocation Chart and Project Status Section */}
-            <div className="flex gap-6 mb-8">
-                <div className="w-1/2">
+            {/* FTE Allocation Chart, Project Status, and Pie Chart Section */}
+            <div className="flex gap-6 mb-8 h-[500px]">
+                <div className="w-2/5 h-full">
                     <ChartBarLabelCustom 
                         chartData={chartData}
                         title="FTE Allocation per Project"
@@ -154,8 +154,8 @@ export default function Welcome() {
                         ongoingCount={ongoingProjectsCount}
                     />
                 </div>
-                <div className="w-1/2">
-                    <Card className="bg-[#0f172a] border border-[#1e293b] shadow-xl rounded-2xl overflow-hidden">
+                <div className="w-2/5 h-full">
+                    <Card className="bg-[#0f172a] border border-[#1e293b] shadow-xl rounded-2xl overflow-hidden h-full flex flex-col">
                         <CardHeader className="pb-2 border-b border-[#1e293b]">
                             <div className="flex items-center justify-between">
                                 <div>
@@ -175,8 +175,8 @@ export default function Welcome() {
                             </div>
                         </CardHeader>
 
-                        <CardContent className="p-6">
-                            <div className="w-full h-[360px] overflow-auto">
+                        <CardContent className="p-6 flex-1 flex flex-col">
+                            <div className="w-full flex-1 overflow-auto">
                                 <table className="w-full border-collapse">
                                     <thead>
                                         <tr className="border-b border-[#1e293b]">
@@ -241,6 +241,103 @@ export default function Welcome() {
                                         </tr>
                                     </tfoot>
                                 </table>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+                <div className="w-1/5 h-full">
+                    <Card className="bg-[#0f172a] border border-[#1e293b] shadow-xl rounded-2xl overflow-hidden h-full flex flex-col">
+                        <CardHeader className="pb-2 border-b border-[#1e293b]">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <h3 className="text-lg font-semibold text-white tracking-wide">
+                                        Project Distribution
+                                    </h3>
+                                    <p className="text-sm text-gray-400">
+                                        Bid Price Breakdown
+                                    </p>
+                                    <div className="mt-2 text-xs text-gray-400">
+                                        <span className="text-[#38bdf8] font-semibold text-sm">₱{totalBidPrice.toLocaleString()}</span> total value
+                                    </div>
+                                </div>
+                                <div className="px-3 py-1 text-xs font-medium text-[#38bdf8] bg-[#1e293b] rounded-md">
+                                    Live Data
+                                </div>
+                            </div>
+                        </CardHeader>
+
+                        <CardContent className="p-6 flex-1 flex flex-col">
+                            <div className="w-full flex-1 flex items-center justify-center">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <PieChart>
+                                        <Pie
+                                            data={statusStatsWithPercentage.map(stat => ({
+                                                name: stat.status.charAt(0).toUpperCase() + stat.status.slice(1),
+                                                value: stat.bidPrice,
+                                                percentage: stat.percentage
+                                            }))}
+                                            dataKey="value"
+                                            nameKey="name"
+                                            cx="50%"
+                                            cy="50%"
+                                            outerRadius="70%"
+                                            innerRadius="30%"
+                                            paddingAngle={2}
+                                        >
+                                            {statusStatsWithPercentage.map((stat, index) => {
+                                                const colors = {
+                                                    ongoing: '#10b981',
+                                                    loss: '#ef4444',
+                                                    eoc: '#3b82f6'
+                                                };
+                                                const color = colors[stat.status.toLowerCase() as keyof typeof colors] || '#6b7280';
+                                                return <Cell key={`cell-${index}`} fill={color} />;
+                                            })}
+                                        </Pie>
+                                        <Tooltip 
+                                            formatter={(value: number, name: string, props: any) => [
+                                                `₱${value.toLocaleString()}`,
+                                                name
+                                            ]}
+                                            labelFormatter={(label: string) => `${label}`}
+                                            contentStyle={{
+                                                backgroundColor: "#1e293b",
+                                                borderRadius: "8px",
+                                                border: "1px solid #334155",
+                                                color: "#f8fafc",
+                                                boxShadow: "0 4px 16px rgba(56,189,248,0.2)",
+                                            }}
+                                            labelStyle={{ color: "#38bdf8" }}
+                                            itemStyle={{ color: "#f1f5f9" }}
+                                        />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </div>
+                            
+                            {/* Legend */}
+                            <div className="mt-4 space-y-2">
+                                {statusStatsWithPercentage.map((stat, index) => {
+                                    const colors = {
+                                        ongoing: '#10b981',
+                                        loss: '#ef4444',
+                                        eoc: '#3b82f6'
+                                    };
+                                    const color = colors[stat.status.toLowerCase() as keyof typeof colors] || '#6b7280';
+                                    return (
+                                        <div key={index} className="flex items-center gap-2 text-sm">
+                                            <div 
+                                                className="w-3 h-3 rounded-full" 
+                                                style={{ backgroundColor: color }}
+                                            ></div>
+                                            <span className="text-gray-300 flex-1">
+                                                {stat.status.charAt(0).toUpperCase() + stat.status.slice(1)}
+                                            </span>
+                                            <span className="text-white font-semibold">
+                                                {stat.percentage.toFixed(1)}%
+                                            </span>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </CardContent>
                     </Card>

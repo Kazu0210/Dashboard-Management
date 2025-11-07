@@ -43,7 +43,7 @@ export function ChartBarLabelCustom({
   ongoingCount,
 }: ChartBarLabelCustomProps) {
   return (
-    <Card className="bg-[#0f172a] border border-[#1e293b] shadow-xl rounded-2xl overflow-hidden">
+    <Card className="bg-[#0f172a] border border-[#1e293b] shadow-xl rounded-2xl overflow-hidden h-full flex flex-col">
       <CardHeader className="pb-2 border-b border-[#1e293b]">
         <div className="flex items-center justify-between">
           <div>
@@ -65,8 +65,8 @@ export function ChartBarLabelCustom({
         </div>
       </CardHeader>
 
-      <CardContent className="p-6">
-        <div className="w-full h-[360px]">
+      <CardContent className="p-6 flex-1">
+        <div className="w-full h-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={chartData}
