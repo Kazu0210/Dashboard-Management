@@ -364,8 +364,8 @@ export default function Welcome() {
                     description="Equipment costs vs bid prices for ongoing projects only"
                 />
 
-                {/* Monthly Income and Expenses Pie Chart */}
-                <Card className="bg-[#0f172a] border border-[#1e293b] shadow-xl rounded-lg lg:rounded-2xl overflow-hidden flex-1 flex flex-col">
+                {/* Monthly Income and Expenses Two-Column Layout */}
+                <Card className="bg-[#0f172a] border border-[#1e293b] shadow-xl rounded-lg lg:rounded-2xl overflow-hidden md:col-span-2 flex flex-col">
                     <CardHeader className="pb-2 border-b border-[#1e293b] p-3 sm:p-6">
                         <div>
                             <h3 className="text-sm sm:text-lg font-semibold text-white tracking-wide">
@@ -380,107 +380,164 @@ export default function Welcome() {
                         </div>
                     </CardHeader>
                     <CardContent className="p-3 sm:p-6 flex-1 flex flex-col">
-                        <div className="w-full flex-1 flex items-center justify-center">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <PieChart>
-                                    <Pie
-                                        data={[
-                                            { name: 'Project Revenue', value: 8500000, color: '#10b981' },
-                                            { name: 'Service Income', value: 3200000, color: '#3b82f6' },
-                                            { name: 'Operational Expenses', value: 2100000, color: '#ef4444' },
-                                            { name: 'Staff Costs', value: 4800000, color: '#f59e0b' },
-                                            { name: 'Equipment & Supplies', value: 1500000, color: '#8b5cf6' }
-                                        ]}
-                                        dataKey="value"
-                                        nameKey="name"
-                                        cx="50%"
-                                        cy="50%"
-                                        outerRadius="70%"
-                                        innerRadius="30%"
-                                        paddingAngle={2}
-                                    >
-                                        {[
-                                            { name: 'Project Revenue', value: 8500000, color: '#10b981' },
-                                            { name: 'Service Income', value: 3200000, color: '#3b82f6' },
-                                            { name: 'Operational Expenses', value: 2100000, color: '#ef4444' },
-                                            { name: 'Staff Costs', value: 4800000, color: '#f59e0b' },
-                                            { name: 'Equipment & Supplies', value: 1500000, color: '#8b5cf6' }
-                                        ].map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={entry.color} />
-                                        ))}
-                                    </Pie>
-                                    <Tooltip 
-                                        formatter={(value: number, name: string) => [
-                                            `₱${value.toLocaleString()}`,
-                                            name
-                                        ]}
-                                        contentStyle={{
-                                            backgroundColor: "#1e293b",
-                                            borderRadius: "8px",
-                                            border: "1px solid #334155",
-                                            color: "#f8fafc",
-                                            boxShadow: "0 4px 16px rgba(56,189,248,0.2)",
-                                        }}
-                                        labelStyle={{ color: "#38bdf8" }}
-                                        itemStyle={{ color: "#f1f5f9" }}
-                                    />
-                                </PieChart>
-                            </ResponsiveContainer>
-                        </div>
-                        
-                        {/* Legend */}
-                        <div className="mt-2 sm:mt-4 space-y-1 sm:space-y-2">
-                            {[
-                                { name: 'Project Revenue', color: '#10b981', value: 8500000, type: 'income' },
-                                { name: 'Service Income', color: '#3b82f6', value: 3200000, type: 'income' },
-                                { name: 'Operational Expenses', color: '#ef4444', value: 2100000, type: 'expense' },
-                                { name: 'Staff Costs', color: '#f59e0b', value: 4800000, type: 'expense' },
-                                { name: 'Equipment & Supplies', color: '#8b5cf6', value: 1500000, type: 'expense' }
-                            ].map((item, index) => (
-                                <div key={index} className="flex items-center gap-2 text-xs sm:text-sm">
-                                    <div 
-                                        className="w-2 sm:w-3 h-2 sm:h-3 rounded-full" 
-                                        style={{ backgroundColor: item.color }}
-                                    ></div>
-                                    <span className="text-gray-300 flex-1 truncate">
-                                        {item.name}
-                                    </span>
-                                    <span className={`font-semibold text-xs ${item.type === 'income' ? 'text-green-400' : 'text-red-400'}`}>
-                                        {item.type === 'income' ? '+' : '-'}₱{item.value.toLocaleString()}
-                                    </span>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
+                            {/* Expenses Column */}
+                            <div className="flex flex-col">
+                                <h4 className="text-sm font-semibold text-red-400 mb-3 text-center">Monthly Expenses</h4>
+                                <div className="flex-1 flex items-center justify-center">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <PieChart>
+                                            <Pie
+                                                data={[
+                                                    { name: 'Staff Costs', value: 4800000, color: '#ef4444' },
+                                                    { name: 'Operational Expenses', value: 2100000, color: '#f59e0b' },
+                                                    { name: 'Equipment & Supplies', value: 1500000, color: '#8b5cf6' }
+                                                ]}
+                                                dataKey="value"
+                                                nameKey="name"
+                                                cx="50%"
+                                                cy="50%"
+                                                outerRadius="65%"
+                                                innerRadius="35%"
+                                                paddingAngle={3}
+                                            >
+                                                {[
+                                                    { name: 'Staff Costs', value: 4800000, color: '#ef4444' },
+                                                    { name: 'Operational Expenses', value: 2100000, color: '#f59e0b' },
+                                                    { name: 'Equipment & Supplies', value: 1500000, color: '#8b5cf6' }
+                                                ].map((entry, index) => (
+                                                    <Cell key={`expense-${index}`} fill={entry.color} />
+                                                ))}
+                                            </Pie>
+                                            <Tooltip 
+                                                formatter={(value: number, name: string) => [
+                                                    `₱${value.toLocaleString()}`,
+                                                    name
+                                                ]}
+                                                contentStyle={{
+                                                    backgroundColor: "#1e293b",
+                                                    borderRadius: "8px",
+                                                    border: "1px solid #334155",
+                                                    color: "#f8fafc",
+                                                    boxShadow: "0 4px 16px rgba(239,68,68,0.2)",
+                                                }}
+                                                labelStyle={{ color: "#ef4444" }}
+                                                itemStyle={{ color: "#f1f5f9" }}
+                                            />
+                                        </PieChart>
+                                    </ResponsiveContainer>
                                 </div>
-                            ))}
-                            <div className="border-t border-[#1e293b] pt-2 mt-2">
-                                <div className="flex items-center justify-between text-xs sm:text-sm font-bold">
-                                    <span className="text-white">Net Income:</span>
-                                    <span className="text-green-400">+₱3,300,000</span>
+                                
+                                {/* Expenses Legend */}
+                                <div className="mt-3 space-y-2">
+                                    {[
+                                        { name: 'Staff Costs', color: '#ef4444', value: 4800000 },
+                                        { name: 'Operational Expenses', color: '#f59e0b', value: 2100000 },
+                                        { name: 'Equipment & Supplies', color: '#8b5cf6', value: 1500000 }
+                                    ].map((item, index) => (
+                                        <div key={index} className="flex items-center gap-2 text-xs sm:text-sm">
+                                            <div 
+                                                className="w-2 sm:w-3 h-2 sm:h-3 rounded-full" 
+                                                style={{ backgroundColor: item.color }}
+                                            ></div>
+                                            <span className="text-gray-300 flex-1 truncate">
+                                                {item.name}
+                                            </span>
+                                            <span className="font-semibold text-xs text-red-400">
+                                                -₱{item.value.toLocaleString()}
+                                            </span>
+                                        </div>
+                                    ))}
+                                    <div className="border-t border-[#1e293b] pt-2 mt-2">
+                                        <div className="flex items-center justify-between text-xs sm:text-sm font-bold">
+                                            <span className="text-white">Total Expenses:</span>
+                                            <span className="text-red-400">-₱8,400,000</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Income Column */}
+                            <div className="flex flex-col">
+                                <h4 className="text-sm font-semibold text-green-400 mb-3 text-center">Monthly Income</h4>
+                                <div className="flex-1 flex items-center justify-center">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <PieChart>
+                                            <Pie
+                                                data={[
+                                                    { name: 'Project Revenue', value: 8500000, color: '#10b981' },
+                                                    { name: 'Service Income', value: 3200000, color: '#3b82f6' }
+                                                ]}
+                                                dataKey="value"
+                                                nameKey="name"
+                                                cx="50%"
+                                                cy="50%"
+                                                outerRadius="65%"
+                                                innerRadius="35%"
+                                                paddingAngle={3}
+                                            >
+                                                {[
+                                                    { name: 'Project Revenue', value: 8500000, color: '#10b981' },
+                                                    { name: 'Service Income', value: 3200000, color: '#3b82f6' }
+                                                ].map((entry, index) => (
+                                                    <Cell key={`income-${index}`} fill={entry.color} />
+                                                ))}
+                                            </Pie>
+                                            <Tooltip 
+                                                formatter={(value: number, name: string) => [
+                                                    `₱${value.toLocaleString()}`,
+                                                    name
+                                                ]}
+                                                contentStyle={{
+                                                    backgroundColor: "#1e293b",
+                                                    borderRadius: "8px",
+                                                    border: "1px solid #334155",
+                                                    color: "#f8fafc",
+                                                    boxShadow: "0 4px 16px rgba(16,185,129,0.2)",
+                                                }}
+                                                labelStyle={{ color: "#10b981" }}
+                                                itemStyle={{ color: "#f1f5f9" }}
+                                            />
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                </div>
+                                
+                                {/* Income Legend */}
+                                <div className="mt-3 space-y-2">
+                                    {[
+                                        { name: 'Project Revenue', color: '#10b981', value: 8500000 },
+                                        { name: 'Service Income', color: '#3b82f6', value: 3200000 }
+                                    ].map((item, index) => (
+                                        <div key={index} className="flex items-center gap-2 text-xs sm:text-sm">
+                                            <div 
+                                                className="w-2 sm:w-3 h-2 sm:h-3 rounded-full" 
+                                                style={{ backgroundColor: item.color }}
+                                            ></div>
+                                            <span className="text-gray-300 flex-1 truncate">
+                                                {item.name}
+                                            </span>
+                                            <span className="font-semibold text-xs text-green-400">
+                                                +₱{item.value.toLocaleString()}
+                                            </span>
+                                        </div>
+                                    ))}
+                                    <div className="border-t border-[#1e293b] pt-2 mt-2">
+                                        <div className="flex items-center justify-between text-xs sm:text-sm font-bold">
+                                            <span className="text-white">Total Income:</span>
+                                            <span className="text-green-400">+₱11,700,000</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </CardContent>
-                </Card>
-
-                {/* Pie Chart */}
-                <Card className="flex-1 md:col-span-2 xl:col-span-1">
-                    <CardContent className="w-full h-full flex items-center justify-center p-2 sm:p-6">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <PieChart>
-                                <Pie
-                                    data={pieData}
-                                    dataKey="value"
-                                    nameKey="name"
-                                    cx="50%"
-                                    cy="50%"
-                                    outerRadius="70%"
-                                    label={false}
-                                >
-                                    {pieData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                    ))}
-                                </Pie>
-                                <Tooltip />
-                            </PieChart>
-                        </ResponsiveContainer>
+                        
+                        {/* Overall Summary */}
+                        <div className="border-t-2 border-[#38bdf8]/30 pt-3 mt-4">
+                            <div className="flex items-center justify-between text-sm sm:text-base font-bold">
+                                <span className="text-white">Net Income (Monthly):</span>
+                                <span className="text-green-400">+₱3,300,000</span>
+                            </div>
+                        </div>
                     </CardContent>
                 </Card>
             </div>
