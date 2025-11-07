@@ -31,6 +31,7 @@ type ChartBarLabelCustomProps = {
     isUp?: boolean
   }
   footerDescription?: string
+  ongoingCount?: number
 }
 
 export function ChartBarLabelCustom({
@@ -39,6 +40,7 @@ export function ChartBarLabelCustom({
   description = "Performance overview | Jan - Jun 2024",
   footerTrend,
   footerDescription = "Data synchronized in real-time",
+  ongoingCount,
 }: ChartBarLabelCustomProps) {
   return (
     <Card className="bg-[#0f172a] border border-[#1e293b] shadow-xl rounded-2xl overflow-hidden">
@@ -51,6 +53,11 @@ export function ChartBarLabelCustom({
             <CardDescription className="text-sm text-gray-400">
               {description}
             </CardDescription>
+            {ongoingCount !== undefined && (
+              <div className="mt-2 text-xs text-gray-400">
+                <span className="text-[#38bdf8] font-semibold text-sm">{ongoingCount}</span> ongoing projects
+              </div>
+            )}
           </div>
           <div className="px-3 py-1 text-xs font-medium text-[#38bdf8] bg-[#1e293b] rounded-md">
             Live Data

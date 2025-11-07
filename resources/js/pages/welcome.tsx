@@ -22,9 +22,11 @@ type ProjectStat = {
 }
 
 export default function Welcome() {
-    const { project_status: project_statusRaw, project_count, projects: projectsRaw } = usePage().props;
+    const { project_status: project_statusRaw, project_count, projects: projectsRaw, ongoing_projects_count } = usePage().props;
     const project_status: ProjectStat[] = Array.isArray(project_statusRaw) ? project_statusRaw : [];
     const projects: any[] = Array.isArray(projectsRaw) ? projectsRaw : [];
+    const totalProjectCount = Number(project_count) || 0;
+    const ongoingProjectsCount = Number(ongoing_projects_count) || 0;
 
     // Key metrics mock
     const metrics = [
@@ -71,18 +73,21 @@ export default function Welcome() {
 
     return (
         <div className="min-h-screen w-full bg-gray-50 p-6 md:p-10">
-            {/* FTE Allocation Chart Section */}
-            <div className="mb-8 w-1/2">
-                <ChartBarLabelCustom 
-                    chartData={chartData}
-                    title="FTE Allocation per Project"
-                    description="Current Active Projects - Q4 2024"
-                    footerTrend={{
-                        text: "Resource utilization trending",
-                        isUp: true
-                    }}
-                    footerDescription="Showing Full-Time Equivalent staff allocation across active projects"
-                />
+            {/* FTE Allocation Chart and Project Status Section */}
+            <div className="flex gap-6 mb-8">
+                <div className="w-1/2">
+                    <ChartBarLabelCustom 
+                        chartData={chartData}
+                        title="FTE Allocation per Project"
+                        description="Current Active Projects - Q4 2024"
+                        footerTrend={{
+                            text: "Resource utilization trending",
+                            isUp: true
+                        }}
+                        footerDescription="Showing Full-Time Equivalent staff allocation across active projects"
+                        ongoingCount={ongoingProjectsCount}
+                    />
+                </div>
             </div>
 
             {/* Charts Section */}
