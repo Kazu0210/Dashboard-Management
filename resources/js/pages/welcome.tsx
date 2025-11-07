@@ -364,19 +364,99 @@ export default function Welcome() {
                     description="Equipment costs vs bid prices for ongoing projects only"
                 />
 
-                {/* Bar Chart */}
-                <Card className="flex-1">
-                    <CardContent className="w-full h-full flex items-center justify-center p-2 sm:p-6">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={barData}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="project" tick={{ fontSize: 12 }} />
-                                <YAxis tick={{ fontSize: 12 }} />
-                                <Tooltip formatter={(value: number) => `₱${value.toLocaleString()}`} />
-                                <Bar dataKey="billing" fill="#10b981" name="Billed Amount" />
-                                <Bar dataKey="collected" fill="#3b82f6" name="Collected Amount" />
-                            </BarChart>
-                        </ResponsiveContainer>
+                {/* Monthly Income and Expenses Pie Chart */}
+                <Card className="bg-[#0f172a] border border-[#1e293b] shadow-xl rounded-lg lg:rounded-2xl overflow-hidden flex-1 flex flex-col">
+                    <CardHeader className="pb-2 border-b border-[#1e293b] p-3 sm:p-6">
+                        <div>
+                            <h3 className="text-sm sm:text-lg font-semibold text-white tracking-wide">
+                                Monthly Financial Overview
+                            </h3>
+                            <p className="text-xs sm:text-sm text-gray-400">
+                                Income vs Expenses Breakdown
+                            </p>
+                            <div className="mt-1 sm:mt-2 text-xs text-gray-400">
+                                <span className="text-[#38bdf8] font-semibold text-xs sm:text-sm">Current Month</span> performance
+                            </div>
+                        </div>
+                    </CardHeader>
+                    <CardContent className="p-3 sm:p-6 flex-1 flex flex-col">
+                        <div className="w-full flex-1 flex items-center justify-center">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie
+                                        data={[
+                                            { name: 'Project Revenue', value: 8500000, color: '#10b981' },
+                                            { name: 'Service Income', value: 3200000, color: '#3b82f6' },
+                                            { name: 'Operational Expenses', value: 2100000, color: '#ef4444' },
+                                            { name: 'Staff Costs', value: 4800000, color: '#f59e0b' },
+                                            { name: 'Equipment & Supplies', value: 1500000, color: '#8b5cf6' }
+                                        ]}
+                                        dataKey="value"
+                                        nameKey="name"
+                                        cx="50%"
+                                        cy="50%"
+                                        outerRadius="70%"
+                                        innerRadius="30%"
+                                        paddingAngle={2}
+                                    >
+                                        {[
+                                            { name: 'Project Revenue', value: 8500000, color: '#10b981' },
+                                            { name: 'Service Income', value: 3200000, color: '#3b82f6' },
+                                            { name: 'Operational Expenses', value: 2100000, color: '#ef4444' },
+                                            { name: 'Staff Costs', value: 4800000, color: '#f59e0b' },
+                                            { name: 'Equipment & Supplies', value: 1500000, color: '#8b5cf6' }
+                                        ].map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.color} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip 
+                                        formatter={(value: number, name: string) => [
+                                            `₱${value.toLocaleString()}`,
+                                            name
+                                        ]}
+                                        contentStyle={{
+                                            backgroundColor: "#1e293b",
+                                            borderRadius: "8px",
+                                            border: "1px solid #334155",
+                                            color: "#f8fafc",
+                                            boxShadow: "0 4px 16px rgba(56,189,248,0.2)",
+                                        }}
+                                        labelStyle={{ color: "#38bdf8" }}
+                                        itemStyle={{ color: "#f1f5f9" }}
+                                    />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        </div>
+                        
+                        {/* Legend */}
+                        <div className="mt-2 sm:mt-4 space-y-1 sm:space-y-2">
+                            {[
+                                { name: 'Project Revenue', color: '#10b981', value: 8500000, type: 'income' },
+                                { name: 'Service Income', color: '#3b82f6', value: 3200000, type: 'income' },
+                                { name: 'Operational Expenses', color: '#ef4444', value: 2100000, type: 'expense' },
+                                { name: 'Staff Costs', color: '#f59e0b', value: 4800000, type: 'expense' },
+                                { name: 'Equipment & Supplies', color: '#8b5cf6', value: 1500000, type: 'expense' }
+                            ].map((item, index) => (
+                                <div key={index} className="flex items-center gap-2 text-xs sm:text-sm">
+                                    <div 
+                                        className="w-2 sm:w-3 h-2 sm:h-3 rounded-full" 
+                                        style={{ backgroundColor: item.color }}
+                                    ></div>
+                                    <span className="text-gray-300 flex-1 truncate">
+                                        {item.name}
+                                    </span>
+                                    <span className={`font-semibold text-xs ${item.type === 'income' ? 'text-green-400' : 'text-red-400'}`}>
+                                        {item.type === 'income' ? '+' : '-'}₱{item.value.toLocaleString()}
+                                    </span>
+                                </div>
+                            ))}
+                            <div className="border-t border-[#1e293b] pt-2 mt-2">
+                                <div className="flex items-center justify-between text-xs sm:text-sm font-bold">
+                                    <span className="text-white">Net Income:</span>
+                                    <span className="text-green-400">+₱3,300,000</span>
+                                </div>
+                            </div>
+                        </div>
                     </CardContent>
                 </Card>
 
