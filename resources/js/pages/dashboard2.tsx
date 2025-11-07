@@ -23,9 +23,26 @@ import {
 } from "lucide-react";
 import AppLayout from '@/layouts/app-layout';
 import { usePage } from "@inertiajs/react";
+import { useEffect } from 'react';
+import { router } from '@inertiajs/react';
 
 const Dashboard2 = () => {
   const { auth } = usePage().props;
+
+  // Auto page rotation every 30 seconds
+  useEffect(() => {
+    const rotationInterval = setInterval(() => {
+      const currentPath = window.location.pathname;
+      if (currentPath === '/') {
+        router.visit('/page2');
+      } else if (currentPath === '/page2') {
+        router.visit('/');
+      }
+    }, 30000); // 30 seconds
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(rotationInterval);
+  }, []);
 
   // Mock data for analytics dashboard
   const monthlyRevenue = [

@@ -117,26 +117,46 @@ export default function Welcome() {
         status: project.status
     }));
 
-    // Real-time data updates every 30 seconds
+    // Auto page rotation and real-time data updates every 30 seconds
     useEffect(() => {
-        const interval = setInterval(() => {
-            setIsUpdating(true);
-            
-            // Reload only the current page data without full page refresh
-            router.reload({ 
-                only: ['projects', 'project_count', 'ongoing_projects_count', 'project_status'],
-                onSuccess: () => {
-                    setIsUpdating(false);
-                    setLastUpdated(new Date());
-                },
-                onError: () => {
-                    setIsUpdating(false);
-                }
-            });
+        let rotationInterval: NodeJS.Timeout;
+        let dataUpdateInterval: NodeJS.Timeout;
+
+        // Page rotation every 30 seconds
+        rotationInterval = setInterval(() => {
+            const currentPath = window.location.pathname;
+            if (currentPath === '/') {
+                router.visit('/page2');
+            } else if (currentPath === '/page2') {
+                router.visit('/');
+            }
         }, 30000); // 30 seconds
 
-        // Cleanup interval on component unmount
-        return () => clearInterval(interval);
+        // Data updates every 30 seconds (only for the welcome page)
+        dataUpdateInterval = setInterval(() => {
+            const currentPath = window.location.pathname;
+            if (currentPath === '/') {
+                setIsUpdating(true);
+                
+                // Reload only the current page data without full page refresh
+                router.reload({ 
+                    only: ['projects', 'project_count', 'ongoing_projects_count', 'project_status'],
+                    onSuccess: () => {
+                        setIsUpdating(false);
+                        setLastUpdated(new Date());
+                    },
+                    onError: () => {
+                        setIsUpdating(false);
+                    }
+                });
+            }
+        }, 30000); // 30 seconds
+
+        // Cleanup intervals on component unmount
+        return () => {
+            clearInterval(rotationInterval);
+            clearInterval(dataUpdateInterval);
+        };
     }, []);
 
     return (
