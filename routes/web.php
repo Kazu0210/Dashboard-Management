@@ -9,34 +9,28 @@ use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\ProjectMonitoringController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\GuestController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SupplyExpenseController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
+use App\Http\Controllers\FinancialSummaryController;
+use App\Http\Controllers\PayrollsController;
+
+// Route for Guest Users
+Route::get('/', [GuestController::class, 'index'])->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
-
-    // // Actual Collection Tracker page
-    // Route::get('collections', function () {
-    //     return Inertia::render('Projects/ActualCollection');
-    // })->name('collections.index');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
-// Project monitoring API endpoints (authenticated)
-// Route::middleware(['auth', 'verified'])->group(function () {
-//     Route::get('projects', [ProjectMonitoringController::class, 'index'])->name('projects.index');
-//     Route::post('projects', [ProjectMonitoringController::class, 'store'])->name('projects.store');
-// });
-
-
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+    Route::get('admin/employees/export', [EmployeeController::class, 'export'])->name('employees.export');
+    
+});
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('dole-cases', [DoleCaseController::class, 'index'])->name('dole-cases.index');
@@ -55,6 +49,9 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::put('employees/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
     Route::delete('employees/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
     Route::get('employees/{employee}', [EmployeeController::class, 'show'])->name('employees.show');
+    Route::post('employees/import', [EmployeeController::class, 'import'])->name('employees.import');
+    
+    Route::get('employees/template/download', [EmployeeController::class, 'downloadTemplate'])->name('employees.template.download');
 
     // Contracts
     Route::get('contracts', [ContractController::class, 'index'])->name('contracts.index');
@@ -69,6 +66,9 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('supply-expenses', [SupplyExpenseController::class, 'index'])->name('supply-expenses.index');
     Route::get('supply-expenses/create', [SupplyExpenseController::class, 'create'])->name('supply-expenses.create');
     Route::post('supply-expenses', [SupplyExpenseController::class, 'store'])->name('supply-expenses.store');
+    Route::get('supply-expenses/export', [SupplyExpenseController::class, 'export'])->name('supply-expenses.export');
+    Route::get('supply-expenses/template/download', [SupplyExpenseController::class, 'downloadTemplate'])->name('supply-expenses.template.download');
+    Route::post('supply-expenses/import', [SupplyExpenseController::class, 'import'])->name('supply-expenses.import');
     Route::get('supply-expenses/{id}', [SupplyExpenseController::class, 'show'])->name('supply-expenses.show');
     Route::get('supply-expenses/{id}/edit', [SupplyExpenseController::class, 'edit'])->name('supply-expenses.edit');
     Route::put('supply-expenses/{id}', [SupplyExpenseController::class, 'update'])->name('supply-expenses.update');
@@ -116,8 +116,29 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('projects', [ProjectController::class, 'index'])->name('projects.index');
     Route::get('projects/create', [ProjectController::class, 'create'])->name('projects.create');
     Route::post('projects/create', [ProjectController::class, 'store'])->name('projects.store');
+    Route::get('projects/{id}', [ProjectController::class, 'show'])->name('projects.show');
     Route::get('projects/{id}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
     Route::put('projects/{id}', [ProjectController::class, 'update'])->name('projects.update');
     Route::delete('projects/{id}', [ProjectController::class, 'destroy'])->name('projects.destroy');
-});
 
+    // Import projects from Excel
+    Route::post('projects/import', [ProjectController::class, 'import'])->name('projects.import');
+    Route::get('projects/template/download', [ProjectController::class, 'downloadTemplate'])->name('projects.template.download');
+    Route::get('projects/export', [ProjectController::class, 'export'])->name('projects.export');
+
+    // Financial Summary
+    Route::get('financial-summary', [FinancialSummaryController::class, 'index'])->name('financial.summary');
+
+    // Payroll
+    Route::get('payrolls', [PayrollsController::class, 'index'])->name('payrolls.index');
+    Route::get('payrolls/create', [PayrollsController::class, 'create'])->name('payrolls.create');
+    Route::post('payrolls/store', [PayrollsController::class, 'store'])->name('payrolls.store');
+    Route::post('payrolls/import', [PayrollsController::class, 'import'])->name('payrolls.import');
+    Route::get('payrolls/view', [PayrollsController::class, 'view'])->name('payrolls.view');
+    Route::get('payrolls/export', [PayrollsController::class, 'export'])->name('payrolls.export');
+    Route::get('payrolls/template/download', [PayrollsController::class, 'downloadTemplate'])->name('payrolls.template.download');
+    Route::get('payrolls/{id}', [PayrollsController::class, 'show'])->name('payrolls.show');
+    Route::get('payrolls/{id}/edit', [PayrollsController::class, 'edit'])->name('payrolls.edit');
+    Route::put('payrolls/{id}', [PayrollsController::class, 'update'])->name('payrolls.update');
+    Route::delete('payrolls/{id}', [PayrollsController::class, 'destroy'])->name('payrolls.destroy');
+});

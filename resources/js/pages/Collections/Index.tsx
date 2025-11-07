@@ -1,5 +1,4 @@
 import AppLayout from '@/layouts/app-layout';
-
 import { Link, usePage } from '@inertiajs/react';
 
 const breadcrumbs = [
@@ -25,7 +24,6 @@ const CollectionIndex = () => {
       body: new URLSearchParams({ _method: 'DELETE' }).toString(),
     }).then((res) => {
       if (res.ok) {
-        // reload the page to refresh the list
         window.location.reload();
       } else {
         alert('Failed to delete the collection.');
@@ -33,13 +31,35 @@ const CollectionIndex = () => {
     }).catch(() => alert('Failed to delete the collection.'));
   }
 
+  async function exportCollection(id: number): Promise<void> {
+    try {
+      const response = await fetch(`/api/collections/${id}/export`);
+      if (!response.ok) throw new Error('Export failed');
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `collection-${id}-export.csv`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Export failed:', error);
+      alert('Failed to export data');
+    }
+  }
+
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <div className="space-y-6 p-4 bg-gray-50 min-h-screen">
+        
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <h2 className="text-3xl font-bold text-gray-900">Collections</h2>
-            <p className="text-sm text-gray-600 mt-1">Manage and review collection records. Use the controls to add collections.</p>
+            <p className="text-sm text-gray-600 mt-1">
+              Manage and review collection records. Use the controls to add collections.
+            </p>
           </div>
 
           <div className="flex items-center gap-3 w-full md:w-auto">
@@ -53,37 +73,71 @@ const CollectionIndex = () => {
         </div>
 
         <div className="bg-white rounded-lg shadow p-4">
+
           <div className="overflow-x-auto">
             <table className="min-w-full text-left">
               <thead>
                 <tr className="text-sm text-gray-700">
                   <th className="py-2 px-3">Project</th>
-                  <th className="py-2 px-3">Collector</th>
-                  <th className="py-2 px-3">Amount</th>
-                  <th className="py-2 px-3">Date</th>
-                  <th className="py-2 px-3">Notes</th>
+                  <th className="py-2 px-3">Billing Period</th>
+                  <th className="py-2 px-3">Billed Amount</th>
+                  <th className="py-2 px-3">Collected</th>
+                  <th className="py-2 px-3">Balance</th>
+                  <th className="py-2 px-3">Status</th>
                   <th className="py-2 px-3">Actions</th>
                 </tr>
               </thead>
+
               <tbody>
                 {collections.length === 0 ? (
                   <tr>
-                    <td className="py-4 px-3 text-sm text-gray-600" colSpan={6}>
+                    <td className="py-4 px-3 text-sm text-gray-600" colSpan={7}>
                       No collections to display.
                     </td>
                   </tr>
                 ) : (
                   collections.map((c: any) => (
                     <tr key={c.id} className="border-t">
-                      <td className="py-3 px-3 text-sm text-gray-700">{c.project ? c.project.name : c.project_id}</td>
-                      <td className="py-3 px-3 text-sm text-gray-700">{c.collector}</td>
-                      <td className="py-3 px-3 text-sm text-gray-700">{c.amount}</td>
-                      <td className="py-3 px-3 text-sm text-gray-700">{c.date ? (new Date(c.date)).toLocaleDateString() : ''}</td>
-                      <td className="py-3 px-3 text-sm text-gray-600">{c.notes ?? ''}</td>
+                      <td className="py-3 px-3 text-sm text-gray-700">
+                        {c.project?.name ?? c.project_id}
+                      </td>
+                      <td className="py-3 px-3 text-sm text-gray-700">{c.billing_period}</td>
+                      <td className="py-3 px-3 text-sm text-gray-700">{c.billed_amount}</td>
+                      <td className="py-3 px-3 text-sm text-gray-700">{c.collected_amount}</td>
+                      <td className="py-3 px-3 text-sm text-gray-700">{c.balance}</td>
+                      <td className="py-3 px-3 text-sm text-gray-700">
+                        <span className={`font-medium ${
+                          c.status === 'Paid'
+                            ? 'text-green-600'
+                            : c.status === 'Partial'
+                              ? 'text-yellow-600'
+                              : 'text-red-600'
+                        }`}>
+                          {c.status}
+                        </span>
+                      </td>
                       <td className="py-3 px-3 text-sm text-gray-700">
                         <div className="flex items-center gap-2">
-                          <Link href={`/admin/collections/${c.id}/edit`} className="text-sm text-blue-600 hover:underline">Edit</Link>
-                          <button type="button" onClick={() => deleteCollection(c.id)} className="text-sm text-red-600 hover:underline">Delete</button>
+                          <Link
+                            href={`/admin/collections/${c.id}/edit`}
+                            className="text-sm text-blue-600 hover:underline"
+                          >
+                            Edit
+                          </Link>
+                          <button
+                            type="button"
+                            onClick={() => exportCollection(c.id)}
+                            className="text-sm text-gray-600 hover:underline"
+                          >
+                            Export
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => deleteCollection(c.id)}
+                            className="text-sm text-red-600 hover:underline"
+                          >
+                            Delete
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -92,6 +146,7 @@ const CollectionIndex = () => {
               </tbody>
             </table>
           </div>
+
         </div>
       </div>
     </AppLayout>

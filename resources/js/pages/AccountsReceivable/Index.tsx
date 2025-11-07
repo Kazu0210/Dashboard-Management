@@ -9,6 +9,25 @@ const breadcrumbs = [
 const AccountsReceivablePage = () => {
     const { records = [] } = usePage().props as { records?: any[] };
 
+    async function exportCollection(id: number) {
+        try {
+            const response = await fetch(`/api/accounts-receivable/${id}/export`);
+            if (!response.ok) throw new Error('Export failed');
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `accounts-receivable-${id}-export.csv`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (error) {
+            console.error('Export failed:', error);
+            alert('Failed to export data');
+        }
+    }
+
     function deleteRecord(id: number) {
         if (!confirm('Delete this record? This action cannot be undone.')) return;
 
@@ -84,6 +103,7 @@ const AccountsReceivablePage = () => {
                                                 <div className="flex items-center gap-2">
                                                     <Link href={`/admin/accounts-receivable/${rec.id}`} className="text-sm text-blue-600 hover:underline">View</Link>
                                                     <Link href={`/admin/accounts-receivable/${rec.id}/edit`} className="text-sm text-blue-600 hover:underline">Edit</Link>
+                                                    <button type="button" onClick={() => exportCollection(rec.id)} className="text-sm text-gray-600 hover:underline">Export</button>
                                                     <button type="button" onClick={() => deleteRecord(rec.id)} className="text-sm text-red-600 hover:underline">Delete</button>
                                                 </div>
                                             </td>

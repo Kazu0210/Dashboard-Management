@@ -6,9 +6,52 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\SupplyExpense;
 use Illuminate\Support\Facades\Auth;
+use App\Exports\SupplyExpensesTemplateExport;
+use App\Exports\SupplyExpensesExport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\SupplyExpensesImport;
+use Illuminate\Support\Facades\Log;
 
 class SupplyExpenseController extends Controller
 {
+    /**
+     * Export all supply expenses to Excel
+     */
+    public function export()
+    {
+        $date = now()->format('Y-m-d');
+        $fileName = "SupplyExpenses_Export_{$date}.xlsx";
+        return Excel::download(new SupplyExpensesExport, $fileName);
+    }
+
+    /**
+     * Import supply expenses from Excel file
+     */
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls',
+        ]);
+
+        try {
+            Excel::import(new SupplyExpensesImport, $request->file('file'));
+        } catch (\Exception $e) {
+            Log::error('SupplyExpense import failed', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return response()->json(['message' => 'Import failed', 'error' => $e->getMessage()], 500);
+        }
+
+        return response()->json(['message' => 'Supply expenses imported successfully.'], 200);
+    }
+    /**
+     * Download Excel template for supply expenses import
+     */
+    public function downloadTemplate()
+    {
+        return Excel::download(new SupplyExpensesTemplateExport, 'SupplyExpenses_Import_Template.xlsx');
+    }
     /**
      * Display a listing of the resource.
      */

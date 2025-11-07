@@ -1,205 +1,275 @@
 import AppLayout from '@/layouts/app-layout';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Head, usePage } from '@inertiajs/react';
 import { router } from '@inertiajs/react';
+import { motion } from 'framer-motion';
 import { useState } from 'react';
 
+type ProjectStatus = {
+    id: number;
+    name: string;
+};
+
 const breadcrumbs = [
-  { title: "Home", href: "/" },
-  { title: "Projects", href: "/admin/projects" },
-  { title: "Create Project", href: "#" },
+    { title: 'Home', href: '/' },
+    { title: 'Projects', href: '/admin/projects' },
+    { title: 'Create Project', href: '#' },
 ];
 
-const CreateProject = () => {
-  const [form, setForm] = useState({
-    name: '',
+const steps = [
+    { label: 'Basic Info', fields: ['project_number', 'project_name', 'year', 'status'] },
+    { label: 'Rates & Pricing', fields: ['fte', 'average_rate_per_employee', 'bid_price_one_year', 'half_year_bid_price'] },
+    { label: 'Monthly & Taxes', fields: ['monthly_12', 'withholding_tax', 'vat', 'agency_fee'] },
+    { label: 'Resources', fields: ['supplies', 'equipment', 'salary_expenses_year', 'thirteenth_month_estimated'] },
+    { label: 'Contributions', fields: ['silp_estimated', 'sss_contribution', 'philhealth_contribution', 'pagibig_contribution', 'ecc'] },
+    { label: 'Costs & Income', fields: ['actual_supplies_cost_year', 'actual_equipment_cost_year', 'profit_margin_10_percent', 'total_supplies_equipment', 'vat_savings', 'cost_of_sales', 'total_service_income', 'admin_cost_8000', 'total'] },
+];
+
+const fieldLabels: Record<string, string> = {
+    project_number: 'Project Number',
+    project_name: 'Project Name',
+    year: 'Year',
+    fte: 'FTE (Full Time Equivalent)',
+    average_rate_per_employee: 'Average Rate per Employee (₱)',
+    bid_price_one_year: 'Bid Price - One Year (₱)',
+    half_year_bid_price: 'Half Year Bid Price (₱)',
+    status: 'Status',
+    monthly_12: 'Monthly (12) (₱)',
+    withholding_tax: 'Withholding Tax (₱)',
+    vat: 'VAT (₱)',
+    agency_fee: 'Agency Fee (₱)',
+    supplies: 'Supplies (₱)',
+    equipment: 'Equipment (₱)',
+    salary_expenses_year: 'Salary Expenses (Year) (₱)',
+    thirteenth_month_estimated: '13th Month Estimated (₱)',
+    silp_estimated: 'SILP Estimated (₱)',
+    sss_contribution: 'SSS Contribution (₱)',
+    philhealth_contribution: 'Philhealth Contribution (₱)',
+    pagibig_contribution: 'Pagibig Contribution (₱)',
+    ecc: 'ECC (₱)',
+    actual_supplies_cost_year: 'Actual Supplies Cost (Year) (₱)',
+    actual_supplies_cost_jan_june: 'Actual Supplies Cost (Jan-June) (₱)',
+    actual_equipment_cost_year: 'Actual Equipment Cost (Year) (₱)',
+    profit_margin_10_percent: 'Profit Margin (10%) (₱)',
+    total_supplies_equipment: 'Total Supplies and Equipment (₱)',
+    vat_savings: 'VAT Savings (₱)',
+    cost_of_sales: 'Cost of Sales (₱)',
+    total_service_income: 'Total Service Income (₱)',
+    admin_cost_8000: 'Admin Cost (8000) (₱)',
+    total: 'Total (₱)',
+};
+
+const initialForm = {
+    project_number: '',
+    project_name: '',
+    year: new Date().getFullYear(),
+    fte: '',
+    average_rate_per_employee: '',
+    bid_price_one_year: '',
+    half_year_bid_price: '',
     status: 'ongoing',
-    startDate: '',
-    endDate: '',
-    manager: '',
-    budget: '',
-  });
+    monthly_12: '',
+    withholding_tax: '',
+    vat: '',
+    agency_fee: '',
+    supplies: '',
+    equipment: '',
+    salary_expenses_year: '',
+    thirteenth_month_estimated: '',
+    silp_estimated: '',
+    sss_contribution: '',
+    philhealth_contribution: '',
+    pagibig_contribution: '',
+    ecc: '',
+    actual_supplies_cost_year: '',
+    actual_supplies_cost_jan_june: '',
+    actual_equipment_cost_year: '',
+    profit_margin_10_percent: '',
+    total_supplies_equipment: '',
+    vat_savings: '',
+    cost_of_sales: '',
+    total_service_income: '',
+    admin_cost_8000: '',
+    total: '',
+};
 
-  const [processing, setProcessing] = useState(false);
-  const [errors, setErrors] = useState<Record<string, any>>({});
+const CreateProject = () => {
+    const { project_statuses } = usePage<{project_statuses: ProjectStatus[]}>().props;
+    const [form, setForm] = useState(initialForm);
+    const [processing, setProcessing] = useState(false);
+    const [errors, setErrors] = useState<Record<string, any>>({});
+    const [step, setStep] = useState(0);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setProcessing(true);
-    setErrors({});
-    router.post('/admin/projects/create', form, {
-      onError: (err) => {
-        setErrors(err);
-        setProcessing(false);
-      },
-      onFinish: () => setProcessing(false),
-    });
-  };
+    const handleChange = (field: string, value: any) => {
+        setForm(f => ({ ...f, [field]: value }));
+    };
 
-  return (
-    <AppLayout breadcrumbs={breadcrumbs}>
-      <div className="min-h-screen bg-background p-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Left Panel */}
-          <div className="bg-card shadow rounded-xl p-6 md:col-span-1 space-y-6">
-            <div>
-              <h2 className="text-2xl font-bold text-primary mb-1">Create Project</h2>
-              <p className="text-gray-600 text-sm">
-                Fill in the details to register a new project in the system.
-              </p>
-            </div>
+    const handleNext = () => {
+        console.log('Current step:', step, 'Total steps:', steps.length, 'Next step will be:', Math.min(step + 1, steps.length - 1));
+        setStep(s => Math.min(s + 1, steps.length - 1));
+    };
+    const handleBack = () => {
+        setStep(s => Math.max(s - 1, 0));
+    };
 
-            <div className="border-t pt-4 space-y-2">
-              <p className="font-medium text-gray-700 text-sm">Quick Tips:</p>
-              <ul className="text-gray-600 text-sm list-disc list-inside space-y-1">
-                <li>Use a clear and short project name.</li>
-                <li>Make sure to set accurate start and end dates.</li>
-                <li>Assign a valid project manager.</li>
-              </ul>
-            </div>
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setProcessing(true);
+        setErrors({});
+        router.post('/admin/projects/create', form, {
+            onError: (err) => {
+                setErrors(err);
+                setProcessing(false);
+            },
+            onFinish: () => setProcessing(false),
+        });
+    };
 
-            <div className="pt-4">
-              <a
-                href="/admin/projects"
-                className="w-full inline-block text-center px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 transition"
-              >
-                Back to Projects
-              </a>
-            </div>
-          </div>
+    return (
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title="Create Project" />
 
-          {/* Right Panel */}
-          <div className="md:col-span-2 bg-card shadow rounded-xl p-8">
-            <form onSubmit={handleSubmit} className="space-y-8">
-              {/* Step 1 */}
-              <div>
-                <h3 className="text-lg font-semibold text-primary mb-4 border-b pb-2">
-                  Project Information
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">
-                      Project Name
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.name}
-                      onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">
-                      Status
-                    </label>
-                    <select
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.status}
-                      onChange={e => setForm(f => ({ ...f, status: e.target.value }))}
-                      required
-                    >
-                      <option value="ongoing">Ongoing</option>
-                      <option value="completed">Completed</option>
-                      <option value="on-hold">On Hold</option>
-                    </select>
-                  </div>
+            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 p-6">
+                {/* Header */}
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+                    <div>
+                        <h2 className="text-3xl font-semibold text-gray-900">Create Project</h2>
+                        <p className="text-gray-500 text-sm mt-1">
+                            Enter project information and financial details.
+                        </p>
+                    </div>
                 </div>
-              </div>
 
-              {/* Step 2 */}
-              <div>
-                <h3 className="text-lg font-semibold text-primary mb-4 border-b pb-2">
-                  Timeline Details
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">
-                      Start Date
-                    </label>
-                    <input
-                      type="date"
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.startDate}
-                      onChange={e => setForm(f => ({ ...f, startDate: e.target.value }))}
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">
-                      End Date
-                    </label>
-                    <input
-                      type="date"
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.endDate}
-                      onChange={e => setForm(f => ({ ...f, endDate: e.target.value }))}
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Step 3 */}
-              <div>
-                <h3 className="text-lg font-semibold text-primary mb-4 border-b pb-2">
-                  Management & Budget
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">
-                      Manager
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.manager}
-                      onChange={e => setForm(f => ({ ...f, manager: e.target.value }))}
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">
-                      Budget (₱)
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-primary"
-                      value={form.budget}
-                      onChange={e => setForm(f => ({ ...f, budget: e.target.value }))}
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Buttons */}
-              <div className="flex justify-end gap-3 pt-4 border-t">
-                <a
-                  href="/admin/projects"
-                  className="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
+                {/* Stepper */}
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="w-full mb-10"
                 >
-                  Cancel
-                </a>
-                <button
-                  type="submit"
-                  disabled={processing}
-                  className={`px-5 py-2 rounded bg-primary text-primary-foreground shadow hover:bg-primary/90 transition ${
-                    processing ? 'opacity-70 cursor-not-allowed' : ''
-                  }`}
+                    <Card className="border-none shadow-md bg-white/80 backdrop-blur rounded-2xl">
+                        <CardContent className="p-6">
+                            <ol className="flex items-center w-full text-sm font-medium text-gray-500">
+                                {steps.map((s, idx) => (
+                                    <li key={s.label} className={`flex-1 flex items-center ${idx < step ? 'text-blue-600' : idx === step ? 'text-blue-900' : ''}`}>
+                                        <span className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${idx <= step ? 'border-blue-600 bg-blue-100' : 'border-gray-300 bg-white'} mr-2`}>{idx + 1}</span>
+                                        {s.label}
+                                        {idx < steps.length - 1 && <span className="flex-1 h-0.5 bg-gray-300 mx-2" />}
+                                    </li>
+                                ))}
+                            </ol>
+                        </CardContent>
+                    </Card>
+                </motion.div>
+
+                {/* Form Card */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
                 >
-                  {processing ? 'Creating...' : 'Create Project'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </AppLayout>
-  );
+                    <Card className="border-none shadow-md bg-white/80 backdrop-blur rounded-2xl overflow-hidden">
+                        <form onSubmit={handleSubmit}>
+                            <CardHeader className="pb-4">
+                                <CardTitle className="text-xl font-semibold text-gray-900">
+                                    {steps[step].label}
+                                </CardTitle>
+                                <CardDescription className="text-gray-500">
+                                    Step {step + 1} of {steps.length}
+                                </CardDescription>
+                            </CardHeader>
+
+                            <CardContent className="space-y-6">
+                                <div className="mb-6 border-b border-gray-200">
+                                    <nav className="-mb-px flex space-x-8">
+                                        {steps.map((s, idx) => (
+                                            <button
+                                                type="button"
+                                                key={s.label}
+                                                className={`whitespace-nowrap pb-2 px-1 border-b-2 font-medium text-sm transition-all ${step === idx ? 'border-blue-600 text-blue-700' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
+                                                onClick={() => setStep(idx)}
+                                            >
+                                                {s.label}
+                                            </button>
+                                        ))}
+                                    </nav>
+                                </div>
+
+                                {/* Fields for current step/tab */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {steps[step].fields.map(field => (
+                                        <div key={field} className={field === 'status' ? 'md:col-span-1' : ''}>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">{fieldLabels[field]}</label>
+                                            {field === 'status' ? (
+                                                <select
+                                                    className="w-full rounded-lg border-2 border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400 px-4 py-3 transition-all shadow-sm"
+                                                    value={(form as any)[field]}
+                                                    onChange={e => handleChange(field, e.target.value)}
+                                                    required
+                                                >
+                                                    {project_statuses?.map((status: ProjectStatus) => (
+                                                        <option key={status.id} value={status.name}>
+                                                            {status.name.charAt(0).toUpperCase() + status.name.slice(1)}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            ) : (
+                                                <input
+                                                    type={field === 'year' || ['fte', 'average_rate_per_employee', 'bid_price_one_year', 'half_year_bid_price', 'monthly_12', 'withholding_tax', 'vat', 'agency_fee', 'supplies', 'equipment', 'salary_expenses_year', 'thirteenth_month_estimated', 'silp_estimated', 'sss_contribution', 'philhealth_contribution', 'pagibig_contribution', 'ecc', 'actual_supplies_cost_year', 'actual_supplies_cost_jan_june', 'actual_equipment_cost_year', 'profit_margin_10_percent', 'total_supplies_equipment', 'vat_savings', 'cost_of_sales', 'total_service_income', 'admin_cost_8000', 'total'].includes(field) ? 'number' : 'text'}
+                                                    step={field === 'fte' || field.includes('rate') || field.includes('margin') ? '0.01' : undefined}
+                                                    className="w-full rounded-lg border-2 border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400 px-4 py-3 transition-all shadow-sm"
+                                                    value={(form as any)[field]}
+                                                    onChange={e => handleChange(field, field === 'year' ? Number(e.target.value) : e.target.value)}
+                                                    required={field === 'project_number' || field === 'project_name' || field === 'year'}
+                                                    placeholder={field === 'project_number' ? 'e.g., PROJ-2025-001' : undefined}
+                                                />
+                                            )}
+                                            {errors[field] && (
+                                                <p className="text-red-500 text-xs mt-1">{errors[field]}</p>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Navigation Buttons */}
+                                <div className="flex justify-between pt-8 border-t border-gray-200">
+                                    <button
+                                        type="button"
+                                        onClick={handleBack}
+                                        disabled={step === 0}
+                                        className={`px-6 py-3 rounded-xl bg-gray-200 text-gray-700 hover:bg-gray-300 text-sm font-medium transition-all shadow-sm ${step === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    >
+                                        Back
+                                    </button>
+                                    {step < steps.length - 1 ? (
+                                        <button
+                                            type="button"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                console.log('Next button clicked, current step:', step);
+                                                handleNext();
+                                            }}
+                                            className="px-8 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium shadow-md transition-all"
+                                        >
+                                            Next (Step {step + 1} of {steps.length})
+                                        </button>
+                                    ) : (
+                                        <button
+                                            type="submit"
+                                            disabled={processing}
+                                            className="px-8 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium shadow-md transition-all disabled:opacity-50"
+                                        >
+                                            {processing ? 'Creating...' : 'Create Project'}
+                                        </button>
+                                    )}
+                                </div>
+                            </CardContent>
+                        </form>
+                    </Card>
+                </motion.div>
+            </div>
+        </AppLayout>
+    );
 };
 
 export default CreateProject;

@@ -13,10 +13,27 @@ class Employee extends Model
         "last_name",
         "email",
         "phone",
-        "position",
-        "hired_at",
-        "salary",
         "employment_type_id",
-        "status",
+        "status_id",
+        "monthly_salary",
+        "attendance_rate",
+        "date_hired",
+        "date_resigned",
+        "is_active",
     ];
+    /**
+     * Get the employment type for the employee.
+     */
+    public function employmentType()
+    {
+        return $this->belongsTo(\App\Models\EmploymentType::class, 'employment_type_id');
+    }
+
+    /**
+     * Get the status for the employee.
+     */
+    public function status()
+    {
+        return $this->belongsTo(\App\Models\ProjectStatus::class, 'status_id');
+    }
 }
