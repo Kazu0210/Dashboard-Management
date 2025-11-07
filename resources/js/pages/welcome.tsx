@@ -356,7 +356,7 @@ export default function Welcome() {
             </div>
 
             {/* Charts Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 sm:gap-4 lg:gap-6 flex-shrink-0 h-40 sm:h-60 lg:h-80">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 sm:gap-4 lg:gap-6 flex-shrink-0 h-60 sm:h-80 lg:h-96">
                 {/* Ongoing Projects Supplies & Equipment Chart */}
                 <ChartBarInteractive 
                     data={suppliesEquipmentData}

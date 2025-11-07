@@ -65,7 +65,7 @@ export function ChartBarInteractive({
         </div>
       </CardHeader>
       <CardContent className="px-2 sm:p-6 flex-1">
-        <div className="h-[250px] w-full">
+        <div className="h-full w-full min-h-[200px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={ongoingProjects}
