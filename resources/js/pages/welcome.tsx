@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { ChartBarLabelCustom } from '@/components/ChartBarLabelCustom';
 import { Head, Link, usePage } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
+import { router } from '@inertiajs/react';
 
 import {
     ResponsiveContainer,
@@ -27,6 +29,10 @@ export default function Welcome() {
     const projects: any[] = Array.isArray(projectsRaw) ? projectsRaw : [];
     const totalProjectCount = Number(project_count) || 0;
     const ongoingProjectsCount = Number(ongoing_projects_count) || 0;
+
+    // State for real-time updates
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [lastUpdated, setLastUpdated] = useState(new Date());
 
     // Key metrics mock
     const metrics = [
@@ -71,8 +77,38 @@ export default function Welcome() {
             desktop: Number(project.fte) || 0 // FTE value
         }));
 
+    // Real-time data updates every 30 seconds
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setIsUpdating(true);
+            
+            // Reload only the current page data without full page refresh
+            router.reload({ 
+                only: ['projects', 'project_count', 'ongoing_projects_count', 'project_status'],
+                onSuccess: () => {
+                    setIsUpdating(false);
+                    setLastUpdated(new Date());
+                },
+                onError: () => {
+                    setIsUpdating(false);
+                }
+            });
+        }, 30000); // 30 seconds
+
+        // Cleanup interval on component unmount
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <div className="min-h-screen w-full bg-gray-50 p-6 md:p-10">
+            {/* Real-time Status Indicator */}
+            <div className="flex justify-end mb-4">
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <div className={`w-2 h-2 rounded-full ${isUpdating ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`}></div>
+                    {isUpdating ? 'Updating data...' : `Last updated: ${lastUpdated.toLocaleTimeString()}`}
+                </div>
+            </div>
+
             {/* FTE Allocation Chart and Project Status Section */}
             <div className="flex gap-6 mb-8">
                 <div className="w-1/2">
