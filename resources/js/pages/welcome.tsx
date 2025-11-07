@@ -78,8 +78,7 @@ export default function Welcome() {
                     title="FTE Allocation per Project"
                     description="Current Active Projects - Q4 2024"
                     footerTrend={{
-                        text: "Resource utilization up by",
-                        percentage: "15.2%",
+                        text: "Resource utilization trending",
                         isUp: true
                     }}
                     footerDescription="Showing Full-Time Equivalent staff allocation across active projects"
