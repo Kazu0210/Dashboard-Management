@@ -29,4 +29,9 @@ class GuestController extends Controller
             'ongoing_projects_count' => $ongoing_projects_count
         ]);
     }
+
+    public function index2()
+    {
+        return Inertia::render('dashboard2');
+    }
 }
