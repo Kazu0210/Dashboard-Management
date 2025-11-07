@@ -72,7 +72,7 @@ export default function Welcome() {
     return (
         <div className="min-h-screen w-full bg-gray-50 p-6 md:p-10">
             {/* FTE Allocation Chart Section */}
-            <div className="mb-8">
+            <div className="mb-8 w-1/2">
                 <ChartBarLabelCustom 
                     chartData={chartData}
                     title="FTE Allocation per Project"
