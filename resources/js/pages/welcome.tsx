@@ -194,11 +194,11 @@ export default function Welcome() {
                                             >
                                                 <td className="py-3 px-4 font-medium text-white flex items-center gap-2">
                                                     <div className={`w-3 h-3 rounded-full ${
-                                                        stat.status.toLowerCase().includes('win')
+                                                        stat.status.toLowerCase().includes('ongoing')
                                                             ? 'bg-green-400'
-                                                            : stat.status.toLowerCase().includes('lost')
+                                                            : stat.status.toLowerCase().includes('loss')
                                                             ? 'bg-red-400'
-                                                            : stat.status.toLowerCase().includes('ongoing')
+                                                            : stat.status.toLowerCase().includes('eoc')
                                                             ? 'bg-blue-400'
                                                             : 'bg-yellow-400'
                                                     }`}></div>
