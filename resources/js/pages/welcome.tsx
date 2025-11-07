@@ -155,41 +155,70 @@ export default function Welcome() {
                     />
                 </div>
                 <div className="w-1/2">
-                    <Card>
-                        <CardHeader>
-                            <h3 className="text-lg font-semibold">Project Status Statistics</h3>
-                            <p className="text-sm text-gray-600">Bid performance by project status</p>
+                    <Card className="bg-[#0f172a] border border-[#1e293b] shadow-xl rounded-2xl overflow-hidden">
+                        <CardHeader className="pb-2 border-b border-[#1e293b]">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <h3 className="text-lg font-semibold text-white tracking-wide">
+                                        Project Status Statistics
+                                    </h3>
+                                    <p className="text-sm text-gray-400">
+                                        Bid performance by project status
+                                    </p>
+                                    <div className="mt-2 text-xs text-gray-400">
+                                        <span className="text-[#38bdf8] font-semibold text-sm">{statusStatsWithPercentage.length}</span> status categories
+                                    </div>
+                                </div>
+                                <div className="px-3 py-1 text-xs font-medium text-[#38bdf8] bg-[#1e293b] rounded-md">
+                                    Live Data
+                                </div>
+                            </div>
                         </CardHeader>
-                        <CardContent>
-                            <div className="overflow-x-auto">
+
+                        <CardContent className="p-6">
+                            <div className="w-full h-[360px] overflow-auto">
                                 <table className="w-full border-collapse">
                                     <thead>
-                                        <tr className="border-b border-gray-200">
-                                            <th className="text-left py-3 px-4 font-semibold text-gray-700">Status</th>
-                                            <th className="text-right py-3 px-4 font-semibold text-gray-700">Bid Price</th>
-                                            <th className="text-right py-3 px-4 font-semibold text-gray-700">Bid Count</th>
-                                            <th className="text-right py-3 px-4 font-semibold text-gray-700">% Share</th>
+                                        <tr className="border-b border-[#1e293b]">
+                                            <th className="text-left py-3 px-4 font-semibold text-gray-300 text-sm">Status</th>
+                                            <th className="text-right py-3 px-4 font-semibold text-gray-300 text-sm">Bid Price</th>
+                                            <th className="text-right py-3 px-4 font-semibold text-gray-300 text-sm">Bid Count</th>
+                                            <th className="text-right py-3 px-4 font-semibold text-gray-300 text-sm">% Share</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {statusStatsWithPercentage.map((stat, index) => (
-                                            <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
-                                                <td className="py-3 px-4 font-medium text-gray-800">{stat.status}</td>
-                                                <td className="py-3 px-4 text-right font-mono">
+                                            <tr 
+                                                key={index} 
+                                                className="border-b border-[#1e293b]/50 hover:bg-[#1e293b]/30 transition-all duration-200"
+                                            >
+                                                <td className="py-3 px-4 font-medium text-white flex items-center gap-2">
+                                                    <div className={`w-3 h-3 rounded-full ${
+                                                        stat.status.toLowerCase().includes('win')
+                                                            ? 'bg-green-400'
+                                                            : stat.status.toLowerCase().includes('lost')
+                                                            ? 'bg-red-400'
+                                                            : stat.status.toLowerCase().includes('ongoing')
+                                                            ? 'bg-blue-400'
+                                                            : 'bg-yellow-400'
+                                                    }`}></div>
+                                                    {stat.status}
+                                                </td>
+                                                <td className="py-3 px-4 text-right font-mono text-gray-300">
                                                     ₱{stat.bidPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                                                 </td>
-                                                <td className="py-3 px-4 text-right font-semibold text-blue-600">
+                                                <td className="py-3 px-4 text-right font-semibold text-[#38bdf8]">
                                                     {stat.bidCount}
                                                 </td>
                                                 <td className="py-3 px-4 text-right">
                                                     <div className="flex items-center justify-end gap-2">
-                                                        <div className="flex-1 bg-gray-200 rounded-full h-2 max-w-[60px]">
+                                                        <div className="w-[60px] bg-[#0f172a] rounded-full h-2 overflow-hidden">
                                                             <div 
-                                                                className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                                                                className="h-2 rounded-full bg-gradient-to-r from-[#38bdf8] to-[#0ea5e9] transition-all duration-500"
                                                                 style={{ width: `${Math.min(stat.percentage, 100)}%` }}
                                                             ></div>
                                                         </div>
-                                                        <span className="font-semibold text-gray-700 min-w-[50px]">
+                                                        <span className="font-semibold text-gray-300 text-sm min-w-[45px]">
                                                             {stat.percentage.toFixed(1)}%
                                                         </span>
                                                     </div>
@@ -198,15 +227,15 @@ export default function Welcome() {
                                         ))}
                                     </tbody>
                                     <tfoot>
-                                        <tr className="border-t-2 border-gray-300 bg-gray-50">
-                                            <td className="py-3 px-4 font-bold text-gray-800">Total</td>
-                                            <td className="py-3 px-4 text-right font-mono font-bold">
+                                        <tr className="border-t-2 border-[#38bdf8]/30 bg-[#1e293b]/30">
+                                            <td className="py-3 px-4 font-bold text-white">Total</td>
+                                            <td className="py-3 px-4 text-right font-mono font-bold text-white">
                                                 ₱{totalBidPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                                             </td>
-                                            <td className="py-3 px-4 text-right font-bold text-blue-600">
+                                            <td className="py-3 px-4 text-right font-bold text-[#38bdf8]">
                                                 {statusStatsWithPercentage.reduce((sum, stat) => sum + stat.bidCount, 0)}
                                             </td>
-                                            <td className="py-3 px-4 text-right font-bold text-gray-700">
+                                            <td className="py-3 px-4 text-right font-bold text-white">
                                                 100.0%
                                             </td>
                                         </tr>
