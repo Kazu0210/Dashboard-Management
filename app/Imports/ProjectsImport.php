@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Concerns\WithStartRow;
 class ProjectsImport implements ToModel, WithHeadingRow, WithStartRow
 {
     /**
-     * Clean amount value by removing parentheses
+     * Clean amount value by removing parentheses and handling different number formats
      *
      * @param mixed $value
      * @return mixed
@@ -19,10 +19,36 @@ class ProjectsImport implements ToModel, WithHeadingRow, WithStartRow
     private function cleanAmount($value)
     {
         if (is_string($value)) {
-            // Remove parentheses from amounts like (101000) -> 101000
-            $cleaned = preg_replace('/^\((\d+(?:\.\d+)?)\)$/', '$1', trim($value));
-            return $cleaned;
+            $trimmed = trim($value);
+            
+            // Handle parentheses format: (101000) -> 101000 (but keep it positive)
+            if (preg_match('/^\((\d+(?:\.\d+)?)\)$/', $trimmed, $matches)) {
+                return $matches[1]; // Return as positive number
+            }
+            
+            // Handle parentheses with negative sign: -(101000) -> -101000
+            if (preg_match('/^-\((\d+(?:\.\d+)?)\)$/', $trimmed, $matches)) {
+                return '-' . $matches[1];
+            }
+            
+            // Handle regular negative numbers: -101000 -> -101000
+            if (preg_match('/^-(\d+(?:\.\d+)?)$/', $trimmed, $matches)) {
+                return '-' . $matches[1];
+            }
+            
+            // Handle positive numbers: 101000 -> 101000
+            if (preg_match('/^(\d+(?:\.\d+)?)$/', $trimmed, $matches)) {
+                return $matches[1];
+            }
+            
+            return $trimmed;
         }
+        
+        // For numeric values, check if they're negative when they should be positive
+        if (is_numeric($value)) {
+            return $value;
+        }
+        
         return $value;
     }
 
@@ -45,11 +71,18 @@ class ProjectsImport implements ToModel, WithHeadingRow, WithStartRow
         $totalSuppliesEquipmentRaw = $row['total_supplies_equipment'] ?? $row['total_supplies_and_equipment'] ?? null;
         $totalSuppliesEquipmentCleaned = $this->cleanAmount($totalSuppliesEquipmentRaw);
         
+        // Special handling: if total_supplies_equipment is negative, make it positive
+        // This handles cases where Excel accounting format shows positive but stores negative
+        if (is_numeric($totalSuppliesEquipmentCleaned) && $totalSuppliesEquipmentCleaned < 0) {
+            $totalSuppliesEquipmentCleaned = abs($totalSuppliesEquipmentCleaned);
+        }
+        
         Log::info('Total Supplies Equipment Debug:', [
             'raw_value' => $totalSuppliesEquipmentRaw,
-            'cleaned_value' => $totalSuppliesEquipmentCleaned,
+            'after_clean' => $this->cleanAmount($totalSuppliesEquipmentRaw),
+            'final_value' => $totalSuppliesEquipmentCleaned,
             'type_raw' => gettype($totalSuppliesEquipmentRaw),
-            'type_cleaned' => gettype($totalSuppliesEquipmentCleaned),
+            'type_final' => gettype($totalSuppliesEquipmentCleaned),
             'available_keys' => array_keys($row),
         ]);
 
@@ -80,7 +113,7 @@ class ProjectsImport implements ToModel, WithHeadingRow, WithStartRow
             'actual_supplies_cost_jan_june' => $this->cleanAmount($row['actual_supplies_cost_jan_june'] ?? null),
             'actual_equipment_cost_year' => $this->cleanAmount($row['actual_equipment_cost_year'] ?? null),
             'profit_margin_10_percent' => $this->cleanAmount($row['profit_margin_10_percent'] ?? null),
-            'total_supplies_equipment' => $this->cleanAmount($row['total_supplies_equipment'] ?? $row['total_supplies_and_equipment'] ?? null),
+            'total_supplies_equipment' => $totalSuppliesEquipmentCleaned,
             'vat_savings' => $this->cleanAmount($row['vat_savings'] ?? null),
             'cost_of_sales' => $this->cleanAmount($row['cost_of_sales'] ?? null),
             'total_service_income' => $this->cleanAmount($row['total_service_income'] ?? null),
