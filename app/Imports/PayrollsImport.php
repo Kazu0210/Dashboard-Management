@@ -11,6 +11,22 @@ use Maatwebsite\Excel\Concerns\WithStartRow;
 
 class PayrollsImport implements ToModel, WithHeadingRow, WithStartRow
 {
+    /**
+     * Clean amount value by removing parentheses
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    private function cleanAmount($value)
+    {
+        if (is_string($value)) {
+            // Remove parentheses from amounts like (101000) -> 101000
+            $cleaned = preg_replace('/^\((\d+(?:\.\d+)?)\)$/', '$1', trim($value));
+            return $cleaned;
+        }
+        return $value;
+    }
+
     public function model(array $row)
     {
         // Log all details of the row to laravel.log
@@ -49,10 +65,10 @@ class PayrollsImport implements ToModel, WithHeadingRow, WithStartRow
                 'employee_id' => $employeeId,
                 'pay_period_start' => $pay_period_start,
                 'pay_period_end' => $pay_period_end,
-                'basic_salary' => $row['basic_salary'] ?? 0,
-                'allowances' => $row['allowances'] ?? 0,
-                'deductions' => $row['deductions'] ?? 0,
-                'net_pay' => $row['net_pay'] ?? 0,
+                'basic_salary' => $this->cleanAmount($row['basic_salary'] ?? 0),
+                'allowances' => $this->cleanAmount($row['allowances'] ?? 0),
+                'deductions' => $this->cleanAmount($row['deductions'] ?? 0),
+                'net_pay' => $this->cleanAmount($row['net_pay'] ?? 0),
                 'status' => $row['status'] ?? 'pending',
                 'paid_at' => $paid_at,
             ]);

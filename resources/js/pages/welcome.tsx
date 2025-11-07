@@ -108,6 +108,15 @@ export default function Welcome() {
             desktop: Number(project.fte) || 0 // FTE value
         }));
 
+    // Transform projects data for the supplies & equipment chart
+    const suppliesEquipmentData = projects.map(project => ({
+        project_name: project.project_name || `Project ${project.project_number}`,
+        total_supplies_equipment: Number(project.total_supplies_equipment) || 0,
+        bid_price: Number(project.bid_price_one_year) || 0,
+        project_id: project.id,
+        status: project.status
+    }));
+
     // Real-time data updates every 30 seconds
     useEffect(() => {
         const interval = setInterval(() => {
@@ -348,8 +357,12 @@ export default function Welcome() {
 
             {/* Charts Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 sm:gap-4 lg:gap-6 flex-shrink-0 h-40 sm:h-60 lg:h-80">
-                {/* Empty Bar Chart */}
-                <ChartBarInteractive />
+                {/* Ongoing Projects Supplies & Equipment Chart */}
+                <ChartBarInteractive 
+                    data={suppliesEquipmentData}
+                    title="Ongoing Projects - Supplies & Equipment"
+                    description="Equipment costs vs bid prices for ongoing projects only"
+                />
 
                 {/* Bar Chart */}
                 <Card className="flex-1">

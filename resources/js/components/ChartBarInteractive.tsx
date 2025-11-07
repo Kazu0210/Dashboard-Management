@@ -11,15 +11,17 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-export const description = "An interactive bar chart"
+export const description = "An interactive bar chart showing ongoing project expenses"
 
 type ChartDataItem = {
-  date: string;
-  desktop: number;
-  mobile: number;
+  project_name: string;
+  total_supplies_equipment: number;
+  bid_price: number;
+  project_id?: number;
+  status?: string;
 }
 
-type ChartType = "desktop" | "mobile"
+type ChartType = "total_supplies_equipment" | "bid_price"
 
 interface ChartBarInteractiveProps {
   data?: ChartDataItem[];
@@ -28,65 +30,45 @@ interface ChartBarInteractiveProps {
 }
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "#3b82f6",
+  total_supplies_equipment: {
+    label: "Supplies & Equipment",
+    color: "#ef4444",
   },
-  mobile: {
-    label: "Mobile", 
+  bid_price: {
+    label: "Bid Price", 
     color: "#10b981",
   },
 }
 
 export function ChartBarInteractive({ 
   data = [], 
-  title = "Bar Chart - Interactive", 
-  description = "Showing total visitors for the last 3 months" 
+  title = "Ongoing Projects - Supplies & Equipment", 
+  description = "Equipment costs vs bid prices for ongoing projects only" 
 }: ChartBarInteractiveProps) {
-  const [activeChart, setActiveChart] = React.useState<ChartType>("desktop")
-
-  const total = React.useMemo(
-    () => ({
-      desktop: data.reduce((acc: number, curr: ChartDataItem) => acc + curr.desktop, 0),
-      mobile: data.reduce((acc: number, curr: ChartDataItem) => acc + curr.mobile, 0),
-    }),
-    [data]
-  )
+  // Filter for ongoing projects with supplies & equipment costs > 0
+  const ongoingProjects = React.useMemo(() => {
+    return data.filter(project => 
+      project.status && 
+      project.status.toLowerCase().includes('ongoing') &&
+      project.total_supplies_equipment > 0
+    );
+  }, [data]);
 
   return (
     <Card className="bg-[#0f172a] border border-[#1e293b] shadow-xl rounded-lg lg:rounded-2xl overflow-hidden h-full flex flex-col">
-      <CardHeader className="flex flex-col items-stretch border-b border-[#1e293b] !p-0 sm:flex-row">
-        <div className="flex flex-1 flex-col justify-center gap-1 px-6 pt-4 pb-3 sm:py-6">
-          <CardTitle className="text-white">{title}</CardTitle>
-          <CardDescription className="text-gray-400">
+      <CardHeader className="pb-2 border-b border-[#1e293b] p-3 sm:p-6">
+        <div>
+          <CardTitle className="text-white text-sm sm:text-lg">{title}</CardTitle>
+          <CardDescription className="text-gray-400 text-xs sm:text-sm">
             {description}
           </CardDescription>
-        </div>
-        <div className="flex">
-          {(["desktop", "mobile"] as ChartType[]).map((key) => {
-            return (
-              <button
-                key={key}
-                data-active={activeChart === key}
-                className="data-[active=true]:bg-[#1e293b]/50 relative z-30 flex flex-1 flex-col justify-center gap-1 border-t border-[#1e293b] px-6 py-4 text-left even:border-l sm:border-t-0 sm:border-l sm:px-8 sm:py-6 hover:bg-[#1e293b]/30 transition-colors"
-                onClick={() => setActiveChart(key)}
-              >
-                <span className="text-gray-400 text-xs">
-                  {chartConfig[key].label}
-                </span>
-                <span className="text-lg leading-none font-bold sm:text-3xl text-white">
-                  {total[key].toLocaleString()}
-                </span>
-              </button>
-            )
-          })}
         </div>
       </CardHeader>
       <CardContent className="px-2 sm:p-6 flex-1">
         <div className="h-[250px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
-              data={data}
+              data={ongoingProjects}
               margin={{
                 left: 12,
                 right: 12,
@@ -96,27 +78,32 @@ export function ChartBarInteractive({
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
               <XAxis
-                dataKey="date"
+                dataKey="project_name"
                 tick={{ fontSize: 12, fill: '#94a3b8' }}
                 tickFormatter={(value) => {
-                  const date = new Date(value)
-                  return date.toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                  })
+                  // Truncate long project names for better display
+                  return value.length > 15 ? value.substring(0, 15) + '...' : value;
                 }}
-                interval="preserveStartEnd"
+                interval={0}
+                angle={-45}
+                textAnchor="end"
+                height={60}
               />
-              <YAxis tick={{ fontSize: 12, fill: '#94a3b8' }} />
-              <Tooltip
-                formatter={(value: number) => [value.toLocaleString(), chartConfig[activeChart].label]}
-                labelFormatter={(value: string) => {
-                  return new Date(value).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })
+              <YAxis 
+                tick={{ fontSize: 12, fill: '#94a3b8' }}
+                tickFormatter={(value) => {
+                  // Format large numbers with K/M suffixes
+                  if (value >= 1000000) {
+                    return `₱${(value / 1000000).toFixed(1)}M`;
+                  } else if (value >= 1000) {
+                    return `₱${(value / 1000).toFixed(1)}K`;
+                  }
+                  return `₱${value}`;
                 }}
+              />
+              <Tooltip
+                formatter={(value: number) => [`₱${value.toLocaleString()}`, "Supplies & Equipment"]}
+                labelFormatter={(label: string) => `Project: ${label}`}
                 contentStyle={{
                   backgroundColor: "#1e293b",
                   borderRadius: "8px",
@@ -127,7 +114,7 @@ export function ChartBarInteractive({
                 labelStyle={{ color: "#38bdf8" }}
                 itemStyle={{ color: "#f1f5f9" }}
               />
-              <Bar dataKey={activeChart} fill={chartConfig[activeChart].color} />
+              <Bar dataKey="total_supplies_equipment" fill="#ef4444" />
             </BarChart>
           </ResponsiveContainer>
         </div>
