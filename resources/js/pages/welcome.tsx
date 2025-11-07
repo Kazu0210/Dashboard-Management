@@ -20,6 +20,7 @@ import {
 } from 'recharts';
 
 type ProjectStat = {
+    id?: number;
     name: string;
 }
 
@@ -66,6 +67,35 @@ export default function Welcome() {
     ];
 
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+    // Calculate project status statistics
+    const statusStats = project_status.map(status => {
+        // Filter projects by status
+        const statusProjects = projects.filter(project => project.status === status.name || project.status === status.id);
+        
+        // Calculate total bid price for this status
+        const totalBidPrice = statusProjects.reduce((sum, project) => {
+            return sum + (Number(project.bid_price_one_year) || 0);
+        }, 0);
+        
+        // Count of projects with this status
+        const bidCount = statusProjects.length;
+        
+        return {
+            status: status.name,
+            bidPrice: totalBidPrice,
+            bidCount: bidCount
+        };
+    });
+
+    // Calculate total bid price across all projects for percentage calculation
+    const totalBidPrice = statusStats.reduce((sum, stat) => sum + stat.bidPrice, 0);
+
+    // Add percentage share to each status
+    const statusStatsWithPercentage = statusStats.map(stat => ({
+        ...stat,
+        percentage: totalBidPrice > 0 ? ((stat.bidPrice / totalBidPrice) * 100) : 0
+    }));
 
     // Transform projects data for FTE allocation chart
     const chartData = projects
@@ -124,7 +154,71 @@ export default function Welcome() {
                         ongoingCount={ongoingProjectsCount}
                     />
                 </div>
+                <div className="w-1/2">
+                    <Card>
+                        <CardHeader>
+                            <h3 className="text-lg font-semibold">Project Status Statistics</h3>
+                            <p className="text-sm text-gray-600">Bid performance by project status</p>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="overflow-x-auto">
+                                <table className="w-full border-collapse">
+                                    <thead>
+                                        <tr className="border-b border-gray-200">
+                                            <th className="text-left py-3 px-4 font-semibold text-gray-700">Status</th>
+                                            <th className="text-right py-3 px-4 font-semibold text-gray-700">Bid Price</th>
+                                            <th className="text-right py-3 px-4 font-semibold text-gray-700">Bid Count</th>
+                                            <th className="text-right py-3 px-4 font-semibold text-gray-700">% Share</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {statusStatsWithPercentage.map((stat, index) => (
+                                            <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
+                                                <td className="py-3 px-4 font-medium text-gray-800">{stat.status}</td>
+                                                <td className="py-3 px-4 text-right font-mono">
+                                                    ₱{stat.bidPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                                                </td>
+                                                <td className="py-3 px-4 text-right font-semibold text-blue-600">
+                                                    {stat.bidCount}
+                                                </td>
+                                                <td className="py-3 px-4 text-right">
+                                                    <div className="flex items-center justify-end gap-2">
+                                                        <div className="flex-1 bg-gray-200 rounded-full h-2 max-w-[60px]">
+                                                            <div 
+                                                                className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                                                                style={{ width: `${Math.min(stat.percentage, 100)}%` }}
+                                                            ></div>
+                                                        </div>
+                                                        <span className="font-semibold text-gray-700 min-w-[50px]">
+                                                            {stat.percentage.toFixed(1)}%
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr className="border-t-2 border-gray-300 bg-gray-50">
+                                            <td className="py-3 px-4 font-bold text-gray-800">Total</td>
+                                            <td className="py-3 px-4 text-right font-mono font-bold">
+                                                ₱{totalBidPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                                            </td>
+                                            <td className="py-3 px-4 text-right font-bold text-blue-600">
+                                                {statusStatsWithPercentage.reduce((sum, stat) => sum + stat.bidCount, 0)}
+                                            </td>
+                                            <td className="py-3 px-4 text-right font-bold text-gray-700">
+                                                100.0%
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
             </div>
+
+            
 
             {/* Charts Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
