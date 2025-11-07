@@ -18,6 +18,7 @@ import {
     Pie,
     Cell,
 } from 'recharts';
+import { ChartBarInteractive } from '@/components/ChartBarInteractive';
 
 type ProjectStat = {
     id?: number;
@@ -345,24 +346,10 @@ export default function Welcome() {
                 </div>
             </div>
 
-            
-
             {/* Charts Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 sm:gap-4 lg:gap-6 flex-shrink-0 h-40 sm:h-60 lg:h-80">
-                {/* Line Chart */}
-                <Card className="flex-1">
-                    <CardContent className="w-full h-full flex items-center justify-center p-2 sm:p-6">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <LineChart data={lineData}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="month" tick={{ fontSize: 12 }} />
-                                <YAxis tick={{ fontSize: 12 }} />
-                                <Tooltip formatter={(value: number) => `₱${value.toLocaleString()}`} />
-                                <Line type="monotone" dataKey="income" stroke="#2563eb" strokeWidth={2} dot={{ r: 3 }} />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </CardContent>
-                </Card>
+                {/* Empty Bar Chart */}
+                <ChartBarInteractive />
 
                 {/* Bar Chart */}
                 <Card className="flex-1">
