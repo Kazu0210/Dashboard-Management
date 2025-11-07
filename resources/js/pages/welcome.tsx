@@ -130,9 +130,9 @@ export default function Welcome() {
     }, []);
 
     return (
-        <div className="min-h-screen w-full bg-gray-50 p-6 md:p-10">
+        <div className="h-screen w-full bg-gray-50 p-6 md:p-10 overflow-hidden flex flex-col">
             {/* Real-time Status Indicator */}
-            <div className="flex justify-end mb-4">
+            <div className="flex justify-end mb-4 flex-shrink-0">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                     <div className={`w-2 h-2 rounded-full ${isUpdating ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`}></div>
                     {isUpdating ? 'Updating data...' : `Last updated: ${lastUpdated.toLocaleTimeString()}`}
@@ -140,7 +140,7 @@ export default function Welcome() {
             </div>
 
             {/* FTE Allocation Chart, Project Status, and Pie Chart Section */}
-            <div className="flex gap-6 mb-8 h-[500px]">
+            <div className="flex gap-6 mb-6 flex-1 min-h-0">
                 <div className="w-2/5 h-full">
                     <ChartBarLabelCustom 
                         chartData={chartData}
@@ -347,10 +347,10 @@ export default function Welcome() {
             
 
             {/* Charts Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 flex-shrink-0 h-80">
                 {/* Line Chart */}
                 <Card className="flex-1">
-                    <CardContent className="w-full h-[22rem] flex items-center justify-center">
+                    <CardContent className="w-full h-full flex items-center justify-center">
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={lineData}>
                                 <CartesianGrid strokeDasharray="3 3" />
@@ -365,7 +365,7 @@ export default function Welcome() {
 
                 {/* Bar Chart */}
                 <Card className="flex-1">
-                    <CardContent className="w-full h-[22rem] flex items-center justify-center">
+                    <CardContent className="w-full h-full flex items-center justify-center">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={barData}>
                                 <CartesianGrid strokeDasharray="3 3" />
@@ -381,7 +381,7 @@ export default function Welcome() {
 
                 {/* Pie Chart */}
                 <Card className="flex-1">
-                    <CardContent className="w-full h-[22rem] flex items-center justify-center">
+                    <CardContent className="w-full h-full flex items-center justify-center">
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                                 <Pie
