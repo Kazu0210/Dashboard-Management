@@ -14,10 +14,12 @@ class GuestController extends Controller
     {
         $project_status = ProjectStatus::all();
         $project_count = Project::count();
+        $projects = Project::all();
         
         return Inertia::render('welcome', [
             'project_status' => $project_status->toArray(),
-            'project_count' => $project_count
+            'project_count' => $project_count,
+            'projects' => $projects->toArray()
         ]);
     }
 }

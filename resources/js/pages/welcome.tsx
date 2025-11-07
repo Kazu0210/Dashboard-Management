@@ -22,8 +22,9 @@ type ProjectStat = {
 }
 
 export default function Welcome() {
-    const { project_status: project_statusRaw, project_count } = usePage().props;
+    const { project_status: project_statusRaw, project_count, projects: projectsRaw } = usePage().props;
     const project_status: ProjectStat[] = Array.isArray(project_statusRaw) ? project_statusRaw : [];
+    const projects: any[] = Array.isArray(projectsRaw) ? projectsRaw : [];
 
     // Key metrics mock
     const metrics = [
@@ -56,23 +57,33 @@ export default function Welcome() {
         { name: 'Group D', value: 200 },
     ];
 
-    const chartData = [
-        { month: "January", desktop: 50, mobile: 80 },
-        { month: "February", desktop: 305, mobile: 200 },
-        { month: "March", desktop: 237, mobile: 120 },
-        { month: "April", desktop: 73, mobile: 190 },
-        { month: "May", desktop: 209, mobile: 130 },
-        { month: "June", desktop: 214, mobile: 140 },
-    ]
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+    // Transform projects data for FTE allocation chart
+    const chartData = projects
+        .filter(project => project.fte && project.fte > 0) // Only include projects with FTE data
+        .sort((a, b) => Number(b.fte) - Number(a.fte)) // Sort by FTE descending (highest first)
+        .slice(0, 8) // Limit to top 8 projects for better visualization
+        .map(project => ({
+            month: project.project_name || `Project ${project.project_number}`, // Using month field as project name
+            desktop: Number(project.fte) || 0 // FTE value
+        }));
 
     return (
         <div className="min-h-screen w-full bg-gray-50 p-6 md:p-10">
-            {/* Key Metrics Section */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 mb-8">
-                <div className="col-span-2">
-                    <ChartBarLabelCustom chartData={chartData} />
-                </div>
+            {/* FTE Allocation Chart Section */}
+            <div className="mb-8">
+                <ChartBarLabelCustom 
+                    chartData={chartData}
+                    title="FTE Allocation per Project"
+                    description="Current Active Projects - Q4 2024"
+                    footerTrend={{
+                        text: "Resource utilization up by",
+                        percentage: "15.2%",
+                        isUp: true
+                    }}
+                    footerDescription="Showing Full-Time Equivalent staff allocation across active projects"
+                />
             </div>
 
             {/* Charts Section */}
