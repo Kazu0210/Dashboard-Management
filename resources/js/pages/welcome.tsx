@@ -130,18 +130,19 @@ export default function Welcome() {
     }, []);
 
     return (
-        <div className="h-screen w-full bg-gray-50 p-6 md:p-10 overflow-hidden flex flex-col">
+        <div className="h-screen w-full bg-gray-50 p-2 sm:p-4 md:p-6 lg:p-10 overflow-hidden flex flex-col">
             {/* Real-time Status Indicator */}
-            <div className="flex justify-end mb-4 flex-shrink-0">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+            <div className="flex justify-end mb-2 sm:mb-4 flex-shrink-0">
+                <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
                     <div className={`w-2 h-2 rounded-full ${isUpdating ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`}></div>
-                    {isUpdating ? 'Updating data...' : `Last updated: ${lastUpdated.toLocaleTimeString()}`}
+                    <span className="hidden sm:inline">{isUpdating ? 'Updating data...' : `Last updated: ${lastUpdated.toLocaleTimeString()}`}</span>
+                    <span className="sm:hidden">{isUpdating ? 'Updating...' : 'Live'}</span>
                 </div>
             </div>
 
             {/* FTE Allocation Chart, Project Status, and Pie Chart Section */}
-            <div className="flex gap-6 mb-6 flex-1 min-h-0">
-                <div className="w-2/5 h-full">
+            <div className="flex flex-col lg:flex-row gap-2 sm:gap-4 lg:gap-6 mb-4 lg:mb-6 flex-1 min-h-0">
+                <div className="w-full lg:w-2/5 h-1/2 lg:h-full">
                     <ChartBarLabelCustom 
                         chartData={chartData}
                         title="FTE Allocation per Project"
@@ -154,36 +155,36 @@ export default function Welcome() {
                         ongoingCount={ongoingProjectsCount}
                     />
                 </div>
-                <div className="w-2/5 h-full">
-                    <Card className="bg-[#0f172a] border border-[#1e293b] shadow-xl rounded-2xl overflow-hidden h-full flex flex-col">
-                        <CardHeader className="pb-2 border-b border-[#1e293b]">
-                            <div className="flex items-center justify-between">
+                <div className="w-full lg:w-2/5 h-1/2 lg:h-full">
+                    <Card className="bg-[#0f172a] border border-[#1e293b] shadow-xl rounded-lg lg:rounded-2xl overflow-hidden h-full flex flex-col">
+                        <CardHeader className="pb-2 border-b border-[#1e293b] p-3 sm:p-6">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                 <div>
-                                    <h3 className="text-lg font-semibold text-white tracking-wide">
+                                    <h3 className="text-sm sm:text-lg font-semibold text-white tracking-wide">
                                         Project Status Statistics
                                     </h3>
-                                    <p className="text-sm text-gray-400">
+                                    <p className="text-xs sm:text-sm text-gray-400">
                                         Bid performance by project status
                                     </p>
-                                    <div className="mt-2 text-xs text-gray-400">
-                                        <span className="text-[#38bdf8] font-semibold text-sm">{statusStatsWithPercentage.length}</span> status categories
+                                    <div className="mt-1 sm:mt-2 text-xs text-gray-400">
+                                        <span className="text-[#38bdf8] font-semibold text-xs sm:text-sm">{statusStatsWithPercentage.length}</span> status categories
                                     </div>
                                 </div>
-                                <div className="px-3 py-1 text-xs font-medium text-[#38bdf8] bg-[#1e293b] rounded-md">
+                                <div className="px-2 sm:px-3 py-1 text-xs font-medium text-[#38bdf8] bg-[#1e293b] rounded-md whitespace-nowrap">
                                     Live Data
                                 </div>
                             </div>
                         </CardHeader>
 
-                        <CardContent className="p-6 flex-1 flex flex-col">
+                        <CardContent className="p-2 sm:p-6 flex-1 flex flex-col overflow-hidden">
                             <div className="w-full flex-1 overflow-auto">
                                 <table className="w-full border-collapse">
                                     <thead>
                                         <tr className="border-b border-[#1e293b]">
-                                            <th className="text-left py-3 px-4 font-semibold text-gray-300 text-sm">Status</th>
-                                            <th className="text-right py-3 px-4 font-semibold text-gray-300 text-sm">Bid Price</th>
-                                            <th className="text-right py-3 px-4 font-semibold text-gray-300 text-sm">Bid Count</th>
-                                            <th className="text-right py-3 px-4 font-semibold text-gray-300 text-sm">% Share</th>
+                                            <th className="text-left py-2 sm:py-3 px-2 sm:px-4 font-semibold text-gray-300 text-xs sm:text-sm">Status</th>
+                                            <th className="text-right py-2 sm:py-3 px-1 sm:px-4 font-semibold text-gray-300 text-xs sm:text-sm hidden sm:table-cell">Bid Price</th>
+                                            <th className="text-right py-2 sm:py-3 px-1 sm:px-4 font-semibold text-gray-300 text-xs sm:text-sm">Count</th>
+                                            <th className="text-right py-2 sm:py-3 px-2 sm:px-4 font-semibold text-gray-300 text-xs sm:text-sm">Share</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -192,8 +193,8 @@ export default function Welcome() {
                                                 key={index} 
                                                 className="border-b border-[#1e293b]/50 hover:bg-[#1e293b]/30 transition-all duration-200"
                                             >
-                                                <td className="py-3 px-4 font-medium text-white flex items-center gap-2">
-                                                    <div className={`w-3 h-3 rounded-full ${
+                                                <td className="py-2 sm:py-3 px-2 sm:px-4 font-medium text-white flex items-center gap-2">
+                                                    <div className={`w-2 sm:w-3 h-2 sm:h-3 rounded-full ${
                                                         stat.status.toLowerCase().includes('ongoing')
                                                             ? 'bg-green-400'
                                                             : stat.status.toLowerCase().includes('loss')
@@ -202,23 +203,23 @@ export default function Welcome() {
                                                             ? 'bg-blue-400'
                                                             : 'bg-yellow-400'
                                                     }`}></div>
-                                                    {stat.status}
+                                                    <span className="text-xs sm:text-sm truncate">{stat.status}</span>
                                                 </td>
-                                                <td className="py-3 px-4 text-right font-mono text-gray-300">
-                                                    ₱{stat.bidPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                                                <td className="py-2 sm:py-3 px-1 sm:px-4 text-right font-mono text-gray-300 text-xs sm:text-sm hidden sm:table-cell">
+                                                    ₱{stat.bidPrice.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                                                 </td>
-                                                <td className="py-3 px-4 text-right font-semibold text-[#38bdf8]">
+                                                <td className="py-2 sm:py-3 px-1 sm:px-4 text-right font-semibold text-[#38bdf8] text-xs sm:text-sm">
                                                     {stat.bidCount}
                                                 </td>
-                                                <td className="py-3 px-4 text-right">
-                                                    <div className="flex items-center justify-end gap-2">
-                                                        <div className="w-[60px] bg-[#0f172a] rounded-full h-2 overflow-hidden">
+                                                <td className="py-2 sm:py-3 px-2 sm:px-4 text-right">
+                                                    <div className="flex items-center justify-end gap-1 sm:gap-2">
+                                                        <div className="w-8 sm:w-[60px] bg-[#0f172a] rounded-full h-1.5 sm:h-2 overflow-hidden">
                                                             <div 
-                                                                className="h-2 rounded-full bg-gradient-to-r from-[#38bdf8] to-[#0ea5e9] transition-all duration-500"
+                                                                className="h-1.5 sm:h-2 rounded-full bg-gradient-to-r from-[#38bdf8] to-[#0ea5e9] transition-all duration-500"
                                                                 style={{ width: `${Math.min(stat.percentage, 100)}%` }}
                                                             ></div>
                                                         </div>
-                                                        <span className="font-semibold text-gray-300 text-sm min-w-[45px]">
+                                                        <span className="font-semibold text-gray-300 text-xs sm:text-sm min-w-[35px] sm:min-w-[45px]">
                                                             {stat.percentage.toFixed(1)}%
                                                         </span>
                                                     </div>
@@ -228,14 +229,14 @@ export default function Welcome() {
                                     </tbody>
                                     <tfoot>
                                         <tr className="border-t-2 border-[#38bdf8]/30 bg-[#1e293b]/30">
-                                            <td className="py-3 px-4 font-bold text-white">Total</td>
-                                            <td className="py-3 px-4 text-right font-mono font-bold text-white">
-                                                ₱{totalBidPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                                            <td className="py-2 sm:py-3 px-2 sm:px-4 font-bold text-white text-xs sm:text-sm">Total</td>
+                                            <td className="py-2 sm:py-3 px-1 sm:px-4 text-right font-mono font-bold text-white text-xs sm:text-sm hidden sm:table-cell">
+                                                ₱{totalBidPrice.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                                             </td>
-                                            <td className="py-3 px-4 text-right font-bold text-[#38bdf8]">
+                                            <td className="py-2 sm:py-3 px-1 sm:px-4 text-right font-bold text-[#38bdf8] text-xs sm:text-sm">
                                                 {statusStatsWithPercentage.reduce((sum, stat) => sum + stat.bidCount, 0)}
                                             </td>
-                                            <td className="py-3 px-4 text-right font-bold text-white">
+                                            <td className="py-2 sm:py-3 px-2 sm:px-4 text-right font-bold text-white text-xs sm:text-sm">
                                                 100.0%
                                             </td>
                                         </tr>
@@ -245,28 +246,28 @@ export default function Welcome() {
                         </CardContent>
                     </Card>
                 </div>
-                <div className="w-1/5 h-full">
-                    <Card className="bg-[#0f172a] border border-[#1e293b] shadow-xl rounded-2xl overflow-hidden h-full flex flex-col">
-                        <CardHeader className="pb-2 border-b border-[#1e293b]">
-                            <div className="flex items-center justify-between">
+                <div className="w-full lg:w-1/5 h-1/2 lg:h-full hidden md:block">
+                    <Card className="bg-[#0f172a] border border-[#1e293b] shadow-xl rounded-lg lg:rounded-2xl overflow-hidden h-full flex flex-col">
+                        <CardHeader className="pb-2 border-b border-[#1e293b] p-3 sm:p-6">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                 <div>
-                                    <h3 className="text-lg font-semibold text-white tracking-wide">
+                                    <h3 className="text-sm sm:text-lg font-semibold text-white tracking-wide">
                                         Project Distribution
                                     </h3>
-                                    <p className="text-sm text-gray-400">
+                                    <p className="text-xs sm:text-sm text-gray-400">
                                         Bid Price Breakdown
                                     </p>
-                                    <div className="mt-2 text-xs text-gray-400">
-                                        <span className="text-[#38bdf8] font-semibold text-sm">₱{totalBidPrice.toLocaleString()}</span> total value
+                                    <div className="mt-1 sm:mt-2 text-xs text-gray-400">
+                                        <span className="text-[#38bdf8] font-semibold text-xs sm:text-sm">₱{totalBidPrice.toLocaleString()}</span> total value
                                     </div>
                                 </div>
-                                <div className="px-3 py-1 text-xs font-medium text-[#38bdf8] bg-[#1e293b] rounded-md">
+                                <div className="px-2 sm:px-3 py-1 text-xs font-medium text-[#38bdf8] bg-[#1e293b] rounded-md whitespace-nowrap">
                                     Live Data
                                 </div>
                             </div>
                         </CardHeader>
 
-                        <CardContent className="p-6 flex-1 flex flex-col">
+                        <CardContent className="p-3 sm:p-6 flex-1 flex flex-col">
                             <div className="w-full flex-1 flex items-center justify-center">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <PieChart>
@@ -315,7 +316,7 @@ export default function Welcome() {
                             </div>
                             
                             {/* Legend */}
-                            <div className="mt-4 space-y-2">
+                            <div className="mt-2 sm:mt-4 space-y-1 sm:space-y-2">
                                 {statusStatsWithPercentage.map((stat, index) => {
                                     const colors = {
                                         ongoing: '#10b981',
@@ -324,12 +325,12 @@ export default function Welcome() {
                                     };
                                     const color = colors[stat.status.toLowerCase() as keyof typeof colors] || '#6b7280';
                                     return (
-                                        <div key={index} className="flex items-center gap-2 text-sm">
+                                        <div key={index} className="flex items-center gap-2 text-xs sm:text-sm">
                                             <div 
-                                                className="w-3 h-3 rounded-full" 
+                                                className="w-2 sm:w-3 h-2 sm:h-3 rounded-full" 
                                                 style={{ backgroundColor: color }}
                                             ></div>
-                                            <span className="text-gray-300 flex-1">
+                                            <span className="text-gray-300 flex-1 truncate">
                                                 {stat.status.charAt(0).toUpperCase() + stat.status.slice(1)}
                                             </span>
                                             <span className="text-white font-semibold">
@@ -347,17 +348,17 @@ export default function Welcome() {
             
 
             {/* Charts Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 flex-shrink-0 h-80">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 sm:gap-4 lg:gap-6 flex-shrink-0 h-40 sm:h-60 lg:h-80">
                 {/* Line Chart */}
                 <Card className="flex-1">
-                    <CardContent className="w-full h-full flex items-center justify-center">
+                    <CardContent className="w-full h-full flex items-center justify-center p-2 sm:p-6">
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={lineData}>
                                 <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="month" />
-                                <YAxis />
+                                <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                                <YAxis tick={{ fontSize: 12 }} />
                                 <Tooltip formatter={(value: number) => `₱${value.toLocaleString()}`} />
-                                <Line type="monotone" dataKey="income" stroke="#2563eb" strokeWidth={3} dot={{ r: 5 }} />
+                                <Line type="monotone" dataKey="income" stroke="#2563eb" strokeWidth={2} dot={{ r: 3 }} />
                             </LineChart>
                         </ResponsiveContainer>
                     </CardContent>
@@ -365,12 +366,12 @@ export default function Welcome() {
 
                 {/* Bar Chart */}
                 <Card className="flex-1">
-                    <CardContent className="w-full h-full flex items-center justify-center">
+                    <CardContent className="w-full h-full flex items-center justify-center p-2 sm:p-6">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={barData}>
                                 <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="project" />
-                                <YAxis />
+                                <XAxis dataKey="project" tick={{ fontSize: 12 }} />
+                                <YAxis tick={{ fontSize: 12 }} />
                                 <Tooltip formatter={(value: number) => `₱${value.toLocaleString()}`} />
                                 <Bar dataKey="billing" fill="#10b981" name="Billed Amount" />
                                 <Bar dataKey="collected" fill="#3b82f6" name="Collected Amount" />
@@ -380,8 +381,8 @@ export default function Welcome() {
                 </Card>
 
                 {/* Pie Chart */}
-                <Card className="flex-1">
-                    <CardContent className="w-full h-full flex items-center justify-center">
+                <Card className="flex-1 md:col-span-2 xl:col-span-1">
+                    <CardContent className="w-full h-full flex items-center justify-center p-2 sm:p-6">
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                                 <Pie
@@ -391,7 +392,7 @@ export default function Welcome() {
                                     cx="50%"
                                     cy="50%"
                                     outerRadius="70%"
-                                    label
+                                    label={false}
                                 >
                                     {pieData.map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
