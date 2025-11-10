@@ -391,6 +391,7 @@ const Dashboard2 = () => {
           </CardContent>
         </Card>
       </div>
+    </AppLayout>
   );
 };
 
