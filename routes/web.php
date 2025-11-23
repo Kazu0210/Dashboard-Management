@@ -22,6 +22,7 @@ use App\Http\Controllers\PayrollsController;
 
 // Route for Guest Users
 Route::get('/', [GuestController::class, 'index'])->name('home');
+Route::get('/page2', [GuestController::class, 'index2'])->name('home2');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');

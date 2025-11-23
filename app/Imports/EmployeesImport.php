@@ -11,6 +11,22 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class EmployeesImport implements ToModel, WithHeadingRow
 {
+    /**
+     * Clean amount value by removing parentheses
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    private function cleanAmount($value)
+    {
+        if (is_string($value)) {
+            // Remove parentheses from amounts like (101000) -> 101000
+            $cleaned = preg_replace('/^\((\d+(?:\.\d+)?)\)$/', '$1', trim($value));
+            return $cleaned;
+        }
+        return $value;
+    }
+
     public function model(array $row)
     {
         // Get all employment types from the employment_types table
@@ -54,7 +70,7 @@ class EmployeesImport implements ToModel, WithHeadingRow
                 'phone'            => $row['phone'] ?? null,
                 'employment_type_id' => $employmentTypeId,
                 'status'           => $row['status'] ?? null,
-                'monthly_salary'   => $row['monthly_salary'] ?? null,
+                'monthly_salary'   => $this->cleanAmount($row['monthly_salary'] ?? null),
                 'attendance_rate'  => $row['attendance_rate'] ?? null,
                 'date_hired'       => $dateHired,
                 'date_resigned'    => $dateResigned,

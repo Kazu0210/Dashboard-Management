@@ -10,13 +10,29 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class SupplyExpensesImport implements ToModel, WithHeadingRow
 {
+    /**
+     * Clean amount value by removing parentheses
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    private function cleanAmount($value)
+    {
+        if (is_string($value)) {
+            // Remove parentheses from amounts like (101000) -> 101000
+            $cleaned = preg_replace('/^\((\d+(?:\.\d+)?)\)$/', '$1', trim($value));
+            return $cleaned;
+        }
+        return $value;
+    }
+
     public function model(array $row)
     {
         try {
             return new SupplyExpense([
                 'category' => $row['category'] ?? '',
                 'description' => $row['description'] ?? '',
-                'amount' => $row['amount'] ?? 0,
+                'amount' => $this->cleanAmount($row['amount'] ?? 0),
                 'expense_date' => $row['expense_date'] ?? null,
                 'created_by' => Auth::id(),
             ]);
